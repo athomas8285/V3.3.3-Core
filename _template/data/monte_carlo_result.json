@@ -1,0 +1,38 @@
+{
+  "matches": [
+    {
+      "id": "003",
+      "home": "日本",
+      "away": "冰岛",
+      "lambda_raw_h": 3.2,
+      "lambda_raw_a": 0.5333,
+      "lambda_h_final": 3.296,
+      "lambda_a_final": 0.5387,
+      "lambda_diff": 2.7573,
+      "jc_handicap": -2,
+      "physical": {
+        "home_win": 0.878,
+        "draw": 0.087,
+        "away_win": 0.035
+      },
+      "jc_handicap_prob": {
+        "rang_sheng": 0.5275,
+        "rang_ping": 0.194,
+        "rang_fu": 0.2785
+      },
+      "top2_total_goals": [
+        "3球",
+        "4球"
+      ],
+      "top2_half_full": [
+        "胜胜",
+        "平胜"
+      ],
+      "top3_scores": [
+        "3-0",
+        "4-0",
+        "2-0"
+      ]
+    }
+  ]
+}

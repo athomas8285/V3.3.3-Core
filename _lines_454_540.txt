@@ -1,0 +1,87 @@
+        <div class="acc open" id="accWC">
+      <div class="acc-head" onclick="toggleAccordion('accWC')">
+        <span class="acc-arrow">▶</span>
+        <span class="acc-icon">🏆</span>
+        <span class="acc-label">2026 世界杯分析</span>
+        <span class="wc-badge">专题</span>
+        <span class="acc-count" id="wcMatchCount">-</span>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner" style="padding:4px 0 8px">
+          <div class="wc-sub-item active" data-view="today" onclick="switchWCView('today')">
+            <span class="wsi-icon">📅</span>
+            <span class="wsi-label">今日赛程</span>
+          </div>
+          <div class="wc-sub-item" data-view="standings" onclick="switchWCView('standings')">
+            <span class="wsi-icon">📊</span>
+            <span class="wsi-label">小组积分榜</span>
+          </div>
+          <div class="wc-sub-item" data-view="bracket" onclick="switchWCView('bracket')">
+            <span class="wsi-icon">🏟</span>
+            <span class="wsi-label">淘汰赛对阵图</span>
+          </div>
+          <div class="wc-sub-item" data-view="odds" onclick="switchWCView('odds')">
+            <span class="wsi-icon">💰</span>
+            <span class="wsi-label">冠军赔率追踪</span>
+          </div>
+          <div class="wc-sub-item" data-view="picks" onclick="switchWCView('picks')">
+            <span class="wsi-icon">⭐</span>
+            <span class="wsi-label">今日精选推荐</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sd-wc-divider"></div><div class="acc" id="accHistory">
+      <div class="acc-head" onclick="toggleAccordion('accHistory')">
+        <span class="acc-arrow">▶</span>
+        <span class="acc-icon">📅</span>
+        <span class="acc-label">历史预测数据</span>
+        <span class="acc-badge" style="background:rgba(0,230,118,.15);color:var(--green)">实战</span>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner" style="padding:8px 16px 12px">
+          <div style="margin-bottom:10px">
+            <input type="text" id="historySearch" placeholder="搜索日期 (YYYY-MM-DD)" style="width:100%;padding:7px 10px;font-size:11px;font-family:var(--sans);background:var(--bg);border:1px solid var(--bd);border-radius:5px;color:var(--t1);outline:none;transition:border-color .15s" oninput="filterHistoryDates(this.value)">
+          </div>
+          <div id="historyListContainer">
+            <div class="sd-loading">加载中...</div>
+          </div>
+          <div id="historyLoadMore" style="display:none;text-align:center;padding:8px 0">
+            <button onclick="loadMoreHistory()" style="width:100%;padding:6px 10px;font-size:11px;color:var(--t2);background:rgba(255,255,255,.04);border:1px solid var(--bd);border-radius:5px;cursor:pointer;font-family:var(--sans);transition:all .15s">加载更多 ↓</button>
+          </div>
+        </div>
+      </div>
+    </div><div class="acc" id="accBacktest">
+      <div class="acc-head" onclick="toggleAccordion('accBacktest')">
+        <span class="acc-arrow">▶</span>
+        <span class="acc-icon">🧪</span>
+        <span class="acc-label">历史比赛回测</span>
+        <span class="acc-badge" style="background:rgba(66,165,245,.18);color:var(--blue)">验证</span>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner" id="backtestContainer">
+          <div class="sd-loading">加载中...</div>
+        </div>
+      </div>
+    </div><div class="acc" id="accDoc">
+      <div class="acc-head" onclick="toggleAccordion('accDoc')">
+        <span class="acc-arrow">▶</span>
+        <span class="acc-icon">📘</span>
+        <span class="acc-label">系统说明书</span>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner" id="docContainer">
+          <div class="sd-loading">加载中...</div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+  <div class="sd-divider"></div>
+<div class="sd-contact">
+    <button class="sd-contact-btn" onclick="prompt('复制微信号：codex_analysis', '微信号：codex_analysis')">
+      <span class="cb-icon">💬</span>
+      <span class="cb-text">🚀 联系作者</span>
+    </button>
+  

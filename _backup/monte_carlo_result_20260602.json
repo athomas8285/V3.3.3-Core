@@ -1,0 +1,109 @@
+{
+  "matches": [
+    {
+      "id": "001",
+      "physical": {
+        "home_win": 0.38,
+        "draw": 0.28,
+        "away_win": 0.34
+      },
+      "jc_handicap_prob": {
+        "rang_sheng": 0.16,
+        "rang_ping": 0.2,
+        "rang_fu": 0.64
+      },
+      "top2_total_goals": [
+        "2球",
+        "1球"
+      ],
+      "top2_half_full": [
+        "平负",
+        "负负"
+      ],
+      "top3_scores": [
+        "0-1",
+        "0-2",
+        "1-1"
+      ],
+      "s7_score": 0.2,
+      "opponent_predictability": 0.95,
+      "trap_analysis": "主客SP对称但让球深，诱盘信号",
+      "key_risk": "友谊赛轮换不确定性",
+      "lambda_h_final": 1.1556,
+      "lambda_a_final": 1.1111,
+      "lambda_diff": 0.0445,
+      "lambda_raw_h": 1.1556,
+      "lambda_raw_a": 1.1111
+    },
+    {
+      "id": "002",
+      "physical": {
+        "home_win": 0.45,
+        "draw": 0.28,
+        "away_win": 0.27
+      },
+      "jc_handicap_prob": {
+        "rang_sheng": 0.21,
+        "rang_ping": 0.25,
+        "rang_fu": 0.54
+      },
+      "top2_total_goals": [
+        "2球",
+        "1球"
+      ],
+      "top2_half_full": [
+        "平胜",
+        "胜胜"
+      ],
+      "top3_scores": [
+        "1-0",
+        "0-0",
+        "1-1"
+      ],
+      "s7_score": 0.1,
+      "opponent_predictability": 0.95,
+      "trap_analysis": "",
+      "key_risk": "格鲁吉亚近期进攻数据含水分",
+      "lambda_h_final": 1.7111,
+      "lambda_a_final": 0.8296,
+      "lambda_diff": 0.8815,
+      "lambda_raw_h": 1.7111,
+      "lambda_raw_a": 0.8296
+    },
+    {
+      "id": "003",
+      "physical": {
+        "home_win": 0.48,
+        "draw": 0.27,
+        "away_win": 0.25
+      },
+      "jc_handicap_prob": {
+        "rang_sheng": 0.22,
+        "rang_ping": 0.25,
+        "rang_fu": 0.53
+      },
+      "top2_total_goals": [
+        "2球",
+        "1球"
+      ],
+      "top2_half_full": [
+        "平胜",
+        "胜胜"
+      ],
+      "top3_scores": [
+        "1-1",
+        "1-0",
+        "0-0"
+      ],
+      "s7_score": 0.3,
+      "opponent_predictability": 1.0,
+      "trap_analysis": "主胜市场过热(54% vs 46%)",
+      "key_risk": "加纳核心Kudus缺阵攻击削弱",
+      "lambda_h_final": 3.0667,
+      "lambda_a_final": 0.4667,
+      "lambda_diff": 2.6,
+      "lambda_raw_h": 3.0667,
+      "lambda_raw_a": 0.4667
+    }
+  ]
+}

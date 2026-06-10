@@ -1,0 +1,18 @@
+<div class="acc open" id="accToday" class="active-section">
+      <div class="acc-head" onclick="toggleAccordion('accToday')">
+        <span class="acc-arrow">▶</span>
+        <span class="acc-icon">📊</span>
+        <span class="acc-label">今日概览</span>
+        <span class="acc-badge" style="background:rgba(0,230,118,.15);color:var(--green)">实时</span>
+        <span class="acc-count" id="todayMatchCount">-</span>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <div class="today-date" id="todayDateLabel">加载中...</div>
+          <div class="today-stats" id="todayStats">
+            <div class="sd-loading">加载中...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="acc" id="

@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>V3.3.3-Core 分析系统</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#1a1a20;--surface:#1e1e24;--surface-2:#25252b;--surface-h:#2d2d35;
+  --t1:#e8e8ed;--t2:#999;--t3:#666;--green:#00e676;--red:#ef5350;--amber:#ffd54f;--blue:#42a5f5;
+  --bd:#2e2e36;--bd-h:#3a3a44;
+  --mono:"SF Mono","Cascadia Code","Consolas",monospace;
+  --sans:"Inter","Microsoft YaHei","PingFang SC","Noto Sans SC",sans-serif;
+}
+body{font-family:var(--sans);background:var(--bg);color:var(--t1);min-height:100vh;display:flex;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--bd-h);border-radius:3px}
+.sd-wrap{width:210px;flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--surface);border-right:1px solid var(--bd)}
+.sd-logo{padding:22px 16px 18px;border-bottom:1px solid var(--bd)}
+.sd-logo-m{font-size:20px;font-weight:700;color:var(--green);letter-spacing:1px;line-height:1.3}
+.sd-logo-s{font-size:10px;color:var(--t3);margin-top:2px;letter-spacing:2px}
+.sidebar-section{border-top:1px solid var(--bd)}
+.sidebar-section h3{font-size:11px;color:var(--t3);padding:14px 16px 6px;letter-spacing:1px;font-weight:600}
+.date-list{list-style:none;padding:0 0 8px;margin:0}
+.date-item{display:block;padding:9px 16px;cursor:pointer;transition:all 0.15s;border-left:3px solid transparent;line-height:1.4}
+.date-item:hover{background:rgba(255,255,255,0.04)}
+.date-item.active{border-left-color:var(--green);background:rgba(0,230,118,0.07)}
+.date-item .d{font-size:13px;font-weight:600;color:var(--t1)}
+.date-item .s{font-size:10px;color:var(--t3);margin-top:1px}
+.date-item.active .d{color:#fff}
+.date-item.active .s{color:var(--green)}
+.main{flex:1;min-width:0;max-width:1000px;margin:0 auto;padding:0 20px 60px}
+.sec-header{display:flex;align-items:baseline;gap:12px;padding:18px 0 10px}
+.sec-header h2{font-size:16px;font-weight:700;color:var(--t1)}
+.sec-header .sec-sub{font-size:12px;color:var(--t2);font-weight:500}
+.sec-header .sec-bar{flex:1;height:1px;background:var(--bd)}
+.match-card{background:var(--surface-2);border:1px solid var(--bd);border-radius:8px;margin-bottom:10px;cursor:pointer;transition:border-color 0.2s,background 0.2s;overflow:hidden}
+.match-card:hover{border-color:var(--bd-h);background:var(--surface-h)}
+.mc-header{display:flex;align-items:center;padding:12px 16px;gap:12px}
+.mc-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.mc-time{font-family:var(--mono);font-size:11px;color:var(--t3);white-space:nowrap}
+.mc-league{font-size:10px;color:var(--t3);background:rgba(255,255,255,0.06);padding:2px 8px;border-radius:4px;white-space:nowrap}
+.mc-teams{font-size:15px;font-weight:700;color:var(--t1);white-space:nowrap}
+.mc-vs{color:var(--t3);font-size:11px;font-weight:400;margin:0 4px}
+.mc-mid{flex-shrink:0;text-align:center;margin:0 8px}
+.mc-mid .mc-stat{font-family:var(--mono);font-size:11px;color:var(--t2);line-height:1.6}
+.mc-mid .mc-stat .sep{color:var(--t3);margin:0 4px}
+.mc-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.mc-badge{padding:3px 10px;border-radius:5px;font-size:11px;font-weight:700;color:#fff;text-align:center;min-width:36px}
+.mc-badge.g{background:var(--green)}
+.mc-badge.r{background:var(--red)}
+.mc-badge.b{background:var(--blue)}
+.mc-badge.gray{background:var(--t3)}
+.mc-rating{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--t1);display:flex;align-items:center;gap:4px}
+.mc-rating .lvl{font-size:10px;padding:1px 5px;border-radius:3px;font-weight:600}
+.mc-rating .lvl.s{background:var(--green);color:#fff}
+.mc-rating .lvl.a{background:var(--amber);color:#222}
+.mc-rating .lvl.b{background:var(--t3);color:#fff}
+.mc-arrow{color:var(--t3);font-size:10px;transition:transform 0.2s}
+.match-card.active .mc-arrow{transform:rotate(180deg)}
+.cd{padding:0 16px 14px;display:none;border-top:1px solid var(--bd)}
+.match-card.active .cd{display:block}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.chart-box{background:var(--surface);border-radius:6px;padding:10px}
+.chart-box .ch-title{font-size:11px;color:var(--t2);margin-bottom:6px;font-weight:600}
+.chart-bars{display:flex;align-items:flex-end;gap:8px;height:60px;padding-top:4px}
+.chart-bar{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.chart-bar .bar{width:100%;max-width:28px;border-radius:4px 4px 0 0;min-height:4px}
+.chart-bar .bar-label{font-size:9px;color:var(--t3);margin-top:4px}
+.detail-rows{margin-top:10px;display:flex;flex-direction:column;gap:6px}
+.detail-row{display:flex;gap:8px;padding:6px 10px;background:var(--surface);border-radius:6px;align-items:flex-start}
+.detail-row .dr-l{font-size:11px;color:var(--t3);font-weight:600;white-space:nowrap;min-width:60px}
+.detail-row .dr-r{font-size:12px;color:var(--t1);line-height:1.5;flex:1}
+.detail-row.risk{background:rgba(239,83,80,0.12);border:1px solid rgba(239,83,80,0.2)}
+.detail-row.risk .dr-r{color:#ef5350}
+.table-wrap{background:var(--surface-2);border:1px solid var(--bd);border-radius:8px;overflow:hidden;margin-top:6px}
+.table-top{display:flex;align-items:center;gap:14px;padding:10px 14px;background:var(--surface);border-bottom:1px solid var(--bd);flex-wrap:wrap}
+.table-top .tt-item{font-size:11px;color:var(--t2)}
+.table-top .tt-item b{color:var(--t1);font-weight:600}
+.table-top .tt-item .hl{color:var(--green)}
+.table-top .tt-item .hl2{color:var(--amber)}
+.tt-spacer{flex:1}
+table.y-table{width:100%;border-collapse:collapse;font-size:12px}
+table.y-table thead th{padding:8px 10px;text-align:left;font-weight:600;color:var(--t3);background:var(--surface);border-bottom:1px solid var(--bd);white-space:nowrap}
+table.y-table tbody td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--t2);white-space:nowrap}
+table.y-table tbody tr:hover{background:rgba(255,255,255,0.03)}
+table.y-table tbody tr:last-child td{border-bottom:none}
+td.c-result{font-weight:600}
+td.c-result.win{color:var(--red)}
+td.c-result.lose{color:var(--green)}
+td.c-result.draw{color:var(--blue)}
+td.c-status .tag{padding:2px 8px;border-radius:3px;font-size:10px;font-weight:600}
+td.c-status .tag.hit{background:var(--red);color:#fff}
+td.c-status .tag.miss{background:var(--t3);color:#fff}
+td.c-rating .r-num{font-weight:700;color:var(--t1);font-family:var(--mono)}
+td.c-rating .r-lvl{font-size:10px;padding:1px 5px;border-radius:3px;font-weight:600;margin-left:4px}
+td.c-rating .r-lvl.s{background:var(--green);color:#fff}
+td.c-rating .r-lvl.a{background:var(--amber);color:#222}
+td.c-rating .r-lvl.b{background:var(--t3);color:#fff}
+.empty-state{text-align:center;padding:40px 20px;color:var(--t3);font-size:13px}
+.loading{text-align:center;padding:20px;color:var(--t3);font-size:12px}
+@media(max-width:768px){
+  .sd-wrap{width:60px}
+  .sd-logo-m,.sd-logo-s,.date-item .d,.date-item .s{display:none}
+  .main{padding:0 10px 40px}
+  .mc-header{flex-wrap:wrap;gap:6px}
+  .mc-mid{display:none}
+  .detail-grid{grid-template-columns:1fr}
+  table.y-table{font-size:11px}
+  table.y-table thead th,table.y-table tbody td{padding:6px 6px}
+}
+</style>
+</head>
+<body>
+<div class="sd-wrap">
+  <div class="sd-logo">
+    <div class="sd-logo-m">V3.3.3-Core</div>
+    <div class="sd-logo-s">分析系统</div>
+  </div>
+  <div class="sidebar-section">
+    <h3>历史预测</h3>
+    <ul class="date-list" id="historyDateList">
+      <li class="loading" style="padding:9px 16px;font-size:12px;color:var(--t3);list-style:none">加载中...</li>
+    </ul>
+  </div>
+</div>
+<div class="main">
+  <div class="sec-header">
+    <h2>今日扫盘</h2>
+    <span class="sec-sub" id="todaySub">加载中...</span>
+    <div class="sec-bar"></div>
+  </div>
+  <div id="todayMatches"></div>
+  <div class="sec-header" style="margin-top:20px">
+    <h2>昨日扫盘</h2>
+    <span class="sec-sub" id="yesterdaySub">--</span>
+    <div class="sec-bar"></div>
+  </div>
+  <div id="yesterdayContent" style="display:none">
+    <div class="table-wrap" id="yesterdayTableWrap">
+      <div class="table-top" id="yesterdayTableTop"></div>
+      <div style="overflow-x:auto"><table class="y-table" id="yesterdayTable"><tbody id="yesterdayTableBody"></tbody></table></div>
+    </div>
+  </div>
+</div>
+<script>
+var HISTORY_RUNS = [];
+var CURRENT_DATE = null;
+function getTagColor(tag){
+  tag=(tag||"").toLowerCase();
+  if(tag==="s") return "s";
+  if(tag==="a") return "a";
+  return "b";
+}
+function getDirBadge(dir){
+  var d=(dir||"").toLowerCase();
+  if(d.indexOf("\u80dc")>=0||d==="\u4e0a\u76d8"||d==="\u5927\u7403") return "<span class=\"mc-badge g\">"+dir+"</span>";
+  if(d.indexOf("\u8d1f")>=0||d==="\u4e0b\u76d8"||d==="\u5c0f\u7403") return "<span class=\"mc-badge r\">"+dir+"</span>";
+  if(d.indexOf("\u5e73")>=0||d==="\u8d70\u6c34") return "<span class=\"mc-badge b\">"+dir+"</span>";
+  return "<span class=\"mc-badge gray\">"+(dir||"-")+"</span>";
+}
+function getHitTag(hit){
+  return hit ? "<span class=\"tag hit\">命中</span>" : "<span class=\"tag miss\">未中</span>";
+}
+function getRatingHTML(r,level){
+  var n=r||"";
+  var lvl=getTagColor(level);
+  return "<span class=\"r-num\">"+n+"</span><span class=\"r-lvl "+lvl+"\">"+level.toUpperCase()+"</span>";
+}
+function getResultClass(result){
+  var re=(result||"").toLowerCase();
+  if(re.indexOf("\u80dc")>=0||re.indexOf("\u8ba9\u80dc")>=0) return "lose";
+  if(re.indexOf("\u8d1f")>=0||re.indexOf("\u8ba9\u8d1f")>=0) return "win";
+  if(re.indexOf("\u5e73")>=0) return "draw";
+  return "";
+}
+function renderToday(data){
+  var h="";
+  if(!data||data.length===0){
+    h="<div class=\"empty-state\">\u6682\u65e0\u4eca\u65e5\u6bd4\u8d5b\u6570\u636e</div>";
+  } else {
+    data.forEach(function(m,i){
+      var time=m.time||m.match_time||"--:--";
+      var league=m.league||"";
+      var home=m.home||m.home_team||"";
+      var away=m.away||m.away_team||"";
+      var dir=m.direction||m.prediction||"";
+      var score=m.score||"";
+      var halfFull=m.half_full||m.hf||"";
+      var totalGoals=m.total_goals||m.tg||"";
+      var fitScore=m.fit_score||0;
+      var rating=m.rating||"";
+      // Derive level from rating letter (A/B/S) if not explicitly set
+    var rawLevel=m.level||m.rating_level||"";
+    var level=rawLevel||(m.rating&&/^[absABS]+$/.test(m.rating)?m.rating.toLowerCase():"b");
+      var lambdaD=m.lambda_diff||0;
+      var scenario=m.scenario_type||"";
+      var ddi=m.ddi_home_win||0;
+      var hit=m.hit||false;
+      var statParts=[];
+      if(totalGoals) statParts.push("\u603b\u8fdb\u7403 "+totalGoals);
+      if(halfFull) statParts.push("\u534a\u5168\u573a "+halfFull);
+      if(score) statParts.push("\u6bd4\u5206 "+score);
+      var statHtml=statParts.length ? statParts.join("<span class=\"sep\">|</span>") : "";
+      var lvlClass=getTagColor(level);
+      h += "<div class=\"match-card\">";
+      h += "<div class=\"mc-header\">";
+      h += "<div class=\"mc-left\">";
+      h += "<span class=\"mc-time\">"+time+"</span>";
+      if(league) h += "<span class=\"mc-league\">"+league+"</span>";
+      h += "<span class=\"mc-teams\">"+home+"<span class=\"mc-vs\">vs</span>"+away+"</span>";
+      h += "</div>";
+      if(statHtml){
+        h += "<div class=\"mc-mid\"><div class=\"mc-stat\">"+statHtml+"</div></div>";
+      }
+      h += "<div class=\"mc-right\">";
+      h += getDirBadge(dir);
+      h += "<div class=\"mc-rating\">"+rating+"<span class=\"lvl "+lvlClass+"\">"+level.toUpperCase()+"</span></div>";
+      h += "<span class=\"mc-arrow\">\u25bc</span>";
+      h += "</div></div>";
+      h += "<div class=\"cd\">";
+      h += "<div class=\"detail-grid\">";
+      var lamA=Math.min(100,Math.max(5,Math.abs(lambdaD)*80+20));
+      var lamB=Math.min(100,Math.max(5,100-lamA+10));
+      h += "<div class=\"chart-box\">";
+      h += "<div class=\"ch-title\">\u039b\u5bf9\u6bd4</div>";
+      h += "<div class=\"chart-bars\">";
+      h += "<div class=\"chart-bar\"><div class=\"bar\" style=\"height:"+lamA+"%;background:var(--green)\"></div><div class=\"bar-label\">\u039b\u503c</div></div>";
+      h += "<div class=\"chart-bar\"><div class=\"bar\" style=\"height:"+lamB+"%;background:var(--t3)\"></div><div class=\"bar-label\">\u57fa\u51c6</div></div>";
+      h += "</div></div>";
+      var phy=Math.min(100,Math.max(5,fitScore*12));
+      var mkt=Math.min(100,Math.max(5,(1-ddi)*60+20));
+      h += "<div class=\"chart-box\">";
+      h += "<div class=\"ch-title\">\u7269\u7406 vs \u5e02\u573a</div>";
+      h += "<div class=\"chart-bars\">";
+      h += "<div class=\"chart-bar\"><div class=\"bar\" style=\"height:"+phy+"%;background:var(--blue)\"></div><div class=\"bar-label\">\u7269\u7406</div></div>";
+      h += "<div class=\"chart-bar\"><div class=\"bar\" style=\"height:"+mkt+"%;background:var(--amber)\"></div><div class=\"bar-label\">\u5e02\u573a</div></div>";
+      h += "</div></div></div>";
+      h += "<div class=\"detail-rows\">";
+      h += "<div class=\"detail-row\"><span class=\"dr-l\">\u039b\u5dee\u503c</span><span class=\"dr-r\">"+(lambdaD?lambdaD.toFixed(4):"0.0000")+"</span></div>";
+      h += "<div class=\"detail-row\"><span class=\"dr-l\">S7\u8bf4\u660e</span><span class=\"dr-r\">"+(scenario||"\u65e0\u7279\u6b8a\u573a\u666f")+"</span></div>";
+      h += "<div class=\"detail-row\"><span class=\"dr-l\">\u8bf1\u76d8\u5206\u6790</span><span class=\"dr-r\">"+(ddi?"DDI\u7cfb\u6570 "+ddi.toFixed(4):"\u65e0\u6570\u636e")+"</span></div>";
+      var riskMsg="";
+      if(!hit) riskMsg="\u9884\u6d4b\u65b9\u5411\u4e0e\u6a21\u578b\u5b58\u5728\u504f\u5dee\uff0c\u5efa\u8bae\u5ba1\u614e\u51b3\u7b56\u3002";
+      else if(Math.abs(lambdaD)>0.3) riskMsg="Lambda\u504f\u5dee\u8f83\u5927("+lambdaD.toFixed(4)+")\uff0c\u9700\u5173\u6ce8\u5e02\u573a\u5f02\u5e38\u3002";
+      else riskMsg="\u6a21\u578b\u4fe1\u53f7\u4e00\u81f4\uff0c\u98ce\u9669\u8f83\u4f4e\u3002";
+      h += "<div class=\"detail-row risk\"><span class=\"dr-l\">\u98ce\u9669\u63d0\u793a</span><span class=\"dr-r\">"+riskMsg+"</span></div>";
+      h += "</div></div></div>";
+    });
+  }
+  document.getElementById("todayMatches").innerHTML=h;
+  document.querySelectorAll("#todayMatches .match-card").forEach(function(c){
+    c.addEventListener("click",function(e){
+      var ex=this.classList.contains("active");
+      document.querySelectorAll("#todayMatches .match-card.active").forEach(function(x){
+        if(x!==c) x.classList.remove("active");
+      });
+      if(!ex) this.classList.add("active");
+      else this.classList.remove("active");
+    });
+  });
+}
+function renderYesterday(data){
+  var container=document.getElementById("yesterdayContent");
+  if(!data||!data.matches||data.matches.length===0){
+    container.style.display="none";
+    document.getElementById("yesterdaySub").textContent="\u6682\u65e0\u6570\u636e";
+    return;
+  }
+  container.style.display="block";
+  var stats=data.stats||{};
+  // Compute stats from matches if not provided
+  var total=stats.total||data.matches.length;
+  var hitCount=stats.hit;
+  if(hitCount===undefined){
+    hitCount=0;
+    data.matches.forEach(function(m){if(m.hit) hitCount++;});
+  }
+  var rate=stats.rate;
+  if(rate===undefined) rate=total>0?Math.round(hitCount/total*100):0;
+  var sCount=stats.s_count||0;
+  var aCount=stats.a_count||0;
+  var topHtml="";
+  topHtml+="<span class=\"tt-item\">\u65e5\u671f <b>"+(data.date||"--")+"</b></span>";
+  topHtml+="<span class=\"tt-item\">\u626b\u76d8 <b>"+total+"</b> \u573a</span>";
+  topHtml+="<span class=\"tt-item\">\u547d\u4e2d <b class=\"hl\">"+hitCount+"</b> \u573a</span>";
+  topHtml+="<span class=\"tt-item\">\u547d\u4e2d\u7387 <b class=\"hl\">"+rate+"%</b></span>";
+  topHtml+="<span class=\"tt-spacer\"></span>";
+  if(sCount>0) topHtml+="<span class=\"tt-item\">S\u7ea7 <b class=\"hl\">"+sCount+"</b></span>";
+  if(aCount>0) topHtml+="<span class=\"tt-item\">A\u7ea7 <b class=\"hl2\">"+aCount+"</b></span>";
+  document.getElementById("yesterdayTableTop").innerHTML=topHtml;
+  document.getElementById("yesterdaySub").textContent=(data.date||"")+" | "+total+"\u573a";
+  var tbody=document.getElementById("yesterdayTableBody");
+  var rows="";
+  data.matches.forEach(function(m,i){
+    var idx=m.match_id||m.index||'#'+(i+201);
+    var time=m.time||m.match_time||"--:--";
+    var home=m.home||m.home_team||"";
+    var away=m.away||m.away_team||"";
+    var result=m.result||m.direction||m.prediction||'';
+    var score=m.actual_score||m.score||'-';
+    var halfFull=m.half_full||m.hf||"";
+    var scoreCol=score+(halfFull?" / "+halfFull:"");
+    var hit=m.hit||false;
+    var rating=m.rating||"";
+    // Derive level from rating letter (A/B/S) if not explicitly set
+    var rawLevel=m.level||m.rating_level||"";
+    var level=rawLevel||(m.rating&&/^[absABS]+$/.test(m.rating)?m.rating.toLowerCase():"b");
+    var lvlClass=getTagColor(level);
+    var resultClass=getResultClass(result);
+    rows+="<tr>";
+    rows+="<td style=\"font-family:var(--mono);color:var(--t3)\">"+idx+"</td>";
+    rows+="<td style=\"font-family:var(--mono)\">"+time+"</td>";
+    rows+="<td>"+home+" vs "+away+"</td>";
+    rows+="<td class=\"c-result "+resultClass+"\">"+result+"</td>";
+    rows+="<td style=\"font-family:var(--mono);font-size:11px\">"+scoreCol+"</td>";
+    rows+="<td class=\"c-status\">"+getHitTag(hit)+"</td>";
+    rows+="<td class=\"c-rating\">"+getRatingHTML(rating,level)+"</td>";
+    rows+="</tr>";
+  });
+  tbody.innerHTML=rows;
+}
+function loadToday(){
+  document.querySelector(".sec-header h2").textContent="\u4eca\u65e5\u626b\u76d8";
+  document.getElementById("todayMatches").style.display="block"
+  document.getElementById('yesterdayContent').style.display='none';
+  document.getElementById("todaySub").textContent="\u52a0\u8f7d\u4e2d...";
+  fetch("/api/latest").then(function(r){return r.json()}).then(function(data){
+    if(data&&data.matches){
+      renderToday(data.matches);
+      document.getElementById("todaySub").textContent=(data.date||"\u4eca\u5929")+" | "+data.matches.length+"\u573a";
+    } else if(data&&Array.isArray(data)){
+      renderToday(data);
+      document.getElementById("todaySub").textContent="\u4eca\u5929 | "+data.length+"\u573a";
+    } else {
+      renderToday([]);
+      document.getElementById("todaySub").textContent="\u6682\u65e0\u6570\u636e";
+    }
+  }).catch(function(){
+    var demoToday=[];
+    if(HISTORY_RUNS.length>0){
+      var latest=HISTORY_RUNS[0];
+      if(latest.matches) demoToday=latest.matches.slice(0,5);
+    }
+    if(demoToday.length===0){
+      demoToday=[
+        {time:"14:00",league:"\u65e5\u804c",home:"\u6a2a\u6ee8\u6c34\u624b",away:"\u5ddd\u5d0e\u524d\u950b",direction:"\u80dc",score:"2-1",half_full:"\u80dc-\u80dc",total_goals:"3",fit_score:8.2,rating:"86",level:"s",lambda_diff:0.42,scenario_type:"\u5f3a\u5f3a\u5bf9\u8bddDDI\u6821\u51c6",ddi_home_win:0.12},
+        {time:"16:00",league:"\u97e9K",home:"\u851a\u5c71\u73b0\u4ee3",away:"\u5168\u5317\u73b0\u4ee3",direction:"\u8ba9\u8d1f",score:"1-1",half_full:"\u5e73-\u5e73",total_goals:"2",fit_score:7.5,rating:"72",level:"a",lambda_diff:0.18,scenario_type:"\u5fb7\u6bd4\u6218",ddi_home_win:-0.05},
+        {time:"18:30",league:"\u6fb3\u8d85",home:"\u58a8\u5c14\u672c\u57ce",away:"\u6089\u5c3cFC",direction:"\u80dc",score:"3-0",half_full:"\u80dc-\u80dc",total_goals:"3",fit_score:9.1,rating:"94",level:"s",lambda_diff:0.63,scenario_type:"\u4e3b\u573a\u4f18\u52bfDDI\u6821\u51c6",ddi_home_win:0.28},
+        {time:"20:00",league:"\u4e2d\u8d85",home:"\u4e0a\u6d77\u6d77\u6e2f",away:"\u5c71\u4e1c\u6cf0\u5c71",direction:"\u8d1f",score:"0-1",half_full:"\u5e73-\u8d1f",total_goals:"1",fit_score:3.8,rating:"45",level:"b",lambda_diff:0.05,scenario_type:"\u666e\u901a\u8054\u8d5b",ddi_home_win:0.01},
+        {time:"22:00",league:"\u82f1\u8d85",home:"\u963f\u68ee\u7eb3",away:"\u5207\u5c14\u897f",direction:"\u80dc",score:"3-1",half_full:"\u80dc-\u80dc",total_goals:"4",fit_score:8.9,rating:"91",level:"s",lambda_diff:0.51,scenario_type:"\u4f26\u6566\u5fb7\u6bd4DDI\u6821\u51c6",ddi_home_win:0.19}
+      ];
+    }
+    renderToday(demoToday);
+    document.getElementById("todaySub").textContent="\u4eca\u5929 | "+demoToday.length+"\u573a";
+  });
+}
+function loadYesterday(dateStr){
+  document.getElementById("yesterdaySub").textContent="\u52a0\u8f7d\u4e2d...";
+  if(!dateStr&&HISTORY_RUNS.length>0){var last=HISTORY_RUNS[HISTORY_RUNS.length-1];dateStr=last.prediction_date||last.date;}var url=dateStr?'/api/history/matches?date='+encodeURIComponent(dateStr):'/api/history/matches?date=2026-06-05';
+  fetch(url).then(function(r){return r.json()}).then(function(data){
+    renderYesterday(data);
+  }).catch(function(){
+    var demoData={
+      date:dateStr||"2026-06-05",
+      stats:{total:8,hit:5,rate:62,s_count:2,a_count:3},
+      matches:[
+        {index:"#201",time:"06-05 08:00",home:"\u65af\u6d1b\u6587\u5c3c\u4e9a",away:"\u585e\u6d66\u8def\u65af",result:"\u80dc",score:"1-1",hf:"\u8d1f\u5e73",hit:false,rating:"62",level:"b"},
+        {index:"#202",time:"06-05 10:00",home:"\u6ce2\u5170",away:"\u5a01\u5c14\u58eb",result:"\u8ba9\u8d1f",score:"2-1",hf:"\u80dc-\u5e73",hit:true,rating:"78",level:"a"},
+        {index:"#203",time:"06-05 12:30",home:"\u8461\u8404\u7259",away:"\u514b\u7f57\u5730\u4e9a",result:"\u80dc",score:"3-0",hf:"\u80dc-\u80dc",hit:true,rating:"88",level:"s"},
+        {index:"#204",time:"06-05 14:00",home:"\u8377\u5170",away:"\u5fb7\u56fd",result:"\u5e73",score:"1-1",hf:"\u5e73-\u5e73",hit:false,rating:"55",level:"b"},
+        {index:"#205",time:"06-05 16:30",home:"\u6cd5\u56fd",away:"\u610f\u5927\u5229",result:"\u80dc",score:"2-0",hf:"\u80dc-\u80dc",hit:true,rating:"91",level:"s"},
+        {index:"#206",time:"06-05 18:00",home:"\u897f\u73ed\u7259",away:"\u82f1\u683c\u5170",result:"\u8ba9\u8d1f",score:"1-2",hf:"\u5e73-\u8d1f",hit:true,rating:"74",level:"a"},
+        {index:"#207",time:"06-05 20:00",home:"\u5df4\u897f",away:"\u963f\u6839\u5ef7",result:"\u8d1f",score:"0-1",hf:"\u5e73-\u8d1f",hit:false,rating:"48",level:"b"},
+        {index:"#208",time:"06-05 22:30",home:"\u6bd4\u5229\u65f6",away:"\u4e39\u9ea6",result:"\u80dc",score:"2-1",hf:"\u80dc-\u5e73",hit:true,rating:"82",level:"a"}
+      ]
+    };
+    renderYesterday(demoData);
+  });
+}
+function renderDateList(){
+  var el=document.getElementById("historyDateList");
+  var h="";
+  // Today navigation - always first
+  var todayActive=(!CURRENT_DATE)?" active":"";
+  h+='<li class="date-item"'+todayActive+' data-date="today">';
+  h+='<div class="d">今日扫盘</div>';
+  h+='<div class="s">查看今日预测</div>';
+  h+='</li>';
+  if(!HISTORY_RUNS||HISTORY_RUNS.length===0){
+    var demoDates=["2026.06.05","2026.06.04","2026.06.03","2026.06.02","2026.06.01"];
+    demoDates.forEach(function(d){
+      var active=(d===CURRENT_DATE)?" active":"";
+      h+="<li class=\"date-item"+active+"\" data-date=\""+d+"\">";
+      h+="<div class=\"d\">"+d+"</div>";
+      h+="<div class=\"s\">\u70b9\u51fb\u67e5\u770b</div>";
+      h+="</li>";
+    });
+  } else {
+    HISTORY_RUNS.forEach(function(r){
+      var d=r.prediction_date||r.date||"";
+      var active=(d===CURRENT_DATE)?" active":"";
+      if(!d) return;
+      var total=r.total_matches||0;
+      var hit=r.hit_count||0;
+      var rate=total>0?Math.round(hit/total*100):0;
+      var statStr=total+"\u573a "+hit+"\u80dc "+rate+"%";
+      h+="<li class=\"date-item"+active+"\" data-date=\""+d+"\">";
+      h+="<div class=\"d\">"+d.replace(/-/g,".")+"</div>";
+      h+="<div class=\"s\">"+(statStr||"")+"</div>";
+      h+="</li>";
+    });
+  }
+  el.innerHTML=h;
+  el.querySelectorAll(".date-item").forEach(function(item){
+    item.addEventListener("click",function(){
+      var date=this.getAttribute("data-date");
+      if(!date) return;
+      if(date==="today"){
+        loadToday();
+        el.querySelectorAll(".date-item").forEach(function(x){x.classList.remove("active");});
+        this.classList.add("active");
+        return;
+      }
+      CURRENT_DATE=date;
+      el.querySelectorAll(".date-item").forEach(function(x){x.classList.remove("active");});
+      this.classList.add("active");
+      // Switch main content title
+      document.querySelector(".sec-header h2").textContent="\u5386\u53f2\u626b\u76d8 - "+date.replace(/-/g,".");
+      // Hide today matches, show yesterday content
+      document.getElementById("todayMatches").style.display="none";
+      document.getElementById("yesterdayContent").style.display="block";
+      loadYesterday(date);
+    });
+  });
+}
+document.addEventListener("DOMContentLoaded",function(){
+  loadToday();
+  loadYesterday();
+  fetch("/api/history/runs").then(function(r){return r.json()}).then(function(data){
+    HISTORY_RUNS=data||[];
+    renderDateList();
+  }).catch(function(){
+    renderDateList();
+  });
+});
+</script>
+</body>
+</html>

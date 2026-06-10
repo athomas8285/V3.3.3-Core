@@ -1,0 +1,49 @@
+{
+  "matches": [
+    {
+      "id": "201",
+      "s7_score": 0,
+      "s7_reason": "",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "",
+      "key_risk": ""
+    },
+    {
+      "id": "202",
+      "s7_score": 0,
+      "s7_reason": "",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "",
+      "key_risk": ""
+    },
+    {
+      "id": "203",
+      "s7_score": 0,
+      "s7_reason": "",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "",
+      "key_risk": ""
+    },
+    {
+      "id": "204",
+      "s7_score": 0,
+      "s7_reason": "",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "",
+      "key_risk": ""
+    },
+    {
+      "id": "205",
+      "s7_score": 0,
+      "s7_reason": "",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "",
+      "key_risk": ""
+    }
+  ]
+}

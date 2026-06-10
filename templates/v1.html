@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>V3.3.3-Core 分析系统</title>
+<style>
+:root {
+  --bg: #080a0f;
+  --bg2: #0c0e16;
+  --surface: #11141e;
+  --surface2: #171b28;
+  --surface3: #1e2340;
+  --border: #1e2338;
+  --ink: #e2e6f0;
+  --t2: #8a8fa8;
+  --t3: #4a4f6a;
+  --accent: #0ea5e9;
+  --accent2: #8b5cf6;
+  --accent-dim: rgba(14,165,233,0.08);
+  --green: #22d65e;
+  --red: #f04949;
+  --amber: #f5a524;
+  --radius: 8px;
+  --radius-sm: 4px;
+  --mono: "JetBrains Mono", "Fira Code", "Consolas", monospace;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background-image:
+    radial-gradient(circle at 20% 50%, rgba(14,165,233,0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(139,92,246,0.03) 0%, transparent 50%),
+    radial-gradient(circle at 50% 80%, rgba(14,165,233,0.02) 0%, transparent 50%);
+  pointer-events:none;z-index:0;
+}
+body::after{
+  content:'';
+  position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(30,35,56,0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30,35,56,0.3) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events:none;z-index:0;
+}
+#app{position:relative;z-index:1;display:flex;min-height:100vh;max-width:1440px;margin:0 auto}
+/* Scrollbar */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--t3)}
+/* Sidebar */
+#sidebar{
+  width:260px;flex-shrink:0;position:sticky;top:0;height:100vh;
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  background: rgba(17,20,30,0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.sb-hdr{
+  padding:18px 16px 14px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.sb-hdr h2{
+  font-size:12px;font-weight:600;color:var(--t2);
+  letter-spacing:1.5px;text-transform:uppercase;
+}
+.sb-hdr button{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:3px 10px;
+  font-size:10px;color:var(--t3);cursor:pointer;
+  transition:all .2s;
+}
+.sb-hdr button:hover{background:var(--surface3);color:var(--ink);border-color:var(--accent);}
+#historyDateList{flex:1;overflow-y:auto;padding:6px 0}
+.v-item{
+  padding:10px 16px;cursor:pointer;
+  border-left:2px solid transparent;
+  position:relative;
+  transition:all .2s;
+}
+.v-item::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg, rgba(14,165,233,0.03), transparent);
+  opacity:0;transition:opacity .2s;
+}
+.v-item:hover::before{opacity:1}
+.v-item:hover{background:transparent}
+.v-item.active{border-left-color:var(--accent);background:rgba(14,165,233,0.06)}
+.v-item.active::after{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:2px;
+  background:linear-gradient(180deg, var(--accent), var(--accent2));
+  box-shadow:0 0 8px rgba(14,165,233,0.4);
+}
+.v-item .date{font-size:13px;font-weight:500}
+.v-item .meta{font-size:10px;color:var(--t3);margin-top:2px}
+.v-empty{padding:40px 16px;text-align:center;font-size:11px;color:var(--t3)}
+/* Main */
+#main{flex:1;min-width:0;padding:24px 32px}
+.header{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  margin-bottom:24px;gap:16px;
+}
+.hdr-left h1{
+  font-size:20px;font-weight:700;
+  background:linear-gradient(135deg, var(--ink) 0%, var(--t2) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin:0;
+}
+.hdr-left h1 small{
+  font-size:12px;font-weight:400;color:var(--t3);
+  margin-left:10px;
+  -webkit-text-fill-color:var(--t3);
+}
+.hdr-left .date{
+  font-size:11px;color:var(--t3);margin-top:4px;
+}
+.hdr-left .date em{
+  font-style:normal;color:var(--accent);
+}
+.stats{
+  font-size:12px;color:var(--t2);white-space:nowrap;padding-top:4px;
+}
+.stats b{color:var(--accent);font-weight:600}
+.stats span{color:var(--green);font-weight:600}
+/* Section divider */
+.sec{
+  display:flex;align-items:center;gap:10px;
+  margin:24px 0 14px;font-size:13px;font-weight:600;color:var(--t2);
+}
+.sec-dot{
+  width:4px;height:18px;border-radius:2px;flex-shrink:0;
+  background:linear-gradient(180deg, var(--accent), var(--accent2));
+  box-shadow:0 0 6px rgba(14,165,233,0.3);
+}
+.sec-l{flex:1;height:1px;background:linear-gradient(90deg, var(--border), transparent)}
+/* Column header */
+.thr{
+  display:flex;align-items:center;gap:8px;
+  padding:6px 14px;font-size:10px;color:var(--t3);font-weight:500;
+  letter-spacing:0.5px;
+  border-bottom:1px solid var(--border);margin-bottom:6px;
+}
+/* Cards */
+.card{
+  background:linear-gradient(135deg, var(--surface), var(--surface2));
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  margin-bottom:8px;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+  transition:all .25s cubic-bezier(.22,1,.36,1);
+}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity:0;transition:opacity .3s;
+}
+.card:hover{
+  border-color:rgba(14,165,233,0.3);
+  transform:translateY(-1px);
+  box-shadow:0 4px 20px rgba(14,165,233,0.08);
+}
+.card:hover::before{opacity:1}
+.card.rt-hit{
+  border-left:3px solid var(--green);
+  border-left-color:var(--green);
+  box-shadow:inset 3px 0 0 var(--green);
+}
+.card.rt-miss{
+  border-left:3px solid var(--red);
+  border-left-color:var(--red);
+  box-shadow:inset 3px 0 0 var(--red);
+}
+.cg2{
+  display:flex;align-items:center;gap:8px;
+  padding:10px 14px;position:relative;z-index:1;
+}
+.c2-id{width:40px;flex-shrink:0}
+.c2-tm{width:94px;flex-shrink:0}
+.c-id{
+  color:var(--t3);font-family:var(--mono);font-size:10px;
+  background:var(--bg);padding:1px 6px;border-radius:3px;
+}
+.c-ti{
+  color:var(--t3);font-family:var(--mono);font-size:10px;
+}
+.c2-mm{flex:1;min-width:0;display:flex;align-items:center;gap:6px}
+.c2-h,.c2-a{font-size:13px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.c2-v{color:var(--t3);font-size:10px;flex-shrink:0}
+.c2-dr{width:85px;flex-shrink:0;text-align:center;font-size:11px}
+.c2-sc{width:160px;flex-shrink:0;text-align:center;font-family:var(--mono);font-size:11px}
+.c2-ht{width:55px;flex-shrink:0;text-align:center}
+.c2-ht .hit{
+  color:var(--green);font-size:11px;font-weight:600;padding:1px 8px;
+  border-radius:4px;background:rgba(34,214,94,0.1);
+  border:1px solid rgba(34,214,94,0.15);
+}
+.c2-ht .miss{
+  color:var(--red);font-size:11px;font-weight:600;padding:1px 8px;
+  border-radius:4px;background:rgba(240,73,73,0.1);
+  border:1px solid rgba(240,73,73,0.15);
+}
+.c2-rt{
+  width:145px;flex-shrink:0;text-align:right;
+  display:flex;align-items:center;justify-content:flex-end;gap:6px;padding-right:6px;
+}
+.fs{font-family:var(--mono);font-size:11px;color:var(--t2)}
+/* Badges */
+.badge{
+  font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;
+  letter-spacing:0.3px;
+  border:1px solid transparent;
+}
+.badge-a{color:var(--green);background:rgba(34,214,94,0.08);border-color:rgba(34,214,94,0.2)}
+.badge-b{color:var(--accent);background:rgba(14,165,233,0.08);border-color:rgba(14,165,233,0.2)}
+.badge-c{color:var(--amber);background:rgba(245,165,36,0.08);border-color:rgba(245,165,36,0.2)}
+.badge-d{color:var(--red);background:rgba(240,73,73,0.08);border-color:rgba(240,73,73,0.2)}
+/* Expanded content */
+.cd{display:none;padding:0 14px 14px}
+.card.expanded .cd{display:block}
+.card.expanded{border-color:rgba(14,165,233,0.25)}
+.ana{
+  display:grid;grid-template-columns:1fr 1fr;gap:6px 20px;
+  background:rgba(8,10,15,0.6);
+  border-radius:var(--radius);
+  padding:12px 14px;margin-top:6px;
+  border:1px solid rgba(30,35,56,0.5);
+}
+.ana-i{display:flex;gap:8px;align-items:flex-start}
+.ana-l{color:var(--t3);font-size:10px;flex-shrink:0;min-width:50px}
+.ana-v{font-size:11px;color:var(--ink);word-break:break-all}
+/* Empty & Loading */
+.empty-state{
+  text-align:center;padding:80px 20px;color:var(--t3);font-size:13px;
+}
+.loading{
+  text-align:center;padding:80px 20px;
+}
+/* Loading shimmer */
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.skeleton{
+  display:inline-block;height:12px;border-radius:4px;
+  background:linear-gradient(90deg, var(--surface2) 25%, var(--surface3) 50%, var(--surface2) 75%);
+  background-size:200% 100%;
+  animation:shimmer 1.5s ease-in-out infinite;
+}
+/* Panel */
+.panel-toggle{
+  position:fixed;bottom:24px;right:24px;display:flex;gap:8px;z-index:100;
+}
+.panel-toggle button{
+  background:var(--surface);border:1px solid var(--border);border-radius:50%;
+  width:44px;height:44px;font-size:10px;font-weight:600;color:var(--t2);
+  cursor:pointer;transition:all .2s;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 12px rgba(0,0,0,0.3);
+}
+.panel-toggle button:hover{
+  border-color:var(--accent);color:var(--accent);transform:translateY(-2px);
+  box-shadow:0 6px 20px rgba(14,165,233,0.15);
+}
+.btn-live{
+  background:linear-gradient(135deg, #dc2626, #ef4444)!important;
+  color:#fff!important;border-color:#dc2626!important;
+}
+.btn-live:hover{border-color:#ef4444!important;color:#fff!important}
+.panel-overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,0.6);
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
+  z-index:200;opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.panel-overlay.show{opacity:1;pointer-events:auto}
+.panel-drawer{
+  position:fixed;top:0;right:0;width:400px;max-width:92vw;height:100vh;
+  background:rgba(17,20,30,0.95);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border-left:1px solid var(--border);
+  z-index:201;
+  transform:translateX(105%);
+  transition:transform .35s cubic-bezier(.22,1,.36,1);
+  display:flex;flex-direction:column;
+  box-shadow:-8px 0 40px rgba(0,0,0,0.5);
+}
+.panel-drawer.open{transform:translateX(0)}
+.pd-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 20px;border-bottom:1px solid var(--border);flex-shrink:0;
+}
+.pd-hdr h2{font-size:14px;font-weight:600}
+.pd-close{
+  background:none;border:none;color:var(--t2);font-size:24px;
+  cursor:pointer;padding:0 6px;transition:color .15s;
+}
+.pd-close:hover{color:var(--ink)}
+.pd-body{flex:1;overflow-y:auto;padding:16px 20px}
+.pd-body::-webkit-scrollbar{width:4px}
+.live-item{
+  background:rgba(8,10,15,0.5);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:14px;margin-bottom:10px;
+  transition:border-color .2s;
+}
+.live-item:hover{border-color:rgba(14,165,233,0.2)}
+.live-meta{display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:12px}
+.lm-id{color:var(--t3);font-family:var(--mono);font-size:10px}
+.lm-teams{flex:1;font-weight:500}
+.lm-direction{font-size:11px;font-weight:600}
+.live-input{display:flex;gap:6px}
+.sp-input{
+  flex:1;
+  background:rgba(23,27,40,0.8);
+  border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:6px 10px;font-size:12px;color:var(--ink);font-family:var(--mono);
+  outline:none;transition:border-color .2s;
+}
+.sp-input:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(14,165,233,0.1)}
+.live-input button{
+  background:linear-gradient(135deg, var(--accent), #0284c7);
+  border:none;border-radius:var(--radius-sm);
+  padding:6px 14px;font-size:11px;color:#fff;cursor:pointer;font-weight:500;
+  transition:all .2s;
+}
+.live-input button:hover{box-shadow:0 2px 10px rgba(14,165,233,0.3);transform:translateY(-1px)}
+.live-result{margin-top:8px;font-size:11px;color:var(--t2);font-family:var(--mono)}
+/* Framework tree */
+.framework-tree{font-size:12px;line-height:1.8}
+.fw-g{margin-bottom:10px;background:rgba(8,10,15,0.5);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.fw-g-h{
+  padding:12px 14px;cursor:pointer;font-weight:600;font-size:12px;
+  display:flex;align-items:center;gap:8px;user-select:none;
+  transition:background .15s;
+}
+.fw-g-h:hover{background:rgba(14,165,233,0.03)}
+.fw-g-h::before{
+  content:"+";font-family:var(--mono);font-size:16px;
+  color:var(--accent);width:18px;text-align:center;
+  transition:transform .2s;
+}
+.fw-g.expanded .fw-g-h::before{content:"-"}
+.fw-g-c{display:none;padding:0 14px 14px 32px;font-size:11px;color:var(--t2)}
+.fw-g-c div{margin-bottom:4px}
+.fw-g-c b{color:var(--ink)}
+.fw-g.expanded .fw-g-c{display:block}
+/* Animations */
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.card{animation:fadeUp .35s ease-out both}
+.card:nth-child(1){animation-delay:.02s}
+.card:nth-child(2){animation-delay:.04s}
+.card:nth-child(3){animation-delay:.06s}
+/* Responsive */
+@media(max-width:900px){
+  #app{flex-direction:column}
+  #sidebar{width:100%;height:auto;position:static;border-right:none;border-bottom:1px solid var(--border);max-height:260px;backdrop-filter:none}
+  #main{padding:16px}
+  .cg2{flex-wrap:wrap}
+  .c2-tm{width:auto}
+  .c2-dr{width:auto}
+  .c2-sc{width:auto}
+  .c2-rt{width:auto}
+}
+@media(max-width:700px){
+  .header{flex-direction:column}
+  .stats{white-space:normal}
+  .cg2{gap:4px}
+  .c2-mm{width:100%;order:-1}
+}
+</style>
+</head>
+<body>
+<div id=app>
+  <aside id=sidebar>
+    <div class=sb-hdr>
+      <h2>分析系统</h2>
+      <button id=sortBtn onclick=toggleSort()>倒序</button>
+    </div>
+    <div id=historyDateList><div class=v-empty>加载中...</div></div>
+  </aside>
+  <main id=main>
+    <div class=header>
+      <div class=hdr-left>
+        <h1>V3.3.3-Core<small>分析系统</small></h1>
+        <div class=date id=hdate></div>
+      </div>
+      <div class=stats id=stats></div>
+    </div>
+    <div id=rd></div>
+    <div id=r><div class=loading><div class=skeleton style=width:60%></div><br><br><div class=skeleton style=width:80%></div><br><br><div class=skeleton style=width:45%></div></div></div>
+    <div id=rv></div>
+    <div id=historyContent style=display:none>
+      <div class=sec><span class=sec-dot></span><span id=historyTitle style=font-size:13px;font-weight:600;color:var(--t2)></span><span class=sec-l></span></div>
+      <div id=historyMatches></div>
+    </div>
+  </main>
+  <div class=panel-toggle>
+    <button class=btn-live onclick=togglePanel('live') title="LIVE 分析系统">L</button>
+    <button class=btn-framework onclick=togglePanel('fw') title="分析框架说明">框</button>
+  </div>
+  <div class=panel-overlay id=panelOverlay onclick=togglePanel()></div>
+  <div class=panel-drawer id=livePanel>
+    <div class=pd-hdr><h2>Live Recalibration</h2><button class=pd-close onclick=togglePanel()>&times;</button></div>
+    <div class=pd-body id=livePanelBody style=text-align:center;padding:30px;color:#4a4f6a;font-size:12px>hover to load</div>
+  </div>
+  <div class=panel-drawer id=fwPanel>
+    <div class=pd-hdr><h2>V3.3.3-Core 分析系统</h2><button class=pd-close onclick=togglePanel()>&times;</button></div>
+    <div class=pd-body>
+      <div class=framework-tree>
+        <div class=fw-g>
+          <div class=fw-g-h onclick=toggleFW(this)>蒙特卡洛仿真</div>
+          <div class=fw-g-c>V3.3.3-Core 核心分析引擎。基于泊松分布模型对每场比赛进行蒙特卡洛仿真(2000次/场)，生成进球分布、半全场组合、比分概率等结构化预测，并计算DDI量化市场赔率与分析概率的偏离程度。</div>
+        </div>
+        <div class=fw-g>
+          <div class=fw-g-h onclick=toggleFW(this)>物理面</div>
+          <div class=fw-g-c>基于实际进球/xG数据量化球队攻防真实水平，通过泊松期望进球(lambda)评估比赛实力差。当xG数据缺失时，使用近10场实际进球替代；客场进球权重下调10%。DDI方向判断综合胜平负概率排序。</div>
+        </div>
+        <div class=fw-g>
+          <div class=fw-g-h onclick=toggleFW(this)>校准机制</div>
+          <div class=fw-g-c>
+            <div>- <b>SP匹配</b>：校验竞彩赔率与物理面概率的一致性，赔率偏差触发方向修正或降级</div>
+            <div>- <b>保护机制</b>：高返还率赛果(>97%)触发保守模式，fit score上限降低20%，方向置信度下调5%</div>
+            <div>- <b>冷处理</b>：AI判断/伤停/战意等不确定性累积达到阈值时触发，评分降级并标注风险</div>
+            <div>- <b>高原修正</b>：主场海拔>2500m时主队优势上调5%</div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+
+var HISTORY_RUNS = [];
+var SORT_ASC = false;
+
+function dirTag(dir) {
+  if (!dir) return '<span style=color:var(--t3)>--</span>';
+  if (dir.indexOf('\u8ba9') >= 0) return '<span style=color:var(--green);font-weight:600>' + dir + '</span>';
+  if (dir.indexOf('\u80dc') >= 0 || dir === '\u8d1f' || dir === '\u5ba2\u80dc') return '<span style=color:var(--accent);font-weight:600>' + dir + '</span>';
+  if (dir.indexOf('\u5e73') >= 0) return '<span style=color:var(--amber);font-weight:600>' + dir + '</span>';
+  return '<span>' + dir + '</span>';
+}
+
+function renderDateList() {
+  var h = '';
+  var sorted = HISTORY_RUNS.slice().sort(function(a, b) {
+    var da=a.prediction_date||'',db=b.prediction_date||'';return SORT_ASC?da.localeCompare(db):db.localeCompare(da);
+  });
+  var td = new Date();
+  var ts = td.getFullYear()+'-'+('0'+(td.getMonth()+1)).slice(-2)+'-'+('0'+td.getDate()).slice(-2);
+  var yd = new Date(td.getTime()-86400000);
+  var ys = yd.getFullYear()+'-'+('0'+(yd.getMonth()+1)).slice(-2)+'-'+('0'+yd.getDate()).slice(-2);
+  var count = 0;
+  for (var i = 0; i < sorted.length; i++) {
+    var r = sorted[i];
+    var pd = r.prediction_date;
+    if (pd === ts || pd === ys) continue;
+    count++;
+    var hits = 0, total = 0;
+    for (var j = 0; j < sorted.length; j++) {
+      if (sorted[j].prediction_date === pd) { total += sorted[j].total_matches || 0; hits += sorted[j].hit_count || 0; }
+    }
+    var rate = total > 0 ? Math.round(hits / total * 100) : '--';
+    var disp = pd.replace(/-/g, '.');
+    h += '<div class=v-item data-date="' + pd + '">';
+    h += '<div class=date>' + disp + '</div>';
+    h += '<div class=meta>\u5171' + total + '\u573a \u547d\u4e2d' + hits + '\u573a ' + rate + '%</div>';
+    h += '</div>';
+  }
+  if (!count) h = '<div class=v-empty>\u6682\u65e0\u5386\u53f2\u6570\u636e</div>';
+  document.getElementById('historyDateList').innerHTML = h;
+}
+
+function selectDate(date) {
+  document.querySelectorAll('#historyDateList .v-item').forEach(function(el) { el.classList.remove('active') });
+  document.querySelectorAll('#historyDateList .v-item').forEach(function(el) { if (el.getAttribute('data-date') === date) el.classList.add('active') });
+  var c = document.getElementById('historyContent');
+  c.style.display = 'block';
+  setTimeout(function(){ c.scrollIntoView({behavior:'smooth',block:'start'}) }, 100);
+  document.getElementById('historyTitle').textContent = date.replace(/-/g, '.') + ' \u590d\u76d8';
+  fetch('/api/history/matches?date=' + date).then(function(r) { return r.json() }).then(function(data) {
+    if (!data.matches || !data.matches.length) { c.style.display = 'none'; return; }
+    var ms = data.matches;
+    var h = '<div class=thr><span class=c2-id>\u573a\u6b21</span><span class=c2-tm>\u65f6\u95f4</span><span style=flex:1;min-width:0>\u4e3b\u961f vs \u5ba2\u961f</span><span style=width:80px;text-align:center>\u65b9\u5411</span><span style=width:160px;text-align:center>\u6bd4\u5206</span><span style=width:80px;text-align:center>\u7ed3\u679c</span><span style=width:100px;text-align:right;padding-right:6px>\u8bc4\u5206</span></div>';
+    ms.forEach(function(m) {
+      var hit = m.hit === 1 || m.hit === 'True';
+      var rt = hit ? 'rt-hit' : 'rt-miss';
+      var ko = '';
+      if (m.match_time && m.match_time.length >= 16) ko = m.match_time.substring(5,10) + ' ' + m.match_time.substring(11,16);
+      var dir = m.direction || '--';
+      var score = m.actual_score || '--';
+      var fs = m.fit_score || 0;
+      var rating = m.rating || '';
+      var hitLabel = hit ? '\u547d\u4e2d' : '\u672a\u4e2d';
+      var hitCls = hit ? 'hit' : 'miss';
+      h += '<div class="card ' + rt + '">';
+      h += '<div class=cg2>';
+      h += '<div class=c2-col c2-id><span class=c-id>#' + (m.match_id || '') + '</span></div>';
+      h += '<div class=c2-col c2-tm><span class=c-ti>' + ko + '</span></div>';
+      h += '<div class=c2-mm><span class=c2-h>' + (m.home || '') + '</span><span class=c2-v>vs</span><span class=c2-a>' + (m.away || '') + '</span></div>';
+      h += '<div class=c2-dr>' + dirTag(dir) + '</div>';
+      h += '<div class=c2-sc style=color:' + (hit ? 'var(--green)' : 'var(--ink)') + '>' + score + (m.half_full && m.half_full !== '?' ? '/' + m.half_full : '') + '</div>';
+      h += '<div class="c2-ht ' + hitCls + '"><span>' + hitLabel + '</span></div>';
+      h += '<div class=c2-rt><span class=fs>' + (fs ? fs.toFixed(1) : '--') + '</span>' + (rating ? '<span class="badge badge-' + rating.toLowerCase() + '">' + rating + '</span>' : '') + '</div>';
+      h += '</div>';
+      h += '</div>';
+    });
+    document.getElementById('historyMatches').innerHTML = h;
+    document.querySelectorAll('#historyMatches .card').forEach(function(cc) {
+      cc.addEventListener('click', function() {
+        var ex = this.classList.contains('expanded');
+        document.querySelectorAll('#historyMatches .card.expanded').forEach(function(x) { x.classList.remove('expanded') });
+        if (!ex) this.classList.add('expanded');
+      });
+    });
+  }).catch(function() { c.style.display = 'none' });
+}
+
+function toggleSort() {
+  SORT_ASC = !SORT_ASC;
+  document.getElementById('sortBtn').textContent = SORT_ASC ? '\u987a\u5e8f' : '\u5012\u5e8f';
+  renderDateList();
+}
+
+function togglePanel(which) {
+  var overlay = document.getElementById('panelOverlay');
+  var live = document.getElementById('livePanel');
+  var fw = document.getElementById('fwPanel');
+  if (!which) {
+    overlay.classList.remove('show');
+    live.classList.remove('open');
+    fw.classList.remove('open');
+    return;
+  }
+  overlay.classList.add('show');
+  if (which === 'live') {
+    live.classList.add('open');
+    fw.classList.remove('open');
+    loadLivePanel();
+  } else {
+    fw.classList.add('open');
+    live.classList.remove('open');
+  }
+}
+
+function toggleFW(el) {
+  var p = el.parentNode;
+  p.classList.toggle('expanded');
+}
+
+function loadLivePanel() {
+  var body = document.getElementById('livePanelBody');
+  fetch('/api/live/info').then(function(r) { return r.json() }).then(function(data) {
+    var matches = data.matches || [];
+    if (!matches.length) { body.innerHTML = '<div style=text-align:center;padding:30px;color:#4a4f6a;font-size:12px>\u6682\u65e0\u5b9e\u65f6\u6570\u636e</div>'; return; }
+    var h = '';
+    matches.forEach(function(m) {
+      var dir = m.direction || '';
+      var ds = 'color:#4a4f6a';
+      if (dir.indexOf('\u8ba9') >= 0) ds = 'color:#22d65e';
+      else if (dir.indexOf('\u80dc') >= 0 || dir === '\u8d1f') ds = 'color:#0ea5e9';
+      else if (dir.indexOf('\u5e73') >= 0) ds = 'color:#f5a524';
+      h += '<div class=live-item data-id="' + m.id + '">';
+      h += '<div class=live-meta><span class=lm-id>#' + m.id + '</span><span class=lm-teams>' + m.home + ' vs ' + m.away + '</span><span class=lm-direction style=' + ds + '>' + dir + '</span></div>';
+      h += '<div class=live-input><input type=text class=sp-input placeholder="\u65b0SP (\u5982 1.30)" value="' + (m.sp_home || '') + '"><button onclick=doRecalibrate(this)>\u8ba1\u7b97</button></div>';
+      h += '<div class=live-result></div>';
+      h += '</div>';
+    });
+    body.innerHTML = h;
+  }).catch(function() {
+    body.innerHTML = '<div style=text-align:center;padding:30px;color:#4a4f6a;font-size:12px>\u52a0\u8f7d\u5931\u8d25</div>';
+  });
+}
+
+function doRecalibrate(btn) {
+  var item = btn.closest('.live-item');
+  var id = item.getAttribute('data-id');
+  var spInput = item.querySelector('.sp-input');
+  var result = item.querySelector('.live-result');
+  if (!id || !spInput) return;
+  var sp = spInput.value.trim();
+  if (!sp || isNaN(parseFloat(sp))) { result.textContent = '\u8bf7\u8f93\u5165\u6709\u6548SP'; return; }
+  result.textContent = '\u8ba1\u7b97\u4e2d...';
+  btn.disabled = true;
+  fetch('/api/live/recalibrate', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({match_id: id, sp_home: parseFloat(sp)})
+  }).then(function(r) { return r.json() }).then(function(data) {
+    if (data.error) { result.textContent = '\u9519\u8bef: ' + data.error; btn.disabled = false; return; }
+    result.innerHTML = 'DDI: ' + (data.ddi_home !== undefined ? data.ddi_home.toFixed(4) : '--') + ' | \u8bc4\u5206: ' + (data.fit_score !== undefined ? data.fit_score.toFixed(1) : '--') + ' | \u8bc4\u7ea7: ' + (data.rating || '--');
+    btn.disabled = false;
+  }).catch(function() { result.textContent = '\u8bf7\u6c42\u5931\u8d25'; btn.disabled = false; });
+}
+
+function renderMatches(data) {
+  document.getElementById('hdate').innerHTML = (data.date || '') + ' <em>分析系统</em>';
+  var stats = document.getElementById('stats');
+  stats.innerHTML = '<b>' + (data.total || 0) + '</b>? ??? <b style=color:var(--green)>' + (data.hits || 0) + '</b>? ?? <b style=color:var(--accent)>' + (data.hit_rate || 0) + '</b>%';
+  var rd = document.getElementById('rd');
+  var hdrHtml = '';
+  if (data.matches && data.matches.length) {
+    hdrHtml += '<div class=sec><span class=sec-dot></span>分析系统<span class=sec-l></span></div>';
+    hdrHtml += '<div class=thr><span class=c2-id>场次</span><span class=c2-tm>时间</span><span style=flex:1;min-width:0>?? vs ??</span><span style=width:85px;text-align:center>方向</span><span style=width:160px;text-align:center>预测</span><span style=width:110px;text-align:right;padding-right:24px>评分</span></div>';
+  }
+  rd.innerHTML = hdrHtml;
+  var r = document.getElementById('r');
+  if (!data.matches || !data.matches.length) { r.innerHTML = '<div class=empty-state>暂无赛事数据</div>'; return; }
+  var h = '';
+  data.matches.forEach(function(m) {
+    var dir = m.direction || '--';
+    var fs = m.fit_score || 0;
+    var rating = m.rating || '';
+    var score = m.result || m.actual_score || '--';
+    h += '<div class=card>';
+    h += '<div class=cg2>';
+    h += '<div class=c2-col c2-id><span class=c-id>#' + (m.match_id || '') + '</span></div>';
+    h += '<div class=c2-col c2-tm><span class=c-ti>' + (m.time || '') + '</span></div>';
+    h += '<div class=c2-mm><span class=c2-h>' + (m.home || '') + '</span><span class=c2-v>vs</span><span class=c2-a>' + (m.away || '') + '</span></div>';
+    h += '<div class=c2-dr>' + dirTag(dir) + '</div>';
+    h += '<div class=c2-sc>' + score + '</div>';
+    h += '<div class=c2-rt><span class=fs>' + (fs ? fs.toFixed(1) : '--') + '</span>' + (rating ? '<span class="badge badge-' + rating.toLowerCase() + '">' + rating + '</span>' : '') + '</div>';
+    h += '</div>';
+    var dy = '<div class=ana-i><span class=ana-l>\u65b9\u5411</span><span class=ana-v>' + dirTag(dir) + '</span></div>';
+    dy += '<div class=ana-i><span class=ana-l>\u65b9\u5411</span><span class=ana-v>' + rating + '</span></div>';
+    dy += '<div class=ana-i><span class=ana-l>\u65b9\u5411</span><span class=ana-v>' + (fs ? fs.toFixed(1) : '--') + '</span></div>';
+    if (typeof m.ddi_home_win === 'number') dy += '<div class=ana-i><span class=ana-l>DDI</span><span class=ana-v>' + m.ddi_home_win.toFixed(4) + '</span></div>';
+    if (m.event) dy += '<div class=ana-i style=grid-column:1/-1><span class=ana-l>方向</span><span class=ana-v>' + m.event + '</span></div>';
+    if (m.warning) dy += '<div class=ana-i style=grid-column:1/-1><span class=ana-l>评级</span><span class=ana-v style=color:var(--amber)>' + m.warning + '</span></div>';
+    h += '<div class=cd><div class=ana>' + dy + '</div></div>';
+    h += '</div>';
+  });
+  r.innerHTML = h;
+  document.querySelectorAll('#r .card').forEach(function(cc) {
+    cc.addEventListener('click', function() {
+      var ex = this.classList.contains('expanded');
+      document.querySelectorAll('#r .card.expanded').forEach(function(x) { x.classList.remove('expanded') });
+      if (!ex) this.classList.add('expanded');
+    });
+  });
+}
+
+function renderReviews(data) {
+  if (!data.reviews || !data.reviews.length) return;
+  var rv = document.getElementById('rv');
+  var h = '<div class=sec><span class=sec-dot></span>分析系统<span class=sec-l></span></div>';
+  h += '<div class=thr><span class=c2-id>场次</span><span class=c2-tm>时间</span><span style=flex:1;min-width:0>主队 vs 客队</span><span style=width:80px;text-align:center>??</span><span style=width:160px;text-align:center>??</span><span style=width:80px;text-align:center>??</span><span style=width:100px;text-align:right;padding-right:6px>??</span></div>';
+  data.reviews.forEach(function(m) {
+    var hit = m.hit === 1 || m.hit === 'True';
+    var rt = hit ? 'rt-hit' : 'rt-miss';
+    var dir = m.direction || '--';
+    var score = m.actual_score || '--';
+    var fs = m.fit_score || 0;
+    var rating = m.rating || '';
+    var hitLabel = hit ? '\u547d\u4e2d' : '\u672a\u4e2d';
+    var hitCls = hit ? 'hit' : 'miss';
+    h += '<div class="card ' + rt + '">';
+    h += '<div class=cg2>';
+    h += '<div class=c2-col c2-id><span class=c-id>#' + (m.match_id || '') + '</span></div>';
+    h += '<div class=c2-col c2-tm><span class=c-ti>' + (m.time || '') + '</span></div>';
+    h += '<div class=c2-mm><span class=c2-h>' + (m.home || '') + '</span><span class=c2-v>vs</span><span class=c2-a>' + (m.away || '') + '</span></div>';
+    h += '<div class=c2-dr>' + dirTag(dir) + '</div>';
+    h += '<div class=c2-sc style=color:' + (hit ? 'var(--green)' : 'var(--ink)') + '>' + score + (m.half_full && m.half_full !== '?' ? '/' + m.half_full : '') + '</div>';
+    h += '<div class="c2-ht ' + hitCls + '"><span>' + hitLabel + '</span></div>';
+    h += '<div class=c2-rt><span class=fs>' + (fs ? fs.toFixed(1) : '--') + '</span>' + (rating ? '<span class="badge badge-' + rating.toLowerCase() + '">' + rating + '</span>' : '') + '</div>';
+    h += '</div>';
+    h += '</div>';
+  });
+  rv.innerHTML = '<div style=margin-top:24px>' + h + '</div>';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('sortBtn').addEventListener('click', toggleSort);
+  document.getElementById('historyDateList').addEventListener('click', function(e) {
+    var t = e.target.closest ? e.target.closest('.v-item') : null;
+    if (!t && e.target.classList) t = e.target.classList.contains('v-item') ? e.target : e.target.parentNode;
+    if (t && t.getAttribute('data-date')) selectDate(t.getAttribute('data-date'));
+  });
+  fetch('/api/history/runs').then(function(r) { return r.json() }).then(function(data) {
+    HISTORY_RUNS = data || [];
+    renderDateList();
+  }).catch(function() {
+    document.getElementById('historyDateList').innerHTML = '<div class=v-empty>分析系统</div>';
+  });
+  fetch('/api/latest').then(function(r) { return r.json() }).then(function(data) {
+    renderMatches(data);
+    renderReviews(data);
+  }).catch(function() {
+    document.getElementById('r').innerHTML = '<div class=empty-state>分析系统</div>';
+  });
+});
+</script>
+</body>
+</html>

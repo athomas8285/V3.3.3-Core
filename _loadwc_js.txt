@@ -1,0 +1,9 @@
+function loadWCSchedule(){
+  var el=document.getElementById("loadWCSchedule");
+  if(el)el.click();
+  var container=document.getElementById("wcViewToday");
+  if(!container)return;
+  if(container.getAttribute("data-loaded")=="1")return;
+  container.setAttribute("data-loaded","1");
+  container.innerHTML="<div class=sd-loading>加载赛程中...</div>";
+  fetch("/api/wc/schedule").then(

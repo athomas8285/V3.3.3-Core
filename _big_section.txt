@@ -1,0 +1,29 @@
+lign:center;font-size:14px">数据加载中...</div>
+  </div>
+  <!-- ====== View: 今日精选推荐 ====== -->
+  <div id="topContent" class="view-content" style="display:none">
+    <div class="sec-header">
+      <button class="sec-back-btn" onclick="switchNav('home')">← 返回首页</button>
+      <h2>⭐ 今日精选推荐</h2>
+      <div class="sec-bar"></div>
+    </div>
+    <div id="topInner" style="padding:16px;color:var(--t3);text-align:center;font-size:14px">数据加载中...</div>
+  </div>
+</div>
+  <!-- ====== View: 比赛分析 ====== -->
+  <div id="analysisContent" class="view-content" style="display:none">
+    <div class="sec-header">
+      <button class="sec-back-btn" onclick="switchNav('home')">← 返回首页</button>
+      <h2>🔍 比赛分析</h2>
+      <div class="sec-bar"></div>
+    </div>
+    <div id="analysisInner"></div>
+  
+  <!-- ====== View: ????? ====== -->
+  <div id="docContent" class="view-content" style="display:none">
+    <div id="docInner"></div>
+  </div>
+<script>
+// 球队国旗映射（本地 PNG）
+var TEAM_FLAGS = {
+  "墨西哥":"/static/flags/mexico.png","南非":"/static/flags/south_africa.png","韩国":"/static/flags/korea.png","捷克":"/static/flags/czech.png",

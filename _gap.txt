@@ -1,0 +1,2 @@
+Length: 335
+'</div>\n  <!-- ====== View: 比赛分析 ====== -->\n  <div id="analysisContent" class="view-content" style="display:none">\n    <div class="sec-header">\n      <button class="sec-back-btn" onclick="switchNav(\'home\')">← 返回首页</button>\n      <h2>🔍 比赛分析</h2>\n      <div class="sec-bar"></div>\n    </div>\n    <div id="analysisInner"></div>\n  </div>\n  '

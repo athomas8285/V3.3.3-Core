@@ -1,0 +1,18 @@
+﻿# Check the renderDateList in current_fix (original)
+f = open("C:/Users/gjj/Desktop/v333/templates/index.html.current_fix", "r", encoding="utf-8")
+c = f.read()
+f.close()
+
+idx = c.find("function renderDateList")
+end = c.find("function selectDate", idx)
+print("=== Original current_fix renderDateList ===")
+print(c[idx:end])
+
+print()
+print("=== Current index.html renderDateList ===")
+f2 = open("C:/Users/gjj/Desktop/v333/templates/index.html", "r", encoding="utf-8")
+c2 = f2.read()
+f2.close()
+idx2 = c2.find("function renderDateList")
+end2 = c2.find("function selectDate", idx2)
+print(c2[idx2:end2])

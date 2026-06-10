@@ -1,0 +1,49 @@
+{
+  "matches": [
+    {
+      "id": "007",
+      "injury_home": 0.0,
+      "injury_away": 0.08,
+      "injury_home_boost": 0.0,
+      "injury_away_boost": 0.0,
+      "motivation_home": 0.05,
+      "motivation_away": 0.03,
+      "pressure_home": false,
+      "pressure_away": false,
+      "slack_home": false,
+      "slack_away": false,
+      "altitude_home": 0,
+      "altitude_away": 0
+    },
+    {
+      "id": "008",
+      "injury_home": 0.05,
+      "injury_away": 0.0,
+      "injury_home_boost": 0.0,
+      "injury_away_boost": 0.0,
+      "motivation_home": 0.05,
+      "motivation_away": 0.03,
+      "pressure_home": false,
+      "pressure_away": false,
+      "slack_home": false,
+      "slack_away": false,
+      "altitude_home": 0,
+      "altitude_away": 0
+    },
+    {
+      "id": "009",
+      "injury_home": 0.0,
+      "injury_away": 0.12,
+      "injury_home_boost": 0.0,
+      "injury_away_boost": 0.0,
+      "motivation_home": 0.05,
+      "motivation_away": 0.0,
+      "pressure_home": false,
+      "pressure_away": false,
+      "slack_home": false,
+      "slack_away": false,
+      "altitude_home": 0,
+      "altitude_away": 0
+    }
+  ]
+}

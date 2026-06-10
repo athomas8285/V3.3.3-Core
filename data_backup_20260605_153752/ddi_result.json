@@ -1,0 +1,129 @@
+{
+  "matches": [
+    {
+      "id": "201",
+      "p_physical": {
+        "home_win": 0.762,
+        "draw": 0.164,
+        "away_win": 0.074
+      },
+      "p_market": {
+        "home_win": 0.6812,
+        "draw": 0.206,
+        "away_win": 0.1128
+      },
+      "ddi": {
+        "home_win": 0.0808,
+        "draw": -0.042,
+        "away_win": -0.0388
+      },
+      "calibrated": {
+        "home_win": 0.7862,
+        "draw": 0.164,
+        "away_win": 0.074
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "202",
+      "p_physical": {
+        "home_win": 0.3932,
+        "draw": 0.2996,
+        "away_win": 0.3072
+      },
+      "p_market": {
+        "home_win": 0.4709,
+        "draw": 0.2724,
+        "away_win": 0.2566
+      },
+      "ddi": {
+        "home_win": -0.0777,
+        "draw": 0.0272,
+        "away_win": 0.0506
+      },
+      "calibrated": {
+        "home_win": 0.3932,
+        "draw": 0.2996,
+        "away_win": 0.3072
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "203",
+      "p_physical": {
+        "home_win": 0.864,
+        "draw": 0.0955,
+        "away_win": 0.0405
+      },
+      "p_market": {
+        "home_win": 0.812,
+        "draw": 0.1312,
+        "away_win": 0.0568
+      },
+      "ddi": {
+        "home_win": 0.052,
+        "draw": -0.0357,
+        "away_win": -0.0163
+      },
+      "calibrated": {
+        "home_win": 0.864,
+        "draw": 0.0955,
+        "away_win": 0.0405
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "204",
+      "p_physical": {
+        "home_win": 0.582,
+        "draw": 0.2323,
+        "away_win": 0.1857
+      },
+      "p_market": {
+        "home_win": 0.7565,
+        "draw": 0.1592,
+        "away_win": 0.0843
+      },
+      "ddi": {
+        "home_win": -0.1745,
+        "draw": 0.0731,
+        "away_win": 0.1014
+      },
+      "calibrated": {
+        "home_win": 0.532,
+        "draw": 0.2323,
+        "away_win": 0.2161
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "205",
+      "p_physical": {
+        "home_win": 0.487,
+        "draw": 0.2637,
+        "away_win": 0.2493
+      },
+      "p_market": {
+        "home_win": 0.726,
+        "draw": 0.1808,
+        "away_win": 0.0932
+      },
+      "ddi": {
+        "home_win": -0.239,
+        "draw": 0.0829,
+        "away_win": 0.1561
+      },
+      "calibrated": {
+        "home_win": 0.437,
+        "draw": 0.2886,
+        "away_win": 0.2961
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    }
+  ]
+}

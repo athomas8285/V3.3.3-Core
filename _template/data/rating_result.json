@@ -1,0 +1,18 @@
+{
+  "matches": [
+    {
+      "id": "003",
+      "home": "日本",
+      "away": "冰岛",
+      "event": "国际足球友谊赛",
+      "time": "2026-05-31 18:25",
+      "direction": "胜",
+      "fit_score": 7.95,
+      "rating": "B",
+      "downgrade_count": 1,
+      "meltdown": false,
+      "scenario_type": "低返还率赛事",
+      "direction_warning": false
+    }
+  ]
+}

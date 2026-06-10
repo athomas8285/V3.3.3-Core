@@ -1,0 +1,110 @@
+431:   </div>
+432:   <div class="sd-body">
+433:     <div class="acc open" id="accToday" class="active-section">
+434:       <div class="acc-head" onclick="toggleAccordion('accToday')">
+435:         <span class="acc-arrow">▶</span>
+436:         <span class="acc-icon">📊</span>
+437:         <span class="acc-label">今日概览</span>
+438:         <span class="acc-badge" style="background:rgba(0,230,118,.15);color:var(--green)">实时</span>
+439:         <span class="acc-count" id="todayMatchCount">-</span>
+440:       </div>
+441:       <div class="acc-body">
+442:         <div class="acc-body-inner">
+443:           <div class="today-date" id="todayDateLabel">加载中...</div>
+444:           <div class="today-stats" id="todayStats">
+445:             <div class="sd-loading">加载中...</div>
+446:           </div>
+447:         </div>
+448:       </div>
+449:     </div>
+450:     <div class="acc" id="accPlan">
+451:       <div class="acc-head" onclick="toggleAccordion('accPlan')">
+452:         <span class="acc-arrow">▶</span>
+453:         <span class="acc-icon">🎯</span>
+454:         <span class="acc-label">精选计划单</span>
+455:         <span class="acc-badge" style="background:rgba(255,215,0,.18);color:var(--amber)">推荐</span>
+456:       </div>
+457:       <div class="acc-body">
+458:         <div class="acc-body-inner">
+459:           <div class="plan-item" onclick="location.href=\'/plan/2.0\'">
+460:             <span class="plan-icon">🟢</span>
+461:             <span class="plan-name">2.0 稳健计划</span>
+462:             <span class="plan-arrow">→</span>
+463:           </div>
+464:           <div class="plan-item" onclick="location.href=\'/plan/3.0\'">
+465:             <span class="plan-icon">🔵</span>
+466:             <span class="plan-name">3.0 稳冲计划</span>
+467:             <span class="plan-arrow">→</span>
+468:           </div>
+469:         </div>
+470:       </div>
+471:     </div><div class="acc" id="accHistory">
+472:       <div class="acc-head" onclick="toggleAccordion('accHistory')">
+473:         <span class="acc-arrow">▶</span>
+474:         <span class="acc-icon">📅</span>
+475:         <span class="acc-label">历史预测数据</span>
+476:         <span class="acc-badge" style="background:rgba(0,230,118,.15);color:var(--green)">实战</span>
+477:       </div>
+478:       <div class="acc-body">
+479:         <div class="acc-body-inner" style="padding:8px 16px 12px">
+480:           <div style="margin-bottom:10px">
+481:             <input type="text" id="historySearch" placeholder="搜索日期 (YYYY-MM-DD)" style="width:100%;padding:7px 10px;font-size:11px;font-family:var(--sans);background:var(--bg);border:1px solid var(--bd);border-radius:5px;color:var(--t1);outline:none;transition:border-color .15s" oninput="filterHistoryDates(this.value)">
+482:           </div>
+483:           <div id="historyListContainer">
+484:             <div class="sd-loading">加载中...</div>
+485:           </div>
+486:           <div id="historyLoadMore" style="display:none;text-align:center;padding:8px 0">
+487:             <button onclick="loadMoreHistory()" style="width:100%;padding:6px 10px;font-size:11px;color:var(--t2);background:rgba(255,255,255,.04);border:1px solid var(--bd);border-radius:5px;cursor:pointer;font-family:var(--sans);transition:all .15s">加载更多 ↓</button>
+488:           </div>
+489:         </div>
+490:       </div>
+491:     </div><div class="acc" id="accBacktest">
+492:       <div class="acc-head" onclick="toggleAccordion('accBacktest')">
+493:         <span class="acc-arrow">▶</span>
+494:         <span class="acc-icon">🧪</span>
+495:         <span class="acc-label">历史比赛回测</span>
+496:         <span class="acc-badge" style="background:rgba(66,165,245,.18);color:var(--blue)">验证</span>
+497:       </div>
+498:       <div class="acc-body">
+499:         <div class="acc-body-inner" id="backtestContainer">
+500:           <div class="sd-loading">加载中...</div>
+501:         </div>
+502:       </div>
+503:     </div><div class="acc" id="accDoc">
+504:       <div class="acc-head" onclick="toggleAccordion('accDoc')">
+505:         <span class="acc-arrow">▶</span>
+506:         <span class="acc-icon">📘</span>
+507:         <span class="acc-label">系统说明书</span>
+508:       </div>
+509:       <div class="acc-body">
+510:         <div class="acc-body-inner" id="docContainer">
+511:           <div class="sd-loading">加载中...</div>
+512:         </div>
+513:       </div>
+514:     </div>
+515: 
+516: 
+517:   </div>
+518:   <div class="sd-divider"></div>
+519: <div class="sd-contact">
+520:     <button class="sd-contact-btn" onclick="prompt('复制微信号：codex_analysis', '微信号：codex_analysis')">
+521:       <span class="cb-icon">💬</span>
+522:       <span class="cb-text">🚀 联系作者</span>
+523:     </button>
+524: 
+525: </div>
+526: <div class="sd-footer">© 2026 Analysis System</div>
+527: </div>
+528: <div class="main">
+529:   <div class="sec-header">
+530:     <h2>今日赛事分析</h2>
+531:     <span class="sec-sub" id="todaySub">加载中...</span>
+532:     <div class="sec-actions">
+533:       <div class="sec-dropdown" id="sortDropdown">
+534:         <button class="sec-dropdown-btn" id="sortBtn" onclick="toggleSortMenu(event)">排序 ▾</button>
+535:         <div class="sec-dropdown-menu" id="sortMenu">
+536:           <div class="sec-dropdown-item active" data-sort="id" onclick="applySort('id', event)">按编号排序</div>
+537:           <div class="sec-dropdown-item" data-sort="rating" onclick="applySort('rating', event)">按评分排序</div>
+538:         </div>
+539:       </div>
+540:       <div class="sec-dropdown" id="filterDropdown">

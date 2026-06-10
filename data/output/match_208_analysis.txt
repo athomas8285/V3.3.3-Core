@@ -1,0 +1,53 @@
+============================================================
+  208 | 06-07 01:45 | 葡萄牙 vs 智利
+============================================================
+
+[一、比赛基本信息]
+赛事: 国际赛
+主队: 葡萄牙 (SofaScore: Portugal)
+客队: 智利 (SofaScore: Chile)
+时间: 2026-06-07 01:45
+场地: Not specified, Lisbon
+海拔: 正常
+
+[二、竞彩赔率]
+标准 SP:        1.15 / 5.65 / 12.00
+让球盘:         主队 -2 (主队让球)
+让球 SP:        2.56 / 3.75 / 2.12
+倾向: 主队 SP=1.15 更低 客队 SP=12.00
+差距: 实力差距明显 (SP差>2)
+
+[葡萄牙 近5场 (Portugal)]
+  11-17 Liechtenstein 0-2 Portugal [EURO, Qualification]
+  11-20 Portugal 2-0 Iceland [EURO, Qualification]
+  03-22 Portugal 5-2 Sweden [International Friendly Games]
+  03-27 Slovenia 2-0 Portugal [International Friendly Games]
+  06-05 Portugal 4-2 Finland [International Friendly Games]
+  战绩: 4W 0D 1L | 进2.6/失1.2 场均
+
+[智利 近5场 (Chile)]
+  09-09 Uruguay 3-1 Chile [World Cup Qual. CONMEBOL]
+  09-13 Chile 0-0 Colombia [World Cup Qual. CONMEBOL]
+  10-13 Chile 2-0 Peru [World Cup Qual. CONMEBOL]
+  10-18 Venezuela 3-0 Chile [World Cup Qual. CONMEBOL]
+  11-17 Chile 0-0 Paraguay [World Cup Qual. CONMEBOL]
+  战绩: 1W 2D 2L | 进0.6/失1.2 场均
+
+[三、H2H历史交锋]
+  (近30场无交锋)
+
+[六、伤停信息]
+葡萄牙:
+  (阵型未确认，暂无伤停数据)
+智利:
+  (阵型未确认，暂无伤停数据)
+
+[七、战意背景]
+赛事性质: 国际友谊赛/热身赛
+战意评估: 中低 — 考察阵容、磨合为主，轮换可能性大
+背景: 2026世界杯前热身周期，各队以确定23人大名单为核心目标
+
+[八、特殊事项]
+* 海拔正常
+* 6月国际比赛日窗口，世界杯前最后热身机会
+* 友谊赛性质下，需关注首发阵容是否为全主力

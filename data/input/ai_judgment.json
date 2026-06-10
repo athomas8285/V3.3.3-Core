@@ -1,0 +1,112 @@
+{
+  "matches": [
+    {
+      "id": "206",
+      "s7_score": 0.3,
+      "s7_reason": "H2H广岛两连胜，心理优势明显",
+      "opponent_predictability": 0.95,
+      "opponent_reason": "",
+      "trap_analysis": "主队SP3.10偏高但受让+1，广岛客场未必稳胜",
+      "key_risk": "川崎近期防守不稳，场均失2.2球"
+    },
+    {
+      "id": "207",
+      "s7_score": 0.2,
+      "s7_reason": "友谊赛性质，比利时可能轮换",
+      "opponent_predictability": 0.95,
+      "opponent_reason": "",
+      "trap_analysis": "",
+      "key_risk": "Debast伤缺影响防线轮换深度"
+    },
+    {
+      "id": "208",
+      "s7_score": 0.2,
+      "s7_reason": "葡萄牙-2深盘，智利近期攻击乏力",
+      "opponent_predictability": 0.95,
+      "opponent_reason": "",
+      "trap_analysis": "",
+      "key_risk": "友谊赛葡萄牙可能大幅轮换"
+    },
+    {
+      "id": "209",
+      "s7_score": 0.1,
+      "s7_reason": "",
+      "opponent_predictability": 0.95,
+      "opponent_reason": "",
+      "trap_analysis": "",
+      "key_risk": "友谊赛性质，阵容不确定性大"
+    },
+    {
+      "id": "210",
+      "s7_score": 0.1,
+      "s7_reason": "",
+      "opponent_predictability": 0.95,
+      "opponent_reason": "",
+      "trap_analysis": "",
+      "key_risk": "友谊赛性质，阵容不确定性大"
+    },
+    {
+      "id": "211",
+      "s7_score": 0.2,
+      "s7_reason": "中立场比赛，双方战意不明",
+      "opponent_predictability": 0.95,
+      "opponent_reason": "",
+      "trap_analysis": "",
+      "key_risk": "瑞士伤缺中场Yazbek"
+    },
+    {
+      "id": "212",
+      "s7_score": 0.3,
+      "s7_reason": "双方均有核心球员伤缺",
+      "opponent_predictability": 0.95,
+      "opponent_reason": "",
+      "trap_analysis": "",
+      "key_risk": "巴拿马门将Mejia和中场Godoy双双缺阵"
+    },
+    {
+      "id": "213",
+      "s7_score": 0.2,
+      "s7_reason": "英格兰-2深盘，Ben White缺阵",
+      "opponent_predictability": 0.95,
+      "opponent_reason": "",
+      "trap_analysis": "",
+      "key_risk": "英格兰近5场仅1胜，状态不佳"
+    },
+    {
+      "id": "214",
+      "s7_score": 0.3,
+      "s7_reason": "玻利维亚高原主场(拉巴斯3640m)优势巨大",
+      "opponent_predictability": 0.95,
+      "opponent_reason": "",
+      "trap_analysis": "",
+      "key_risk": "苏格兰需适应高原环境，体能消耗大"
+    },
+    {
+      "id": "215",
+      "s7_score": 0.3,
+      "s7_reason": "内马尔伤缺影响进攻组织",
+      "opponent_predictability": 0.95,
+      "opponent_reason": "",
+      "trap_analysis": "巴西SP仅1.20但近期状态1W1D3L，未必稳胜",
+      "key_risk": "巴西近5场仅1胜，埃及近5场3W2D不败"
+    },
+    {
+      "id": "216",
+      "s7_score": 0.2,
+      "s7_reason": "双方均有伤停，委内瑞拉近5场不败(2W3D)",
+      "opponent_predictability": 0.95,
+      "opponent_reason": "",
+      "trap_analysis": "",
+      "key_risk": "土耳其近5场仅1胜，状态低迷"
+    },
+    {
+      "id": "217",
+      "s7_score": 0.2,
+      "s7_reason": "阿根廷-2深盘，洪都拉斯防守薄弱",
+      "opponent_predictability": 0.95,
+      "opponent_reason": "",
+      "trap_analysis": "",
+      "key_risk": "友谊赛阿根廷可能轮换"
+    }
+  ]
+}

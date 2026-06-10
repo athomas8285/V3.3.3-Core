@@ -1,0 +1,379 @@
+{
+  "matches": [
+    {
+      "id": "001",
+      "p_physical": {
+        "home_win": 0.402,
+        "draw": 0.2416,
+        "away_win": 0.3564
+      },
+      "p_market": {
+        "home_win": 0.3864,
+        "draw": 0.263,
+        "away_win": 0.3506
+      },
+      "ddi": {
+        "home_win": 0.0001,
+        "draw": -0.0001,
+        "away_win": 0.0
+      },
+      "calibrated": {
+        "home_win": 0.402,
+        "draw": 0.2416,
+        "away_win": 0.3564
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "002",
+      "p_physical": {
+        "home_win": 0.387,
+        "draw": 0.2475,
+        "away_win": 0.3655
+      },
+      "p_market": {
+        "home_win": 0.4104,
+        "draw": 0.2697,
+        "away_win": 0.32
+      },
+      "ddi": {
+        "home_win": -0.0002,
+        "draw": -0.0002,
+        "away_win": 0.0003
+      },
+      "calibrated": {
+        "home_win": 0.387,
+        "draw": 0.2475,
+        "away_win": 0.3655
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "003",
+      "p_physical": {
+        "home_win": 0.3864,
+        "draw": 0.2288,
+        "away_win": 0.3848
+      },
+      "p_market": {
+        "home_win": 0.3592,
+        "draw": 0.2746,
+        "away_win": 0.3662
+      },
+      "ddi": {
+        "home_win": 0.0002,
+        "draw": -0.0003,
+        "away_win": 0.0001
+      },
+      "calibrated": {
+        "home_win": 0.3864,
+        "draw": 0.2288,
+        "away_win": 0.3848
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "004",
+      "p_physical": {
+        "home_win": 0.382,
+        "draw": 0.258,
+        "away_win": 0.36
+      },
+      "p_market": {
+        "home_win": 0.4168,
+        "draw": 0.2758,
+        "away_win": 0.3074
+      },
+      "ddi": {
+        "home_win": -0.0002,
+        "draw": -0.0001,
+        "away_win": 0.0004
+      },
+      "calibrated": {
+        "home_win": 0.382,
+        "draw": 0.258,
+        "away_win": 0.36
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "005",
+      "p_physical": {
+        "home_win": 0.4028,
+        "draw": 0.2248,
+        "away_win": 0.3724
+      },
+      "p_market": {
+        "home_win": 0.4505,
+        "draw": 0.2867,
+        "away_win": 0.2628
+      },
+      "ddi": {
+        "home_win": -0.0003,
+        "draw": -0.0004,
+        "away_win": 0.0008
+      },
+      "calibrated": {
+        "home_win": 0.4028,
+        "draw": 0.2248,
+        "away_win": 0.3724
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "006",
+      "p_physical": {
+        "home_win": 0.374,
+        "draw": 0.2316,
+        "away_win": 0.3944
+      },
+      "p_market": {
+        "home_win": 0.3717,
+        "draw": 0.2904,
+        "away_win": 0.3379
+      },
+      "ddi": {
+        "home_win": 0.0,
+        "draw": -0.0004,
+        "away_win": 0.0004
+      },
+      "calibrated": {
+        "home_win": 0.374,
+        "draw": 0.2316,
+        "away_win": 0.3944
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "007",
+      "p_physical": {
+        "home_win": 0.3964,
+        "draw": 0.25,
+        "away_win": 0.3536
+      },
+      "p_market": {
+        "home_win": 0.3964,
+        "draw": 0.2823,
+        "away_win": 0.3213
+      },
+      "ddi": {
+        "home_win": -0.0,
+        "draw": -0.0002,
+        "away_win": 0.0002
+      },
+      "calibrated": {
+        "home_win": 0.3964,
+        "draw": 0.25,
+        "away_win": 0.3536
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "008",
+      "p_physical": {
+        "home_win": 0.3796,
+        "draw": 0.2388,
+        "away_win": 0.3816
+      },
+      "p_market": {
+        "home_win": 0.3875,
+        "draw": 0.2862,
+        "away_win": 0.3263
+      },
+      "ddi": {
+        "home_win": -0.0001,
+        "draw": -0.0003,
+        "away_win": 0.0004
+      },
+      "calibrated": {
+        "home_win": 0.3796,
+        "draw": 0.2388,
+        "away_win": 0.3816
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "009",
+      "p_physical": {
+        "home_win": 0.3873,
+        "draw": 0.2367,
+        "away_win": 0.376
+      },
+      "p_market": {
+        "home_win": 0.4243,
+        "draw": 0.3011,
+        "away_win": 0.2746
+      },
+      "ddi": {
+        "home_win": -0.0003,
+        "draw": -0.0005,
+        "away_win": 0.0007
+      },
+      "calibrated": {
+        "home_win": 0.3873,
+        "draw": 0.2367,
+        "away_win": 0.376
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "010",
+      "p_physical": {
+        "home_win": 0.3953,
+        "draw": 0.2433,
+        "away_win": 0.3613
+      },
+      "p_market": {
+        "home_win": 0.4365,
+        "draw": 0.2607,
+        "away_win": 0.3028
+      },
+      "ddi": {
+        "home_win": -0.0003,
+        "draw": -0.0001,
+        "away_win": 0.0004
+      },
+      "calibrated": {
+        "home_win": 0.3953,
+        "draw": 0.2433,
+        "away_win": 0.3613
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "011",
+      "p_physical": {
+        "home_win": 0.3915,
+        "draw": 0.2375,
+        "away_win": 0.371
+      },
+      "p_market": {
+        "home_win": 0.4146,
+        "draw": 0.2744,
+        "away_win": 0.311
+      },
+      "ddi": {
+        "home_win": -0.0002,
+        "draw": -0.0003,
+        "away_win": 0.0004
+      },
+      "calibrated": {
+        "home_win": 0.3915,
+        "draw": 0.2375,
+        "away_win": 0.371
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "012",
+      "p_physical": {
+        "home_win": 0.3916,
+        "draw": 0.2312,
+        "away_win": 0.3772
+      },
+      "p_market": {
+        "home_win": 0.3656,
+        "draw": 0.2825,
+        "away_win": 0.3518
+      },
+      "ddi": {
+        "home_win": 0.0002,
+        "draw": -0.0004,
+        "away_win": 0.0002
+      },
+      "calibrated": {
+        "home_win": 0.3916,
+        "draw": 0.2312,
+        "away_win": 0.3772
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "013",
+      "p_physical": {
+        "home_win": 0.3928,
+        "draw": 0.2524,
+        "away_win": 0.3548
+      },
+      "p_market": {
+        "home_win": 0.4049,
+        "draw": 0.2739,
+        "away_win": 0.3211
+      },
+      "ddi": {
+        "home_win": -0.0001,
+        "draw": -0.0002,
+        "away_win": 0.0002
+      },
+      "calibrated": {
+        "home_win": 0.3928,
+        "draw": 0.2524,
+        "away_win": 0.3548
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "014",
+      "p_physical": {
+        "home_win": 0.3844,
+        "draw": 0.248,
+        "away_win": 0.3676
+      },
+      "p_market": {
+        "home_win": 0.3858,
+        "draw": 0.2893,
+        "away_win": 0.3249
+      },
+      "ddi": {
+        "home_win": -0.0,
+        "draw": -0.0003,
+        "away_win": 0.0003
+      },
+      "calibrated": {
+        "home_win": 0.3844,
+        "draw": 0.248,
+        "away_win": 0.3676
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "015",
+      "p_physical": {
+        "home_win": 0.4108,
+        "draw": 0.2484,
+        "away_win": 0.3408
+      },
+      "p_market": {
+        "home_win": 0.4153,
+        "draw": 0.2832,
+        "away_win": 0.3015
+      },
+      "ddi": {
+        "home_win": -0.0,
+        "draw": -0.0002,
+        "away_win": 0.0003
+      },
+      "calibrated": {
+        "home_win": 0.4108,
+        "draw": 0.2484,
+        "away_win": 0.3408
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    }
+  ]
+}

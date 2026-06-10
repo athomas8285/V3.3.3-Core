@@ -1,0 +1,19 @@
+﻿  <!-- ====== View: 灏忕粍璧涚▼ ====== -->
+  <div id="scheduleContent" class="view-content">
+    <div class="sec-header">
+      <div class="calendar-header">
+        <h2>馃弳 2026涓栫晫鏉禌绋?/h2>
+        <div class="calt-month-nav">
+          <button class="calt-nav-prev" onclick="prevMonth()">&lt;</button>
+          <span class="calt-month-label" id="caltMonthLabel">6鏈?2026</span>
+          <button class="calt-nav-next" onclick="nextMonth()">&gt;</button>
+        </div>
+      </div>
+      <span class="sec-sub" id="todaySub">鍔犺浇涓?..</span>
+      <div class="sec-bar"></div>
+    </div>
+    </div>
+  </div>
+  <!-- ====== View: Group Standings ====== -->
+  <div id="standingsContent" class="view-content" style="display:none">
+    <div id="standingsInner"></div>

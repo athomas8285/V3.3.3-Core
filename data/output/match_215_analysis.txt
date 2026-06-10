@@ -1,0 +1,53 @@
+============================================================
+  215 | 06-07 06:00 | 巴西 vs 埃及
+============================================================
+
+[一、比赛基本信息]
+赛事: 国际赛
+主队: 巴西 (SofaScore: Brazil)
+客队: 埃及 (SofaScore: Egypt)
+时间: 2026-06-07 06:00
+场地: Not specified, Unknown
+海拔: 正常
+
+[二、竞彩赔率]
+标准 SP:        1.20 / 5.00 / 10.50
+让球盘:         主队 -1 (主队让球)
+让球 SP:        1.72 / 3.70 / 3.60
+倾向: 主队 SP=1.20 更低 客队 SP=10.50
+差距: 实力差距明显 (SP差>2)
+
+[巴西 近5场 (Brazil)]
+  10-18 Uruguay 2-0 Brazil [World Cup Qual. CONMEBOL]
+  11-17 Colombia 2-1 Brazil [World Cup Qual. CONMEBOL]
+  11-22 Brazil 0-1 Argentina [World Cup Qual. CONMEBOL]
+  03-24 England 0-1 Brazil [International Friendly Games]
+  03-27 Spain 3-3 Brazil [International Friendly Games]
+  战绩: 1W 1D 3L | 进1.0/失1.6 场均
+
+[埃及 近5场 (Egypt)]
+  09-11 Botswana 0-4 Egypt [Africa Cup of Nations Qual.]
+  10-12 Egypt 2-0 Mauritania [Africa Cup of Nations Qual.]
+  10-16 Mauritania 0-1 Egypt [Africa Cup of Nations Qual.]
+  11-16 Cabo Verde 1-1 Egypt [Africa Cup of Nations Qual.]
+  11-19 Egypt 1-1 Botswana [Africa Cup of Nations Qual.]
+  战绩: 3W 2D 0L | 进1.8/失0.4 场均
+
+[三、H2H历史交锋]
+  (近30场无交锋)
+
+[六、伤停信息]
+巴西:
+  Neymar (F) - 伤病
+埃及:
+  (阵型未确认，暂无伤停数据)
+
+[七、战意背景]
+赛事性质: 国际友谊赛/热身赛
+战意评估: 中低 — 考察阵容、磨合为主，轮换可能性大
+背景: 2026世界杯前热身周期，各队以确定23人大名单为核心目标
+
+[八、特殊事项]
+* 海拔正常
+* 6月国际比赛日窗口，世界杯前最后热身机会
+* 友谊赛性质下，需关注首发阵容是否为全主力

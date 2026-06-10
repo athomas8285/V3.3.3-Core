@@ -1,0 +1,71 @@
+544: <div class="main">
+545:     <div class="wc-banner show" id="wcBanner">
+546:     <span class="wc-b-icon">🏆</span>
+547:     <div class="wc-b-text">
+548:       <div class="wc-b-title">2026 世界杯 · 量化分析</div>
+549:       <div class="wc-b-sub" id="wcBannerSub">小组赛 · 加载中...</div>
+550:     </div>
+551:     <div class="wc-b-info">
+552:       <div><span class="wc-b-num" id="wcRemainingCount">-</span></div>
+553:       <div style="font-size:10px;color:var(--t3)">剩余场次</div>
+554:     </div>
+555:   </div>
+556:   <div id="wcViewToday" class="wc-view" style="display:block"></div>
+557:   <div id="wcViewStandings" class="wc-view" style="display:none"><div class="empty-state">小组积分榜待开发...</div></div>
+558:   <div id="wcViewBracket" class="wc-view" style="display:none"><div class="empty-state">淘汰赛对阵图待开发...</div></div>
+559:   <div id="wcViewOdds" class="wc-view" style="display:none"><div class="empty-state">冠军赔率追踪待开发...</div></div>
+560:   <div id="wcViewPicks" class="wc-view" style="display:none"><div class="empty-state">今日精选推荐待开发...</div></div>
+561: <div class="sec-header">
+562:     <h2>今日赛事分析</h2>
+563:     <span class="sec-sub" id="todaySub">加载中...</span>
+564:     <div class="sec-actions">
+565:       <div class="sec-dropdown" id="sortDropdown">
+566:         <button class="sec-dropdown-btn" id="sortBtn" onclick="toggleSortMenu(event)">排序 ▾</button>
+567:         <div class="sec-dropdown-menu" id="sortMenu">
+568:           <div class="sec-dropdown-item active" data-sort="id" onclick="applySort('id', event)">按编号排序</div>
+569:           <div class="sec-dropdown-item" data-sort="rating" onclick="applySort('rating', event)">按评分排序</div>
+570:         </div>
+571:       </div>
+572:       <div class="sec-dropdown" id="filterDropdown">
+573:         <button class="sec-dropdown-btn" id="filterBtn" onclick="toggleFilterMenu(event)">筛选 ▾</button>
+574:         <div class="sec-dropdown-menu" id="filterMenu">
+575:           <label class="sec-dropdown-label"><input type="checkbox" value="all" checked onchange="toggleFilterAll(this)"> 全选</label>
+576:           <label class="sec-dropdown-label"><input type="checkbox" value="s" checked onchange="applyFilter()"> S级</label>
+577:           <label class="sec-dropdown-label"><input type="checkbox" value="a" checked onchange="applyFilter()"> A级</label>
+578:           <label class="sec-dropdown-label"><input type="checkbox" value="b" checked onchange="applyFilter()"> B级</label>
+579:           <label class="sec-dropdown-label"><input type="checkbox" value="c" onchange="applyFilter()"> C级</label>
+580:         </div>
+581:       </div>
+582:     </div>
+583:     <div class="sec-bar"></div>
+584:   </div>
+585:   <div id="todayMatches"></div>
+586:   <div class="sec-header" style="margin-top:20px">
+587:     <h2>往日数据复盘</h2>
+588:     <span class="sec-sub" id="yesterdaySub">--</span>
+589:     <div class="sec-actions">
+590:       <div class="sec-dropdown" id="ystSortDropdown">
+591:         <button class="sec-dropdown-btn" onclick="toggleYstSortMenu(event)">排序 ▾</button>
+592:         <div class="sec-dropdown-menu" id="ystSortMenu">
+593:           <div class="sec-dropdown-item active" data-sort="id" onclick="applyYstSort('id', event)">按编号排序</div>
+594:           <div class="sec-dropdown-item" data-sort="rating" onclick="applyYstSort('rating', event)">按评分排序</div>
+595:         </div>
+596:       </div>
+597:       <div class="sec-dropdown" id="ystFilterDropdown">
+598:         <button class="sec-dropdown-btn" onclick="toggleYstFilterMenu(event)">筛选 ▾</button>
+599:         <div class="sec-dropdown-menu" id="ystFilterMenu">
+600:           <label class="sec-dropdown-label"><input type="checkbox" value="all" checked onchange="toggleYstFilterAll(this)"> 全选</label>
+601:           <label class="sec-dropdown-label"><input type="checkbox" value="s" checked onchange="applyYstFilter()"> S级</label>
+602:           <label class="sec-dropdown-label"><input type="checkbox" value="a" checked onchange="applyYstFilter()"> A级</label>
+603:           <label class="sec-dropdown-label"><input type="checkbox" value="b" checked onchange="applyYstFilter()"> B级</label>
+604:           <label class="sec-dropdown-label"><input type="checkbox" value="c" onchange="applyYstFilter()"> C级</label>
+605:         </div>
+606:       </div>
+607:     </div>
+608:     <div class="sec-bar"></div>
+609:   </div>
+610:   <div id="yesterdayContent" style="display:none">
+611:     <div id="yesterdayMatches"></div>
+612:   </div>
+613: </div>
+614: <script>

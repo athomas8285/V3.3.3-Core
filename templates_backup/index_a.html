@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>V3.3.3-Core-Rev1.13 扫盘汇总 · 修正版</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei",sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);min-height:100vh;color:#e0e0e0;padding:20px;}
+h1{text-align:center;color:#e94560;margin-bottom:20px;font-size:22px;}
+table{width:100%;border-collapse:collapse;background:#16213e;border-radius:8px;overflow:hidden;}
+th{background:#0f3460;padding:8px 6px;font-size:12px;text-align:left;white-space:nowrap;}
+td{padding:8px 6px;border-bottom:1px solid #1a1a2e;font-size:12px;}
+tr:hover td{background:rgba(255,255,255,0.03);}
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:bold;}
+.badge-s{background:rgba(255,215,0,0.3);color:#ffd700;border:1px solid rgba(255,215,0,0.5);}
+.badge-a{background:rgba(13,71,161,0.3);color:#64b5f6;border:1px solid rgba(13,71,161,0.5);}
+.badge-b{background:rgba(230,81,0,0.3);color:#ffab40;border:1px solid rgba(230,81,0,0.5);}
+.badge-c{background:rgba(183,28,28,0.3);color:#ef5350;border:1px solid rgba(183,28,28,0.5);}
+.clickable{cursor:pointer;}
+.detail-row{display:none;}
+.detail-row.show{display:table-row;}
+.detail-box{padding:12px 16px;background:rgba(15,52,96,0.3);font-size:12px;line-height:1.7;}
+.prob-bar-wrap{background:rgba(255,255,255,0.1);border-radius:4px;height:12px;overflow:hidden;margin-top:2px;display:flex;}
+.prob-bar{height:100%;}
+.prob-home{background:#66bb6a;}
+.prob-draw{background:#ffa726;}
+.prob-away{background:#ef5350;}
+.footer{text-align:center;padding:20px;color:#555;font-size:11px;}
+</style>
+</head>
+<body>
+<div style="max-width:1400px;margin:0 auto;">
+<h1>V3.3.3-Core-Rev1.13 扫盘汇总 · 修正版</h1>
+<div id="result"></div>
+<div class="footer">评级标准：S=高置信备选 | A=备选 | B=关注 | C=熔断不推荐</div>
+</div>
+
+<script>
+function bg(r){
+  if(r==="S") return'<span class="badge badge-s">S级</span>';
+  if(r==="A") return'<span class="badge badge-a">A级</span>';
+  if(r==="B") return'<span class="badge badge-b">B级</span>';
+  if(r==="C") return'<span class="badge badge-c">C级</span>';
+  return'<span class="badge badge-c">'+r+'</span>';
+}
+
+function td(i){
+  var e=document.getElementById(i);
+  if(e) e.classList.toggle("show");
+}
+
+function rs(d){
+  var r=d.rating||[];
+  var mi=d.info||[];
+  var mc=d.mc||[];
+
+  var im={}, mm={};
+  mi.forEach(function(m){im[m.id]=m;});
+  mc.forEach(function(m){mm[m.id]=m;});
+
+  var sorted=[].concat(r).sort(function(a,b){return a.id.localeCompare(b.id);});
+
+  var h='<table><thead><tr>';
+  h+='<th>编号</th><th>时间</th><th>对阵</th><th>方向</th><th>概率分布</th>';
+  h+='<th>总进球</th><th>半全场</th><th>比分TOP3</th>';
+  h+='<th>贴合度</th><th>评级</th><th></th>';
+  h+='</tr></thead><tbody>';
+
+  sorted.forEach(function(x){
+    var im2=im[x.id]||{};
+    var mc2=mm[x.id]||{};
+    var p=mc2.physical||{};
+    var hw=(p.home_win||0)*100;
+    var dw=(p.draw||0)*100;
+    var aw=(p.away_win||0)*100;
+
+    var tg=(mc2.top2_total_goals||[]).join(", ");
+    var hf=(mc2.top2_half_full||[]).join(", ");
+    var sc=(mc2.top3_scores||[]).join(", ");
+
+    var tm=im2.time||"";
+    var ko=tm.length>=16?tm.substring(5,10)+"/"+tm.substring(11,16):"";
+
+    var pb="<div style=\"font-size:10px;color:#aaa;\">"+Math.round(hw)+"/"+Math.round(dw)+"/"+Math.round(aw)+"</div>";
+    pb+="<div class=\"prob-bar-wrap\">";
+    pb+="<span class=\"prob-bar prob-home\" style=\"width:"+hw+"%;\"></span>";
+    pb+="<span class=\"prob-bar prob-draw\" style=\"width:"+dw+"%;\"></span>";
+    pb+="<span class=\"prob-bar prob-away\" style=\"width:"+aw+"%;\"></span>";
+    pb+="</div>";
+
+    var did="d"+x.id;
+
+    h+="<tr class=\"clickable\" onclick=\"td(\'"+did+"\')\">";
+    h+="<td>"+x.id+"</td><td>"+ko+"</td><td>"+x.home+" vs "+x.away+"</td>";
+    h+="<td><b>"+x.direction+"</b></td><td style=\"min-width:130px;\">"+pb+"</td>";
+    h+="<td>"+tg+"</td><td>"+hf+"</td><td style=\"font-size:11px;\">"+sc+"</td>";
+    h+="<td>"+x.fit_score.toFixed(1)+"</td>";
+    h+="<td>"+bg(x.rating)+"</td>";
+    h+="<td style=\"color:#888;font-size:11px;\">&#9660;</td></tr>";
+
+    var scene=x.scenario_type||"";
+    var warn=x.direction_warning?"&#9888;方向存疑":"";
+    var lh=mc2.lambda_h_final||0;
+    var la=mc2.lambda_a_final||0;
+    var ld=mc2.lambda_diff||0;
+
+    h+="<tr class=\"detail-row\" id=\""+did+"\"><td colspan=\"11\" style=\"padding:0;\"><div class=\"detail-box\">";
+    h+="<b>&lambda;值:</b> 主"+lh.toFixed(3)+" / 客"+la.toFixed(3)+" / 差"+ld.toFixed(3);
+    if(scene) h+="<br><b>场景:</b> "+scene;
+    if(warn) h+="<br><b style=\"color:#ffa726;\">"+warn+"</b>";
+    h+="</div></td></tr>";
+  });
+
+  h+="</tbody></table>";
+  document.getElementById("result").innerHTML=h;
+}
+
+window.onload=function(){
+  fetch("/api/latest").then(function(r){return r.json();}).then(function(d){
+    if(d.rating&&d.rating.length>0){rs(d);}
+  }).catch(function(){});
+};
+</script>
+</body>
+</html>

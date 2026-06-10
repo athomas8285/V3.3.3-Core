@@ -1,0 +1,183 @@
+﻿
+var currentRating = [];
+var currentData = null;
+
+function switchTab(name){
+document.querySelectorAll('.tab-nav button').forEach(function(b){b.classList.remove('active');});
+document.querySelectorAll('.tab-content').forEach(function(c){c.classList.remove('active');});
+if(name==='summary'){document.getElementById('tab-summary').classList.add('active');document.getElementById('summary-tab').classList.add('active');}
+else{document.getElementById('tab-review').classList.add('active');document.getElementById('review-tab').classList.add('active');}
+}
+
+window.onload=function(){
+fetch('/api/latest').then(function(r){return r.json();}).then(function(d){
+if(d.rating&&d.rating.length>0){currentData=d;currentRating=d.rating;renderSummary(d);}
+}).catch(function(){});
+};
+
+function parseRawData(){
+var t=document.getElementById('raw-input').value.trim();
+if(!t){alert('请先粘贴原始数据');return;}
+document.getElementById('parse-status').textContent='将另一个AI采集的完整原始数据粘贴到下方，系统自动解析...';
+fetch('/api/parse',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:t})})
+.then(function(r){return r.json();})
+.then(function(d){if(d.error){alert(d.error);document.getElementById('parse-status').textContent='';return;}document.getElementById('parse-status').textContent='\u2713 '+'解析并保存数据';})
+.catch(function(e){alert('请求失败: '+e.message);document.getElementById('parse-status').textContent='';});
+}
+
+function startAnalysis(){
+var btn=document.getElementById('analyze-btn');btn.disabled=true;
+document.getElementById('loading').style.display='block';
+document.getElementById('analyze-status').textContent='';
+var f;
+try{f=JSON.parse(document.getElementById('factors-input').value);}
+catch(e){alert('factor_params.json 格式错误: '+e.message);btn.disabled=false;document.getElementById('loading').style.display='none';return;}
+fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({factor_params:f})})
+.then(function(r){return r.json();})
+.then(function(d){if(d.error){alert(d.error);}else{currentData=d;currentRating=d.rating;renderSummary(d);}})
+.catch(function(e){alert('请求失败: '+e.message);})
+.finally(function(){btn.disabled=false;document.getElementById('loading').style.display='none';document.getElementById('analyze-status').textContent='\u2713 '+'开始分析';});
+}
+
+function badge(rate,fit){
+if(rate==='BACKUP'){return fit>=9.0?'<span class="badge badge-s">S级</span>':'<span class="badge badge-a">A级</span>';}
+if(rate==='WATCH'){return fit>=7.0?'<span class="badge badge-b">B级</span>':'<span class="badge badge-c">C级</span>';}
+if(rate==='S'){return '<span class="badge badge-s">S级</span>';}
+if(rate==='A'){return '<span class="badge badge-a">A级</span>';}
+if(rate==='C'){return '<span class="badge badge-c">C级</span>';}
+if(fit>=9.0){return '<span class="badge badge-s">S级</span>';}
+if(fit>=7.0){return '<span class="badge badge-a">A级</span>';}
+if(fit>=5.0){return '<span class="badge badge-b">B级</span>';}
+return '<span class="badge badge-c">C级</span>';
+}
+
+function s7c(s){return s>=1?'s7-warn':(s>=0.5?'s7-mid':'s7-safe');}
+function ddic(v){return Math.abs(v)>0.05?'ddi-trigger':'ddi-normal';}
+function toggleDetail(id){var el=document.getElementById(id);if(el)el.classList.toggle('show');}
+
+function renderSummary(data){
+var rating=data.rating,mc=data.mc,info=data.info;
+var ddiData=data.ddi||[],aiData=data.ai||[];
+var im={},mm={},dm={},am={};
+info.forEach(function(m){im[m.id]=m;});
+mc.forEach(function(m){mm[m.id]=m;});
+ddiData.forEach(function(m){dm[m.id]=m;});
+aiData.forEach(function(m){am[m.id]=m;});
+var sorted=[].concat(rating).sort(function(a,b){return a.id.localeCompare(b.id);});
+var html='<table><thead><tr><th>赛事编号</th><th>开赛时间</th><th>对阵</th><th>方向</th><th>概率分布</th><th>λ主/客</th><th>DDI</th><th>S7</th><th>盘口</th><th>贴合度</th><th>评级</th><th>详情</th></tr></thead><tbody>';
+sorted.forEach(function(r){
+var m=im[r.id]||{},monte=mm[r.id]||{},ddiRow=dm[r.id]||{},aiRow=am[r.id]||{};
+var dd=ddiRow.ddi||{},p=monte.physical||{};
+var hw=(p.home_win||0)*100,dw=(p.draw||0)*100,aw=(p.away_win||0)*100;
+var ddi_h=dd.home_win||0,s7=aiRow.s7_score||0;
+var lh=monte.lambda_h_final||0,la=monte.lambda_a_final||0;
+var ahcp=m.asian_handicap||0,hcpStr=ahcp===0?'0':(ahcp>0?'+'+ahcp.toFixed(1):ahcp.toFixed(1));
+var ko=(m.time||'').substring(5,10)+'/'+(m.time||'').substring(11,16);
+var did='d-'+r.id;
+var pbar='<div style="font-size:10px;color:#aaa">'+Math.round(hw)+'/'+Math.round(dw)+'/'+Math.round(aw)+'</div><div class="prob-bar-wrap"><span class="prob-bar prob-home" style="width:'+hw+'%"></span><span class="prob-bar prob-draw" style="width:'+dw+'%"></span><span class="prob-bar prob-away" style="width:'+aw+'%"></span></div>';
+var ddiStr='<span class="'+ddic(ddi_h)+'">'+(ddi_h>=0?'+'+ddi_h.toFixed(3):ddi_h.toFixed(3))+'</span>';
+var s7Str=s7>0?'<span class="'+s7c(s7)+'">'+s7+'</span>':'<span>0</span>';
+html+='<tr class="clickable" onclick="toggleDetail(\''+did+'\')"><td>'+r.id+'</td><td>'+ko+'</td><td>'+r.home+' vs '+r.away+'</td><td><b>'+r.direction+'</b></td><td style="min-width:140px">'+pbar+'</td><td style="font-size:11px">'+lh.toFixed(2)+'/'+la.toFixed(2)+'</td><td>'+ddiStr+'</td><td>'+s7Str+'</td><td>'+hcpStr+'</td><td>'+r.fit_score.toFixed(1)+'</td><td>'+badge(r.rating,r.fit_score)+'</td><td style="color:#888;font-size:11px">\u25bc</td></tr>';
+var trap=aiRow.trap_analysis||'',risk=aiRow.key_risk||'',s7r=aiRow.s7_reason||'',ld=monte.lambda_diff||0;
+html+='<tr class="detail-row" id="'+did+'"><td colspan="12" style="padding:0"><div class="detail-box"><b>λ差值:</b> '+ld.toFixed(3)+(s7r?'<br><b>S7说明:</b> '+s7r:'')+(trap?'<br><b>诱盘分析:</b> '+trap:'')+(risk?'<br><b style="color:#ef5350">风险提示:</b> '+risk:'')+'<div id="charts-'+r.id+'" style="margin-top:10px;display:flex;gap:12px;flex-wrap:wrap;">'<div style="flex:1;min-width:240px;background:rgba(0,0,0,0.25);border-radius:8px;padding:10px;">'<div style="font-size:12px;color:#e0e0e0;margin-bottom:6px;">λ对比 · DDI</div>'<svg id="svg-lambda-'+r.id+'" width="300" height="200" style="width:100%;"></svg>'</div>'<div style="flex:1;min-width:240px;background:rgba(0,0,0,0.25);border-radius:8px;padding:8px;">'<div style="font-size:12px;color:#e0e0e0;margin-bottom:6px;">物理概率 vs 市场概率</div>'<svg id="svg-prob-'+r.id+'" width="300" height="200" style="width:100%;"></svg>'</div>'</div>''+'</div></td></tr>';
+});
+html+='</tbody></table>';
+html+='<h2>输入实际比分</h2><table><thead><tr><th>编号</th><th>对阵</th><th>预测</th><th>实际比分</th><th>操作</th></tr></thead><tbody>';
+sorted.forEach(function(r){html+='<tr><td>'+r.id+'</td><td>'+r.home+' vs '+r.away+'</td><td>'+r.direction+'</td><td><input type="text" id="score-'+r.id+'" placeholder="如 2:1"></td><td><button onclick="submitReview(\''+r.id+'\')">保存</button></td></tr>';});
+html+='</tbody></table><button onclick="submitAllReviews()">一键提交全部已填比分</button>';
+document.getElementById('result').innerHTML=html;setTimeout(function(){try{renderCharts(currentData);}catch(e){}},100);
+switchTab('summary');
+}
+
+function submitReview(mid){var s=document.getElementById('score-'+mid).value;if(!s){alert('请输入比分');return;}submitScores([{id:mid,score:s}]);}
+function submitAllReviews(){var s=[];currentRating.forEach(function(r){var el=document.getElementById('score-'+r.id);if(el&&el.value)s.push({id:r.id,score:el.value});});if(!s.length){alert('请至少输入一个比分');return;}submitScores(s);}
+function submitScores(scores){var p=scores.map(function(s){return{id:s.id,date:'',home:'',actual_score:s.score};});fetch('/api/review',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({scores:p})}).then(function(r){return r.json();}).then(function(d){if(d.error){alert(d.error);}else{renderReview(d);switchTab('review');}}).catch(function(e){alert('复盘失败: '+e.message);});}
+
+
+
+function renderCharts(data){
+ var ratings=data.rating||[],mc=data.mc||[],ddiData=data.ddi||[],info=data.info||[];
+ var mm={},dm={},im={};
+ mc.forEach(function(m){mm[m.id]=m;});
+ ddiData.forEach(function(m){dm[m.id]=m;});
+ info.forEach(function(m){im[m.id]=m;});
+ ratings.forEach(function(r){
+  var id=r.id||'004';var monte=mm[id]||{},ddiRow=dm[id]||{},infoRow=im[id]||{};
+  if(!monte.lambda_h_final) return;
+  var lh=monte.lambda_h_final,la=monte.lambda_a_final,ld=monte.lambda_diff;
+  var phys=monte.physical||{home_win:0,draw:0,away_win:0};
+  var ddi=ddiRow.ddi||{home_win:0,draw:0,away_win:0};
+  var mkt=ddiRow.p_market||{home_win:0,draw:0,away_win:0};
+  var s1=document.getElementById('svg-lambda-'+id);
+  var s2=document.getElementById('svg-prob-'+id);
+  if(!s1||!s2) return;
+  var ns='http://www.w3.org/2000/svg';
+  // Chart 1: lambda
+  s1.innerHTML='';
+  var W=300,H=200,pl=40,pr=10,pt=25,pb=35,cx=pl,cy=pt,cw=W-pl-pr,ch=H-pt-pb;
+  var maxV=Math.max(lh,la,1.5)*1.3;
+  for(var i=0;i<=4;i++){var v=(maxV/4)*i;var y=cy+ch-(v/maxV)*ch;
+   var l=document.createElementNS(ns,'line');l.setAttribute('x1',cx);l.setAttribute('y1',y);l.setAttribute('x2',cx+cw);l.setAttribute('y2',y);l.setAttribute('stroke','rgba(255,255,255,0.08)');l.setAttribute('stroke-width','0.5');s1.appendChild(l);
+   var t=document.createElementNS(ns,'text');t.setAttribute('x',cx-5);t.setAttribute('y',y+3);t.setAttribute('fill','#888');t.setAttribute('font-size','9');t.appendChild(document.createTextNode(v.toFixed(1)));s1.appendChild(t);}
+  var barW=55,gap=25,totalW=barW*2+gap,startX=cx+(cw-totalW)/2;
+  [['#66bb6a',lh,'λ主(预期进球)',0],['#ef5350',la,'λ客(预期进球)',barW+gap]].forEach(function(a){
+   var col=a[0],val=a[1],lbl=a[2],off=a[3];
+   var barH=Math.max((val/maxV)*ch,2),bx=startX+off,by=cy+ch-barH;
+   var r=document.createElementNS(ns,'rect');r.setAttribute('x',bx);r.setAttribute('y',by);r.setAttribute('width',barW);r.setAttribute('height',barH);r.setAttribute('rx','3');r.setAttribute('fill',col);r.setAttribute('opacity','0.85');s1.appendChild(r);
+   var vl=document.createElementNS(ns,'text');vl.setAttribute('x',bx+barW/2);vl.setAttribute('y',by-5);vl.setAttribute('fill','#fff');vl.setAttribute('font-size','11');vl.setAttribute('font-weight','bold');vl.setAttribute('text-anchor','middle');vl.appendChild(document.createTextNode(val.toFixed(3)));s1.appendChild(vl);
+   var lb=document.createElementNS(ns,'text');lb.setAttribute('x',bx+barW/2);lb.setAttribute('y',cy+ch+14);lb.setAttribute('fill','#999');lb.setAttribute('font-size','9');lb.setAttribute('text-anchor','middle');lb.appendChild(document.createTextNode(lbl));s1.appendChild(lb);});
+  // lambda diff + DDI
+  var it=document.createElementNS(ns,'text');it.setAttribute('x',cx);it.setAttribute('y',16);it.setAttribute('fill','#ffa726');it.setAttribute('font-size','11');it.setAttribute('font-weight','bold');it.appendChild(document.createTextNode('λ差值: '+ld.toFixed(3)));s1.appendChild(it);
+  var ddiy=cy+ch+28;
+  [['#66bb6a','主胜DDI: ',ddi.home_win||0,0],['#ffa726','平DDI: ',ddi.draw||0,110],['#ef5350','客胜DDI: ',ddi.away_win||0,205]].forEach(function(a){
+   var dt=document.createElementNS(ns,'text');dt.setAttribute('x',cx+a[3]);dt.setAttribute('y',ddiy);dt.setAttribute('fill',a[0]);dt.setAttribute('font-size','9');var v=a[2];dt.appendChild(document.createTextNode(a[1]+(v>=0?'+'+v.toFixed(3):v.toFixed(3)));s1.appendChild(dt);});
+  // Chart 2: prob comparison
+  s2.innerHTML='';
+  W=300;H=200;pl=38;pr=10;pt=25;pb=38;cx=pl;cy=pt;cw=W-pl-pr;ch=H-pt-pb;
+  var groups=[['主胜',phys.home_win||0,mkt.home_win||0,ddi.home_win||0],['平局',phys.draw||0,mkt.draw||0,ddi.draw||0],['客胜',phys.away_win||0,mkt.away_win||0,ddi.away_win||0]];
+  var maxP=0;groups.forEach(function(g){maxP=Math.max(maxP,g[1],g[2]);});maxP=Math.ceil(maxP*100/5)*5+5;maxP=Math.max(maxP,55);
+  for(var p=0;p<=maxP;p+=10){var y=cy+ch-(p/maxP)*ch;var l=document.createElementNS(ns,'line');l.setAttribute('x1',cx);l.setAttribute('y1',y);l.setAttribute('x2',cx+cw);l.setAttribute('y2',y);l.setAttribute('stroke','rgba(255,255,255,0.08)');l.setAttribute('stroke-width','0.5');s2.appendChild(l);var t=document.createElementNS(ns,'text');t.setAttribute('x',cx-5);t.setAttribute('y',y+3);t.setAttribute('fill','#888');t.setAttribute('font-size','9');t.setAttribute('text-anchor','end');t.appendChild(document.createTextNode(p+'%'));s2.appendChild(t);}
+  barW=36;gap=12;barGap=4;groupW=barW*2+barGap;totalGW=groupW*3+gap*2;startX=cx+(cw-totalGW)/2;
+  groups.forEach(function(g,i){var x=startX+i*(groupW+gap);
+   var bh1=Math.max((g[1]/maxP)*ch,2),by1=cy+ch-bh1;
+   var r1=document.createElementNS(ns,'rect');r1.setAttribute('x',x);r1.setAttribute('y',by1);r1.setAttribute('width',barW);r1.setAttribute('height',bh1);r1.setAttribute('rx','2');r1.setAttribute('fill','#42a5f5');r1.setAttribute('opacity','0.85');s2.appendChild(r1);
+   var t1=document.createElementNS(ns,'text');t1.setAttribute('x',x+barW/2);t1.setAttribute('y',by1-3);t1.setAttribute('fill','#e0e0e0');t1.setAttribute('font-size','9');t1.setAttribute('text-anchor','middle');t1.setAttribute('font-weight','bold');t1.appendChild(document.createTextNode((g[1]*100).toFixed(1)+'%'));s2.appendChild(t1);
+   var bx2=x+barW+barGap;var bh2=Math.max((g[2]/maxP)*ch,2),by2=cy+ch-bh2;
+   var r2=document.createElementNS(ns,'rect');r2.setAttribute('x',bx2);r2.setAttribute('y',by2);r2.setAttribute('width',barW);r2.setAttribute('height',bh2);r2.setAttribute('rx','2');r2.setAttribute('fill','#ef5350');r2.setAttribute('opacity','0.85');s2.appendChild(r2);
+   var t2=document.createElementNS(ns,'text');t2.setAttribute('x',bx2+barW/2);t2.setAttribute('y',by2-3);t2.setAttribute('fill','#e0e0e0');t2.setAttribute('font-size','9');t2.setAttribute('text-anchor','middle');t2.setAttribute('font-weight','bold');t2.appendChild(document.createTextNode((g[2]*100).toFixed(1)+'%'));s2.appendChild(t2);
+   var gl=document.createElementNS(ns,'text');gl.setAttribute('x',x+barW/2+barGap/2+barW/2);gl.setAttribute('y',cy+ch+14);gl.setAttribute('fill','#aaa');gl.setAttribute('font-size','10');gl.setAttribute('text-anchor','middle');gl.appendChild(document.createTextNode(g[0]));s2.appendChild(gl);
+   var dv=g[3];var dcol=Math.abs(dv)>0.05?'#ef5350':'#66bb6a';
+   var dt=document.createElementNS(ns,'text');dt.setAttribute('x',x+barW/2+barGap/2+barW/2);dt.setAttribute('y',cy+ch+26);dt.setAttribute('fill',dcol);dt.setAttribute('font-size','8');dt.setAttribute('text-anchor','middle');dt.appendChild(document.createTextNode('DDI '+(dv>=0?'+'+dv.toFixed(3):dv.toFixed(3)));s2.appendChild(dt);});
+  // legend
+  var lg1=document.createElementNS(ns,'text');lg1.setAttribute('x',cx+cw-110);lg1.setAttribute('y',16);lg1.setAttribute('fill','#42a5f5');lg1.setAttribute('font-size','9');lg1.appendChild(document.createTextNode('■ 物理'));s2.appendChild(lg1);
+  var lg2=document.createElementNS(ns,'text');lg2.setAttribute('x',cx+cw-48);lg2.setAttribute('y',16);lg2.setAttribute('fill','#ef5350');lg2.setAttribute('font-size','9');lg2.appendChild(document.createTextNode('■ 市场'));s2.appendChild(lg2);
+ });
+}
+function renderReview(data){
+var html='<h2>复盘诊断结果</h2>';
+if(data.stats){
+var s=data.stats;
+var rp=s.round_total>0?(s.round_hit/s.round_total*100).toFixed(1):'-';
+var tp=s.total>0?(s.hit/s.total*100).toFixed(1):'-';
+html+='<div class="stat-box"><div class="stat-item"><div class="num">'+s.round_hit+'/'+s.round_total+'</div><div class="lbl">复盘诊断</div></div><div class="stat-item"><div class="num">'+rp+'%</div><div class="lbl">复盘诊断</div></div><div class="stat-item"><div class="num">'+s.hit+'/'+s.total+'</div><div class="lbl">扫盘汇总</div></div><div class="stat-item"><div class="num">'+tp+'%</div><div class="lbl">扫盘汇总</div></div></div>';
+}
+if(data.reviews&&data.reviews.length>0){
+html+='<table><thead><tr><th>对阵</th><th>方向</th><th>实际</th><th>结果</th><th>诊断</th></tr></thead><tbody>';
+data.reviews.forEach(function(r){
+var st=r.hit==='True'?'<span style="color:#66bb6a;font-weight:bold">命中</span>':'<span style="color:#ef5350;font-weight:bold">未命中</span>';
+html+='<tr><td>'+r.home+' vs '+r.away+'</td><td>'+r.direction+'</td><td>'+r.actual_score+'</td><td>'+st+'</td><td style="font-size:12px;color:#aaa">'+(r.diagnosis||'').replace(new RegExp('；','g'),'<br>')+'</td></tr>';
+});
+html+='</tbody></table>';
+}
+document.getElementById('review-result').innerHTML=html;
+}
+
+
+
+var origRenderSummary = renderSummary;
+renderSummary = function(data){
+  origRenderSummary(data);
+  try{renderCharts(data);}catch(e){}
+};
+
+

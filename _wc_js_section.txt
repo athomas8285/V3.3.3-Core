@@ -1,0 +1,11 @@
+function switchWCView(view){
+  document.querySelectorAll(".wc-sub-item").forEach(function(x){x.classList.remove("active");});
+  var el=document.querySelector('.wc-sub-item[data-view="'+view+'"]');
+  if(el)el.classList.add("active");
+  document.querySelectorAll(".wc-view").forEach(function(x){x.style.display="none";});
+  var target=document.getElementById("wcView"+view.charAt(0).toUpperCase()+view.slice(1));
+  if(target)target.style.display="block";
+  var labels={today:'今日赛程',standings:'小组积分榜',bracket:'淘汰赛对阵图',odds:'冠军赔率追踪',picks:'今日精选推荐'};
+  var h2=document.querySelector(".sec-header h2");
+  if(h2)h2.textContent='🏆 '+ (labels[view]||view);
+}

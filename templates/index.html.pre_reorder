@@ -1,0 +1,831 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>V3.3.3-Core 分析系统</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#1a1a20;--surface:#1e1e24;--surface-2:#25252b;--surface-h:#2d2d35;--t1:#e8e8ed;--t2:#999;--t3:#666;--green:#00e676;--red:#ef5350;--amber:#ffd54f;--blue:#42a5f5;--bd:#2e2e36;--bd-h:#3a3a44;--mono:"SF Mono","Cascadia Code","Consolas",monospace;--sans:"Inter","Microsoft YaHei","PingFang SC","Noto Sans SC",sans-serif}
+body{font-family:var(--sans);background:var(--bg);color:var(--t1);min-height:100vh;display:flex;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--bd-h);border-radius:3px}
+.sd-wrap{width:250px;flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--surface);border-right:1px solid var(--bd);display:flex;flex-direction:column}
+.sd-top{padding:20px 18px 16px;border-bottom:1px solid var(--bd);flex-shrink:0}
+.sd-logo-row{display:flex;align-items:center;gap:8px}
+.sd-home{display:flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:6px;cursor:pointer;transition:background .2s;flex-shrink:0;position:relative}
+.sd-home:hover{background:rgba(0,230,118,.12)}
+.sd-home:hover::after{content:attr(title);position:absolute;left:36px;top:50%;transform:translateY(-50%);background:var(--surface-2);color:var(--t2);font-size:11px;padding:3px 8px;border-radius:4px;white-space:nowrap;border:1px solid var(--bd);z-index:10;font-weight:400}
+.sd-title{font-size:22px;font-weight:700;color:var(--green);letter-spacing:1px;line-height:1.2}
+.sd-sub{font-size:11px;color:var(--t3);letter-spacing:1px;margin-top:4px}
+.sd-status{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:12px;color:var(--t2);padding:4px 0}
+.sd-status-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.sd-body{flex:1;overflow-y:auto;padding:0 0 8px}
+.sd-footer{padding:10px 16px;border-top:1px solid var(--bd);font-size:11px;color:var(--t3);text-align:center;flex-shrink:0}
+.acc{border-bottom:1px solid var(--bd)}
+.acc-head{display:flex;align-items:center;gap:10px;padding:13px 16px;min-height:48px;cursor:pointer;user-select:none;transition:background .15s}
+.acc-head:hover{background:rgba(255,255,255,.07)}
+.acc-head .acc-arrow{font-size:11px;color:var(--t3);transition:transform .3s ease;flex-shrink:0;width:12px;text-align:center}
+.acc.open .acc-arrow{transform:rotate(90deg)}
+.acc-head .acc-icon{font-size:17px}
+.acc-head .acc-label{font-size:15px;font-weight:600;color:var(--t2);letter-spacing:.5px;flex:1;min-width:0}
+.acc-head .acc-badge{font-size:10px;color:var(--green);background:rgba(0,230,118,.1);padding:2px 8px;border-radius:8px;white-space:nowrap}
+.acc-head .acc-count{font-size:12px;color:var(--t3);background:rgba(255,255,255,.06);padding:1px 5px;border-radius:4px;white-space:nowrap}
+.acc.open .acc-head .acc-label{color:var(--t1)}
+.acc-body{overflow:hidden;max-height:0;transition:max-height .35s ease}
+.acc.open>.acc-body{max-height:900px}
+.acc-body-inner{padding:4px 16px 12px}
+.today-stats{display:flex;flex-direction:column;gap:6px;padding:4px 0}
+.today-stat-row{display:flex;justify-content:space-between;align-items:center;padding:5px 8px;background:rgba(255,255,255,.03);border-radius:5px;font-size:11px}
+.today-stat-row .tsl{color:var(--t3)}
+.today-stat-row .tsv{color:var(--t1);font-weight:600;font-family:var(--mono)}
+.today-stat-row .tsv.high{color:var(--green)}
+.today-stat-row .tsv.med{color:var(--amber)}
+.today-stat-row .tsv.low{color:var(--red)}
+.today-divider{height:1px;background:var(--bd);margin:6px 0}
+.today-date{font-size:15px;color:var(--green);font-weight:600;padding:2px 0;text-align:center}
+.hist-date-item{display:flex;align-items:center;gap:6px;padding:10px 16px;min-height:40px;cursor:pointer;transition:all .2s;border-left:3px solid transparent;border-radius:0 4px 4px 0;margin:2px 0}
+.hist-date-item:hover{background:rgba(255,255,255,.08)}
+.hist-date-item.active{border-left-color:var(--green);background:rgba(0,230,118,.07)}
+.hist-date-item .hd-date{font-size:14px;font-weight:600;color:var(--t1);flex:1;min-width:0}
+.hist-date-item .hd-stats{font-size:11px;color:var(--t3);white-space:nowrap}
+.hist-date-item.active .hd-date{color:#fff}
+.hist-date-item .hd-arrow{font-size:10px;color:var(--t3);transition:transform .3s ease}
+.hist-date-item.open .hd-arrow{transform:rotate(90deg)}
+.hist-action{padding:4px 16px 8px 28px;display:none}
+.hist-date-item.open+.hist-action{display:block}
+.hist-action button{width:100%;padding:5px 10px;font-size:10px;color:var(--t2);background:rgba(0,230,118,.08);border:1px solid rgba(0,230,118,.15);border-radius:4px;cursor:pointer;transition:all .15s;font-family:var(--sans)}
+.hist-action button:hover{background:rgba(0,230,118,.18);color:var(--green)}
+.hist-empty{padding:16px 12px;font-size:12px;color:var(--t3);text-align:center}
+.bt-item{padding:9px 12px;margin:5px 0;background:rgba(255,255,255,.02);border-radius:5px;cursor:pointer;transition:background .15s;border:1px solid transparent}
+.bt-item:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.12)}
+.bt-item .bt-title{font-size:13px;font-weight:600;color:var(--t1);margin-bottom:2px}
+.bt-item .bt-meta{font-size:11px;color:var(--t3);display:flex;gap:8px;flex-wrap:wrap}
+.bt-item .bt-meta span{background:rgba(255,255,255,.04);padding:1px 5px;border-radius:3px}
+.bt-detail{padding:10px;margin:3px 0 8px;background:var(--surface);border-radius:6px;font-size:11px;color:var(--t2);line-height:1.6;display:none;border:1px solid var(--bd)}
+.bt-detail.show{display:block}
+.bt-detail .bt-summ{color:var(--t1);margin-bottom:4px}
+.bt-detail .bt-link{padding:5px 10px;font-size:11px;background:rgba(66,165,245,.12);color:var(--blue);border:none;border-radius:4px;cursor:pointer;font-family:var(--sans);transition:background .15s}
+.doc-item{padding:9px 12px;margin:5px 0;background:rgba(255,255,255,.02);border-radius:5px;cursor:pointer;transition:background .15s}
+.doc-item:hover{background:rgba(255,255,255,.09)}
+.doc-item .doc-title{font-size:13px;font-weight:600;color:var(--t1)}
+.doc-content{padding:10px;margin:3px 0 8px;background:var(--surface);border-radius:5px;display:none;border:1px solid var(--bd)}
+.doc-content.show{display:block}
+.doc-entry{padding:5px 0;font-size:12px;line-height:1.7}
+.doc-entry .de-label{color:var(--green);font-weight:600;white-space:nowrap}
+.doc-entry .de-value{color:var(--t2)}
+.sd-loading{color:var(--t3);font-size:12px;padding:12px;text-align:center}
+.sd-error{color:var(--red);font-size:12px;padding:12px;text-align:center}
+.main{flex:1;min-width:0;max-width:1000px;margin:0 auto;padding:0 20px 60px}
+.sec-header{display:flex;align-items:baseline;gap:12px;padding:18px 0 10px}
+.sec-header h2{font-size:16px;font-weight:700;color:var(--t1)}
+.sec-header .sec-sub{font-size:12px;color:var(--t2);font-weight:500}
+.sec-header .sec-bar{flex:1;height:1px;background:var(--bd)}
+.match-card{background:var(--surface-2);border:1px solid var(--bd);border-radius:10px;margin-bottom:12px;overflow:hidden;transition:border-color .25s,box-shadow .25s;position:relative}
+.match-card:hover{border-color:var(--bd-h);box-shadow:0 0 0 1px rgba(0,230,118,.08)}
+.mc-header{display:flex;align-items:center;padding:12px 16px;gap:12px}
+.mc-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.mc-time{font-family:var(--mono);font-size:12px;color:var(--t2);white-space:nowrap;font-weight:500}
+.mc-league{font-size:10px;color:var(--t3);background:rgba(255,255,255,.06);padding:2px 9px;border-radius:10px;white-space:nowrap;letter-spacing:.3px;font-weight:500}
+.mc-teams{font-size:15px;font-weight:700;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mc-vs{color:var(--t3);font-size:11px;font-weight:400;margin:0 4px}
+
+
+
+.mc-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+
+
+
+
+
+
+
+
+
+
+
+
+.match-card.active{border-color:rgba(0,230,118,.25);box-shadow:0 0 0 1px rgba(0,230,118,.12),0 0 20px rgba(0,230,118,.04)}
+.mc-teams-wrap{display:flex;flex-direction:column;gap:2px;min-width:0}
+.mc-bar-wrap{flex:1;min-width:80px;max-width:140px;height:6px;margin:0 6px;position:relative;border-radius:3px;overflow:hidden;background:var(--surface)}
+.mc-bar-fill{height:100%;border-radius:3px;transition:width .5s ease}
+.mc-score{font-size:24px;font-weight:800;font-family:var(--mono);color:var(--t1);line-height:1;min-width:44px;text-align:center}
+.mc-rating-badge{font-size:13px;font-weight:700;padding:4px 8px;border-radius:5px;min-width:28px;text-align:center;line-height:1}
+.mc-rating-badge.s{background:var(--green);color:#fff}
+.mc-rating-badge.a{background:var(--blue);color:#fff}
+.mc-rating-badge.b{background:var(--amber);color:#222}
+.mc-rating-badge.c{background:var(--red);color:#fff}
+.mc-rating-badge.m{background:var(--t3);color:#fff}
+.mc-dir-badge{font-size:11px;font-weight:600;padding:3px 8px;border-radius:4px;line-height:1;background:rgba(255,255,255,.06);color:var(--t1)}
+.mc-dir-badge.win{background:rgba(0,230,118,.15);color:var(--green)}
+.mc-dir-badge.lose{background:rgba(239,83,80,.15);color:var(--red)}
+.mc-dir-badge.draw{background:rgba(66,165,245,.15);color:var(--blue)}
+.mc-expand-btn{color:var(--t3);font-size:10px;cursor:pointer;padding:4px;border-radius:4px;transition:transform .3s,background .15s;display:flex;align-items:center;justify-content:center;width:20px;height:20px;flex-shrink:0}
+.mc-expand-btn:hover{background:rgba(255,255,255,.08)}
+.match-card.active .mc-expand-btn{transform:rotate(180deg)}
+.mc-predictions{display:flex;flex-direction:row;gap:8px;margin:10px 18px 0;flex-wrap:nowrap}
+.mc-pred-item{display:flex;align-items:center;gap:6px;padding:5px 10px;border-radius:20px;background:rgba(255,255,255,.04);border:1px solid var(--bd);white-space:nowrap;flex:0 1 auto}
+.mc-pred-icon{font-size:13px;line-height:1;flex-shrink:0}
+.mc-pred-label{font-size:10px;color:var(--t3);font-weight:500;letter-spacing:.3px;flex-shrink:0}
+.mc-pred-value{font-size:12px;font-weight:700;color:var(--green);line-height:1;margin-left:2px}
+.mc-detail{display:none;padding:0 18px 16px}
+.match-card.active .mc-detail{display:block}
+.chart-wrap{position:relative;height:80px;display:flex;align-items:flex-end;padding:0 4px}
+.chart-y-axis{position:absolute;left:0;top:0;bottom:0;width:100%;pointer-events:none}
+.chart-y-axis line{stroke:rgba(255,255,255,.06);stroke-width:1;stroke-dasharray:3 3}
+.chart-y-axis text{fill:var(--t3);font-size:8px;font-family:var(--mono)}
+.chart-bar-group{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;max-width:60px}
+.chart-bar{width:100%;max-width:36px;border-radius:4px 4px 0 0;min-height:4px;position:relative;transition:height .5s ease}
+.chart-bar-label{font-size:9px;color:var(--t3);font-family:var(--mono);white-space:nowrap}
+.chart-bar-val{font-size:9px;font-weight:600;font-family:var(--mono);position:absolute;top:-14px;left:50%;transform:translateX(-50%);white-space:nowrap}
+.chart-bar.val-green .chart-bar-val{color:var(--green)}
+.chart-bar.val-red .chart-bar-val{color:var(--red)}
+.chart-bar.val-amber .chart-bar-val{color:var(--amber)}
+.detail-grid-4{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.detail-cell{background:var(--surface);border-radius:6px;padding:8px 10px;display:flex;flex-direction:column;gap:2px}
+.detail-cell .dc-label{font-size:10px;color:var(--t3);font-weight:500;display:flex;align-items:center;gap:4px}
+.detail-cell .dc-value{font-size:12px;color:var(--t1);line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word}
+.detail-cell .dc-value strong{font-family:var(--mono);font-weight:800;color:#fff;font-size:14px}
+.detail-cell.risk{background:rgba(239,83,80,.1);border:1px solid rgba(239,83,80,.15)}
+.detail-cell.risk .dc-value{color:var(--red)}
+
+
+
+
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.chart-box{background:var(--surface);border-radius:8px;padding:12px 12px 8px}
+.chart-box .ch-title{font-size:11px;color:var(--t2);margin-bottom:6px;font-weight:600}
+
+
+
+
+
+
+
+
+
+
+.table-wrap{background:var(--surface-2);border:1px solid var(--bd);border-radius:8px;overflow:hidden;margin-top:6px}
+.table-top{display:flex;align-items:center;gap:14px;padding:10px 14px;background:var(--surface);border-bottom:1px solid var(--bd);flex-wrap:wrap}
+.table-top .tt-item{font-size:11px;color:var(--t2)}
+.table-top .tt-item b{color:var(--t1);font-weight:600}
+.table-top .tt-item .hl{color:var(--green)}
+.table-top .tt-item .hl2{color:var(--amber)}
+.tt-spacer{flex:1}
+table.y-table{width:100%;border-collapse:collapse;font-size:12px}
+table.y-table thead th{padding:8px 10px;text-align:left;font-weight:600;color:var(--t3);background:var(--surface);border-bottom:1px solid var(--bd);white-space:nowrap}
+table.y-table tbody td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--t2);white-space:nowrap}
+table.y-table tbody tr:hover{background:rgba(255,255,255,.03)}
+table.y-table tbody tr:last-child td{border-bottom:none}
+td.c-result{font-weight:600}
+td.c-result.win{color:var(--red)}
+td.c-result.lose{color:var(--green)}
+td.c-result.draw{color:var(--blue)}
+td.c-status .tag{padding:2px 8px;border-radius:3px;font-size:10px;font-weight:600}
+td.c-status .tag.hit{background:var(--red);color:#fff}
+td.c-status .tag.miss{background:var(--t3);color:#fff}
+td.c-rating .r-num{font-weight:700;color:var(--t1);font-family:var(--mono)}
+td.c-rating .r-lvl{font-size:10px;padding:1px 5px;border-radius:3px;font-weight:600;margin-left:4px}
+td.c-rating .r-lvl.s{background:var(--green);color:#fff}
+td.c-rating .r-lvl.a{background:var(--amber);color:#222}
+td.c-rating .r-lvl.b{background:var(--t3);color:#fff}
+.empty-state{text-align:center;padding:40px 20px;color:var(--t3);font-size:13px}
+
+/* === Contact & Divider === */
+.sd-divider{height:1px;background:var(--bd);margin:16px 18px 12px;flex-shrink:0}
+.sd-contact{padding:6px 18px 12px;display:flex;flex-direction:column;gap:6px;flex-shrink:0}
+.sd-contact-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:10px 16px;border-radius:8px;border:1px solid var(--bd);background:rgba(255,255,255,.03);color:var(--t2);font-size:13px;font-family:var(--sans);cursor:pointer;transition:all .2s}
+.sd-contact-btn:hover{background:rgba(66,165,245,.12);border-color:rgba(66,165,245,.25);color:var(--blue)}
+.sd-contact-btn .cb-icon{font-size:16px}
+.sd-contact-btn .cb-text{font-weight:500}
+
+/* Today module highlight */
+#accToday.open>.acc-head{background:rgba(0,230,118,.06)}
+#accToday.open>.acc-head .acc-label{color:var(--green)}
+
+/* Active date stronger highlight */
+.hist-date-item.active{border-left-color:var(--green);background:rgba(0,230,118,.12)}
+.hist-date-item.active .hd-date{color:var(--green)}
+
+/* Stronger active state for nav items */
+.acc.open>.acc-head{background:rgba(255,255,255,.04)}
+
+
+/* === Plan Items === */
+.plan-item{display:flex;align-items:center;gap:10px;padding:11px 12px;cursor:pointer;transition:all .15s;border-radius:6px;margin:4px 0;text-decoration:none}
+.plan-item:hover{background:rgba(255,255,255,.09)}
+.plan-item .plan-icon{font-size:15px;flex-shrink:0}
+.plan-item .plan-name{font-size:13px;color:var(--t1);flex:1;font-weight:500}
+.plan-item .plan-arrow{font-size:12px;color:var(--t3);transition:transform .2s}
+.plan-item:hover .plan-arrow{transform:translateX(4px);color:var(--green)}
+
+@media(max-width:768px){
+  .sd-wrap{width:60px}
+  .sd-title,.sd-sub,.sd-status,..plan-item,.acc .acc-label,.acc .acc-badge,.acc .acc-count,.hist-date-item .hd-date,.hist-date-item .hd-stats,.today-stat-row,.bt-item .bt-title,.bt-item .bt-meta,.doc-item .doc-title,.sd-contact,.sd-footer{display:none}
+  .sd-wrap .acc-body{max-height:0!important}
+  .sd-wrap:hover{width:250px;position:fixed;z-index:100;box-shadow:4px 0 20px rgba(0,0,0,.4)}
+  .sd-wrap:hover .sd-title,.sd-wrap:hover .sd-sub,.sd-wrap:hover .sd-status,.sd-wrap:hover .acc .acc-label,.sd-wrap:hover .acc .acc-badge,.sd-wrap:hover .acc .acc-count,.sd-wrap:hover .plan-item,.sd-wrap:hover .hist-date-item .hd-date,.sd-wrap:hover .hist-date-item .hd-stats,.sd-wrap:hover .today-stat-row,.sd-wrap:hover .bt-item .bt-title,.sd-wrap:hover .bt-item .bt-meta,.sd-wrap:hover .doc-item .doc-title,.sd-wrap:hover .sd-footer{display:flex;display:block}
+  .sd-wrap:hover .acc-body{max-height:900px!important}
+  .main{padding:0 10px 40px}
+  .mc-header{flex-wrap:wrap;gap:8px}
+.mc-bar-wrap{min-width:50px;max-width:80px}
+  .mc-predictions{flex-wrap:wrap}
+  .detail-grid{grid-template-columns:1fr}
+.detail-grid-4{grid-template-columns:1fr}
+  table.y-table{font-size:11px}
+  table.y-table thead th,table.y-table tbody td{padding:6px 6px}
+}
+</style>
+</head>
+<body>
+<div class="sd-wrap">
+  <div class="sd-top">
+    <div class="sd-logo-row">
+      <div>
+        <div class="sd-title">V3.3.3-Core</div>
+        <div class="sd-sub">分析系统</div>
+      </div>
+    </div>
+    <div class="sd-status">
+      <span class="sd-status-dot db-connected"></span>
+      <span>系统运行中</span>
+      <span style="color:var(--t3);margin-left:auto;font-size:9px">v3.3.3</span>
+    </div>
+  </div>
+  <div class="sd-body">
+<div class="acc open" id="accToday" class="active-section">
+      <div class="acc-head" onclick="toggleAccordion('accToday')">
+        <span class="acc-arrow">▶</span>
+        <span class="acc-icon">📊</span>
+        <span class="acc-label">今日概览</span>
+        <span class="acc-badge" style="background:rgba(0,230,118,.15);color:var(--green)">实时</span>
+        <span class="acc-count" id="todayMatchCount">-</span>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <div class="today-date" id="todayDateLabel">加载中...</div>
+          <div class="today-stats" id="todayStats">
+            <div class="sd-loading">加载中...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="acc" id="accHistory">
+      <div class="acc-head" onclick="toggleAccordion('accHistory')">
+        <span class="acc-arrow">▶</span>
+        <span class="acc-icon">📅</span>
+        <span class="acc-label">历史预测数据</span>
+        <span class="acc-badge" style="background:rgba(0,230,118,.15);color:var(--green)">实战</span>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner" style="padding:8px 16px 12px">
+          <div style="margin-bottom:10px">
+            <input type="text" id="historySearch" placeholder="搜索日期 (YYYY-MM-DD)" style="width:100%;padding:7px 10px;font-size:11px;font-family:var(--sans);background:var(--bg);border:1px solid var(--bd);border-radius:5px;color:var(--t1);outline:none;transition:border-color .15s" oninput="filterHistoryDates(this.value)">
+          </div>
+          <div id="historyListContainer">
+            <div class="sd-loading">加载中...</div>
+          </div>
+          <div id="historyLoadMore" style="display:none;text-align:center;padding:8px 0">
+            <button onclick="loadMoreHistory()" style="width:100%;padding:6px 10px;font-size:11px;color:var(--t2);background:rgba(255,255,255,.04);border:1px solid var(--bd);border-radius:5px;cursor:pointer;font-family:var(--sans);transition:all .15s">加载更多 ↓</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="acc" id="accBacktest">
+      <div class="acc-head" onclick="toggleAccordion('accBacktest')">
+        <span class="acc-arrow">▶</span>
+        <span class="acc-icon">🧪</span>
+        <span class="acc-label">历史比赛回测</span>
+        <span class="acc-badge" style="background:rgba(66,165,245,.18);color:var(--blue)">验证</span>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner" id="backtestContainer">
+          <div class="sd-loading">加载中...</div>
+        </div>
+      </div>
+    </div>
+    <div class="acc" id="accDoc">
+      <div class="acc-head" onclick="toggleAccordion('accDoc')">
+        <span class="acc-arrow">▶</span>
+        <span class="acc-icon">📘</span>
+        <span class="acc-label">系统说明书</span>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner" id="docContainer">
+          <div class="sd-loading">加载中...</div>
+        </div>
+      </div>
+    </div>
+    <div class="acc" id="accPlan">
+      <div class="acc-head" onclick="toggleAccordion('accPlan')">
+        <span class="acc-arrow">▶</span>
+        <span class="acc-icon">🎯</span>
+        <span class="acc-label">精选计划单</span>
+        <span class="acc-badge" style="background:rgba(255,215,0,.18);color:var(--amber)">推荐</span>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <div class="plan-item" onclick="location.href=\'/plan/2.0\'">
+            <span class="plan-icon">🟢</span>
+            <span class="plan-name">2.0 稳健计划</span>
+            <span class="plan-arrow">→</span>
+          </div>
+          <div class="plan-item" onclick="location.href=\'/plan/3.0\'">
+            <span class="plan-icon">🔵</span>
+            <span class="plan-name">3.0 稳冲计划</span>
+            <span class="plan-arrow">→</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+<div class="acc" id="accPlan">
+      <div class="acc-head" onclick="toggleAccordion('accPlan')">
+        <span class="acc-arrow">▶</span>
+        <span class="acc-icon">🎯</span>
+        <span class="acc-label">精选计划单</span>
+        <span class="acc-badge" style="background:rgba(255,215,0,.18);color:var(--amber)">推荐</span>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <div class="plan-item" onclick="location.href=\'/plan/2.0\'">
+            <span class="plan-icon">🟢</span>
+            <span class="plan-name">2.0 稳健计划</span>
+            <span class="plan-arrow">→</span>
+          </div>
+          <div class="plan-item" onclick="location.href=\'/plan/3.0\'">
+            <span class="plan-icon">🔵</span>
+            <span class="plan-name">3.0 稳冲计划</span>
+            <span class="plan-arrow">→</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+<div class="acc" id="accHistory">
+      <div class="acc-head" onclick="toggleAccordion('accHistory')">
+        <span class="acc-arrow">▶</span>
+        <span class="acc-icon">📅</span>
+        <span class="acc-label">历史预测数据</span>
+        <span class="acc-badge" style="background:rgba(0,230,118,.15);color:var(--green)">实战</span>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner" style="padding:8px 16px 12px">
+          <div style="margin-bottom:10px">
+            <input type="text" id="historySearch" placeholder="搜索日期 (YYYY-MM-DD)" style="width:100%;padding:7px 10px;font-size:11px;font-family:var(--sans);background:var(--bg);border:1px solid var(--bd);border-radius:5px;color:var(--t1);outline:none;transition:border-color .15s" oninput="filterHistoryDates(this.value)">
+          </div>
+          <div id="historyListContainer">
+            <div class="sd-loading">加载中...</div>
+          </div>
+          <div id="historyLoadMore" style="display:none;text-align:center;padding:8px 0">
+            <button onclick="loadMoreHistory()" style="width:100%;padding:6px 10px;font-size:11px;color:var(--t2);background:rgba(255,255,255,.04);border:1px solid var(--bd);border-radius:5px;cursor:pointer;font-family:var(--sans);transition:all .15s">加载更多 ↓</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="acc" id="accBacktest">
+      <div class="acc-head" onclick="toggleAccordion('accBacktest')">
+        <span class="acc-arrow">▶</span>
+        <span class="acc-icon">🧪</span>
+        <span class="acc-label">历史比赛回测</span>
+        <span class="acc-badge" style="background:rgba(66,165,245,.18);color:var(--blue)">验证</span>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner" id="backtestContainer">
+          <div class="sd-loading">加载中...</div>
+        </div>
+      </div>
+    </div>
+    <div class="acc" id="accDoc">
+      <div class="acc-head" onclick="toggleAccordion('accDoc')">
+        <span class="acc-arrow">▶</span>
+        <span class="acc-icon">📘</span>
+        <span class="acc-label">系统说明书</span>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner" id="docContainer">
+          <div class="sd-loading">加载中...</div>
+        </div>
+      </div>
+    </div>
+    <div class="acc" id="accPlan">
+      <div class="acc-head" onclick="toggleAccordion('accPlan')">
+        <span class="acc-arrow">▶</span>
+        <span class="acc-icon">🎯</span>
+        <span class="acc-label">精选计划单</span>
+        <span class="acc-badge" style="background:rgba(255,215,0,.18);color:var(--amber)">推荐</span>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <div class="plan-item" onclick="location.href=\'/plan/2.0\'">
+            <span class="plan-icon">🟢</span>
+            <span class="plan-name">2.0 稳健计划</span>
+            <span class="plan-arrow">→</span>
+          </div>
+          <div class="plan-item" onclick="location.href=\'/plan/3.0\'">
+            <span class="plan-icon">🔵</span>
+            <span class="plan-name">3.0 稳冲计划</span>
+            <span class="plan-arrow">→</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+<div class="acc" id="accBacktest">
+      <div class="acc-head" onclick="toggleAccordion('accBacktest')">
+        <span class="acc-arrow">▶</span>
+        <span class="acc-icon">🧪</span>
+        <span class="acc-label">历史比赛回测</span>
+        <span class="acc-badge" style="background:rgba(66,165,245,.18);color:var(--blue)">验证</span>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner" id="backtestContainer">
+          <div class="sd-loading">加载中...</div>
+        </div>
+      </div>
+    </div>
+    <div class="acc" id="accDoc">
+      <div class="acc-head" onclick="toggleAccordion('accDoc')">
+        <span class="acc-arrow">▶</span>
+        <span class="acc-icon">📘</span>
+        <span class="acc-label">系统说明书</span>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner" id="docContainer">
+          <div class="sd-loading">加载中...</div>
+        </div>
+      </div>
+    </div>
+    <div class="acc" id="accPlan">
+      <div class="acc-head" onclick="toggleAccordion('accPlan')">
+        <span class="acc-arrow">▶</span>
+        <span class="acc-icon">🎯</span>
+        <span class="acc-label">精选计划单</span>
+        <span class="acc-badge" style="background:rgba(255,215,0,.18);color:var(--amber)">推荐</span>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <div class="plan-item" onclick="location.href=\'/plan/2.0\'">
+            <span class="plan-icon">🟢</span>
+            <span class="plan-name">2.0 稳健计划</span>
+            <span class="plan-arrow">→</span>
+          </div>
+          <div class="plan-item" onclick="location.href=\'/plan/3.0\'">
+            <span class="plan-icon">🔵</span>
+            <span class="plan-name">3.0 稳冲计划</span>
+            <span class="plan-arrow">→</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+<div class="acc" id="accDoc">
+      <div class="acc-head" onclick="toggleAccordion('accDoc')">
+        <span class="acc-arrow">▶</span>
+        <span class="acc-icon">📘</span>
+        <span class="acc-label">系统说明书</span>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner" id="docContainer">
+          <div class="sd-loading">加载中...</div>
+        </div>
+      </div>
+    </div>
+    <div class="acc" id="accPlan">
+      <div class="acc-head" onclick="toggleAccordion('accPlan')">
+        <span class="acc-arrow">▶</span>
+        <span class="acc-icon">🎯</span>
+        <span class="acc-label">精选计划单</span>
+        <span class="acc-badge" style="background:rgba(255,215,0,.18);color:var(--amber)">推荐</span>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <div class="plan-item" onclick="location.href=\'/plan/2.0\'">
+            <span class="plan-icon">🟢</span>
+            <span class="plan-name">2.0 稳健计划</span>
+            <span class="plan-arrow">→</span>
+          </div>
+          <div class="plan-item" onclick="location.href=\'/plan/3.0\'">
+            <span class="plan-icon">🔵</span>
+            <span class="plan-name">3.0 稳冲计划</span>
+            <span class="plan-arrow">→</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  </div>
+<div class="sd-divider"></div>
+<div class="sd-contact">
+    <button class="sd-contact-btn" onclick="prompt('复制微信号：codex_analysis', '微信号：codex_analysis')">
+      <span class="cb-icon">💬</span>
+      <span class="cb-text">联系开发者</span>
+    </button>
+  
+</div>
+<div class="sd-footer">© 2026 Analysis System</div>
+</div>
+<div class="main">
+  <div class="sec-header">
+    <h2>今日扫盘</h2>
+    <span class="sec-sub" id="todaySub">加载中...</span>
+    <div class="sec-bar"></div>
+  </div>
+  <div id="todayMatches"></div>
+  <div class="sec-header" style="margin-top:20px">
+    <h2>昨日扫盘</h2>
+    <span class="sec-sub" id="yesterdaySub">--</span>
+    <div class="sec-bar"></div>
+  </div>
+  <div id="yesterdayContent" style="display:none">
+    <div class="table-wrap" id="yesterdayTableWrap">
+      <div class="table-top" id="yesterdayTableTop"></div>
+      <div style="overflow-x:auto"><table class="y-table" id="yesterdayTable"><tbody id="yesterdayTableBody"></tbody></table></div>
+    </div>
+  </div>
+</div>
+<script>
+var HISTORY_RUNS = [];
+var CURRENT_DATE = null;
+function toggleAccordion(id){var el=document.getElementById(id);if(el)el.classList.toggle('open');}
+function openAccordion(id){var el=document.getElementById(id);if(el)el.classList.add('open');}
+function getTagColor(t){t=(t||"").toLowerCase();if(t==="s")return"s";if(t==="a")return"a";if(t==="c"||t==="meltdown")return"c";return"b";}
+function getDirBadge(d){var v=(d||"").toLowerCase();if(v.indexOf("\u80dc")>=0||v==="\u4e0a\u76d8"||v==="\u5927\u7403")return"<span class=\"mc-badge g\">"+d+"</span>";if(v.indexOf("\u8d1f")>=0||v==="\u4e0b\u76d8"||v==="\u5c0f\u7403")return"<span class=\"mc-badge r\">"+d+"</span>";if(v.indexOf("\u5e73")>=0||v==="\u8d70\u6c34")return"<span class=\"mc-badge b\">"+d+"</span>";return"<span class=\"mc-badge gray\">"+(d||"-")+"</span>";}
+
+function getRatingClass(r){var v=(r||"").toLowerCase();if(v==="s")return"s";if(v==="a")return"a";if(v==="c"||v==="meltdown")return"c";if(v==="m")return"m";return"b";}
+function getDirClass(d){var v=(d||"").toLowerCase();if(v.indexOf("胜")>=0||v==="上盘")return"win";if(v.indexOf("负")>=0||v==="下盘")return"lose";if(v.indexOf("平")>=0)return"draw";return"";}
+function getHitTag(h){return h?"<span class=\"tag hit\">\u547d\u4e2d</span>":"<span class=\"tag miss\">\u672a\u4e2d</span>";}
+function getRatingHTML(r,l){var n=r||"";var c=getTagColor(l);return"<span class=\"r-num\">"+n+"</span><span class=\"r-lvl "+c+"\">"+l.toUpperCase()+"</span>";}
+function getResultClass(r){var v=(r||"").toLowerCase();if(v.indexOf("\u80dc")>=0||v.indexOf("\u8ba9\u80dc")>=0)return"lose";if(v.indexOf("\u8d1f")>=0||v.indexOf("\u8ba9\u8d1f")>=0)return"win";if(v.indexOf("\u5e73")>=0)return"draw";return"";}
+
+
+function renderMatchCard(m,i,mcData,ddiData,aiData){
+var t=m.time||m.match_time||"--:--";
+var l=m.event||m.league||"";
+var ho=m.home||m.home_team||"";
+var aw=m.away||m.away_team||"";
+var dir=m.direction||m.prediction||"";
+var fs=m.fit_score||0;
+var rat=m.rating||"";
+var lv=getRatingClass(rat);
+var timeDisplay=t&&t.length>=16?t.slice(5,16):t.length>=5?t:t;
+var ld=m.lambda_diff!==undefined?m.lambda_diff:0;
+var lambda_h=1.0,lambda_a=1.0,phys={},hcp={};
+var tgList=(m.top2_total_goals&&m.top2_total_goals.length?m.top2_total_goals:mcData&&mcData.top2_total_goals?mcData.top2_total_goals:[]);
+var hfList=(m.top2_half_full&&m.top2_half_full.length?m.top2_half_full:mcData&&mcData.top2_half_full?mcData.top2_half_full:[]);
+var scList=(m.top3_scores&&m.top3_scores.length?m.top3_scores:mcData&&mcData.top3_scores?mcData.top3_scores:[]);
+if(mcData){lambda_h=mcData.lambda_h_final||1.0;lambda_a=mcData.lambda_a_final||1.0;phys=mcData.physical||{};hcp=mcData.jc_handicap_prob||{};}
+var pMarket={};
+if(ddiData&&ddiData.p_market)pMarket=ddiData.p_market;
+else if(ddiData&&ddiData.market)pMarket=ddiData.market;
+var trapTxt="",riskTxt="",s7Reason="",s7Score=0;
+if(aiData){trapTxt=aiData.trap_analysis||"";riskTxt=aiData.key_risk||"";s7Score=aiData.s7_score||0;s7Reason=aiData.s7_reason||"";}
+if(!trapTxt&&m.warning)trapTxt=m.warning;
+var barPct=50+(ld*50);barPct=Math.max(5,Math.min(95,barPct));
+var barColor=ld>0.05?"var(--green)":ld<-0.05?"var(--red)":"var(--amber)";
+var dirCls=getDirClass(dir);
+var tgText=tgList.length>0?tgList.join(" / "):"--";
+var hfText=hfList.length>0?hfList.join(" / "):"--";
+var scText=scList.length>0?scList.slice(0,2).join(" / "):"--";
+if(scText&&scList.length>2)scText+=" ...";
+var h='<div class="match-card" data-mid="'+(m.match_id||m.id||i)+'">';
+h+='<div class="mc-header" onclick="toggleCard(this)">';
+h+='<div class="mc-left"><span class="mc-time">'+timeDisplay+'</span>';
+if(l)h+='<span class="mc-league">'+l+'</span>';
+h+='<div class="mc-teams-wrap"><div class="mc-teams">'+ho+'<span class="mc-vs">vs</span>'+aw+'</div></div>';
+h+='<div class="mc-bar-wrap"><div class="mc-bar-fill" style="width:'+barPct+'%;background:'+barColor+'"></div></div></div>';
+h+='<div class="mc-right"><div class="mc-score">'+(fs?fs.toFixed(1):"--")+'</div>';
+h+='<div class="mc-rating-badge '+lv+'">'+rat.toUpperCase()+'</div>';
+if(dir)h+='<div class="mc-dir-badge '+dirCls+'">'+dir+'</div>';
+h+='<div class="mc-expand-btn">&#9660;</div></div></div>';
+h+='<div class="mc-predictions">';
+h+='<div class="mc-pred-item"><span class="mc-pred-icon">\u26BD</span><span class="mc-pred-label">\u603b\u8fdb\u7403</span><span class="mc-pred-value">'+tgText+'</span></div>';
+h+='<div class="mc-pred-item"><span class="mc-pred-icon">\U0001F504</span><span class="mc-pred-label">\u534a\u5168\u573a</span><span class="mc-pred-value">'+hfText+'</span></div>';
+h+='<div class="mc-pred-item"><span class="mc-pred-icon">\U0001F3AF</span><span class="mc-pred-label">\u6bd4\u5206\u9884\u6d4b</span><span class="mc-pred-value">'+scText+'</span></div></div>';
+h+='<div class="mc-detail"><div class="detail-grid">';
+var physHome=(phys.home_win||0)*100,physAway=(phys.away_win||0)*100;
+var mktHome=pMarket.home_win!==undefined?(pMarket.home_win*100):physHome;
+var mktAway=pMarket.away_win!==undefined?(pMarket.away_win*100):physAway;
+var maxH=Math.max(physHome,physAway,mktHome,mktAway,10);
+var maxLam=Math.max(lambda_h,lambda_a,1.5);
+var lhH=Math.max(4,lambda_h/maxLam*55),laH=Math.max(4,lambda_a/maxLam*55);
+h+='<div class="chart-box"><div class="ch-title">\u039B \u671f\u671b\u8fdb\u7403\u5bf9\u6bd4</div><div class="chart-wrap">';
+h+='<svg class="chart-y-axis" viewBox="0 0 100 60" preserveAspectRatio="none">';
+h+='<line x1="0" y1="0" x2="100" y2="0"/><text x="96" y="9" text-anchor="end">'+maxLam.toFixed(1)+'</text>';
+h+='<line x1="0" y1="20" x2="100" y2="20"/><text x="96" y="29" text-anchor="end">'+(maxLam*2/3).toFixed(1)+'</text>';
+h+='<line x1="0" y1="40" x2="100" y2="40"/><text x="96" y="49" text-anchor="end">'+(maxLam/3).toFixed(1)+'</text></svg>';
+h+='<div class="chart-bars"><div class="chart-bar-group"><div class="chart-bar val-green" style="height:'+lhH+'px;background:var(--green)"><span class="chart-bar-val">'+lambda_h.toFixed(2)+'</span></div><span class="chart-bar-label">\u039B\u4e3b</span></div>';
+h+='<div class="chart-bar-group"><div class="chart-bar val-red" style="height:'+laH+'px;background:var(--red)"><span class="chart-bar-val">'+lambda_a.toFixed(2)+'</span></div><span class="chart-bar-label">\u039B\u5ba2</span></div></div></div></div>';
+var physH=Math.max(4,physHome/maxH*55),mktH=Math.max(4,mktHome/maxH*55);
+var physA=Math.max(4,physAway/maxH*55),mktA=Math.max(4,mktAway/maxH*55);
+h+='<div class="chart-box"><div class="ch-title">\u7269\u7406 vs \u5e02\u573a (\u4e3b/\u5ba2)</div><div class="chart-wrap">';
+h+='<svg class="chart-y-axis" viewBox="0 0 100 60" preserveAspectRatio="none">';
+h+='<line x1="0" y1="0" x2="100" y2="0"/><text x="96" y="9" text-anchor="end">'+maxH.toFixed(0)+'%</text>';
+h+='<line x1="0" y1="20" x2="100" y2="20"/><text x="96" y="29" text-anchor="end">'+(maxH*2/3).toFixed(0)+'%</text>';
+h+='<line x1="0" y1="40" x2="100" y2="40"/><text x="96" y="49" text-anchor="end">'+(maxH/3).toFixed(0)+'%</text></svg>';
+h+='<div class="chart-bars"><div class="chart-bar-group"><div class="chart-bar val-green" style="height:'+physH+'px;background:var(--green)"><span class="chart-bar-val">'+(physHome).toFixed(1)+'%</span></div><span class="chart-bar-label">\u7269\u4e3b</span></div>';
+h+='<div class="chart-bar-group"><div class="chart-bar val-amber" style="height:'+mktH+'px;background:var(--amber)"><span class="chart-bar-val">'+(mktHome).toFixed(1)+'%</span></div><span class="chart-bar-label">\u5e02\u4e3b</span></div>';
+h+='<div class="chart-bar-group"><div class="chart-bar val-red" style="height:'+physA+'px;background:var(--red)"><span class="chart-bar-val">'+(physAway).toFixed(1)+'%</span></div><span class="chart-bar-label">\u7269\u5ba2</span></div>';
+h+='<div class="chart-bar-group"><div class="chart-bar val-amber" style="height:'+mktA+'px;background:var(--t3)"><span class="chart-bar-val">'+(mktAway).toFixed(1)+'%</span></div><span class="chart-bar-label">\u5e02\u5ba2</span></div></div></div></div></div>';
+h+='<div class="detail-grid-4">';
+var ldColor=ld>0.1?"var(--green)":ld<-0.1?"var(--red)":"var(--amber)";
+h+='<div class="detail-cell"><div class="dc-label">\u039B \u5dee\u503c</div><div class="dc-value"><strong style="color:'+ldColor+'">'+(ld>=0?"+":"")+ld.toFixed(4)+'</strong></div></div>';
+h+='<div class="detail-cell"><div class="dc-label">\U0001F4A1 \u8bf1\u76d8\u5206\u6790</div><div class="dc-value">'+(trapTxt||"\u65e0\u5f02\u5e38\u4fe1\u53f7")+'</div></div>';
+h+='<div class="detail-cell risk"><div class="dc-label">\u26A0\uFE0F \u98ce\u9669\u63d0\u793a</div><div class="dc-value">'+(riskTxt||"\u6a21\u578b\u4fe1\u53f7\u6b63\u5e38")+'</div></div>';
+h+='<div class="detail-cell"><div class="dc-label">\U0001F4C4 S7\u8bf4\u660e</div><div class="dc-value">'+(s7Reason||(s7Score>0?"S7\u8bc4\u5206: "+s7Score.toFixed(2):"\u65e0\u7279\u6b8a\u573a\u666f"))+'</div></div>';
+h+='</div></div></div>';
+return h;
+}
+function renderToday(data){
+var h="";
+if(!data||data.length===0){h='<div class="empty-state">\u6682\u65e0\u4eca\u65e5\u6bd4\u8d5b\u6570\u636e</div>';}
+else{
+var mcById={},ddiById={},aiById={};
+if(typeof __DATA!=="undefined"&&__DATA){
+if(__DATA.mc)__DATA.mc.forEach(function(x){if(x.id)mcById[x.id]=x;});
+if(__DATA.ddi)__DATA.ddi.forEach(function(x){if(x.id)ddiById[x.id]=x;});
+if(__DATA.ai)__DATA.ai.forEach(function(x){if(x.id)aiById[x.id]=x;});
+}
+data.forEach(function(m,i){var mid=m.match_id||m.id||i;h+=renderMatchCard(m,i,mcById[mid],ddiById[mid],aiById[mid]);});
+}
+document.getElementById("todayMatches").innerHTML=h;
+}
+function toggleCard(header){
+var card=header.closest(".match-card");if(!card)return;
+var wasActive=card.classList.contains("active");
+document.querySelectorAll(".match-card.active").forEach(function(x){if(x!==card)x.classList.remove("active");});
+if(wasActive)card.classList.remove("active");else card.classList.add("active");
+}
+
+function renderYesterday(data){
+  var c=document.getElementById("yesterdayContent");
+  if(!data||!data.matches||data.matches.length===0){c.style.display="none";document.getElementById("yesterdaySub").textContent="\u6682\u65e0\u6570\u636e";return;}
+  c.style.display="block";var st=data.stats||{};var tl=st.total||data.matches.length;var hc=st.hit;if(hc===undefined){hc=0;data.matches.forEach(function(m){if(m.hit)hc++;});}
+  var rt=st.rate;if(rt===undefined)rt=tl>0?Math.round(hc/tl*100):0;var sc=st.s_count||0;var ac=st.a_count||0;
+  var th="";th+="<span class=\"tt-item\">\u65e5\u671f <b>"+(data.date||"--")+"</b></span>";th+="<span class=\"tt-item\">\u626b\u76d8 <b>"+tl+"</b> \u573a</span>";th+="<span class=\"tt-item\">\u547d\u4e2d <b class=\"hl\">"+hc+"</b> \u573a</span>";th+="<span class=\"tt-item\">\u547d\u4e2d\u7387 <b class=\"hl\">"+rt+"%</b></span>";th+="<span class=\"tt-spacer\"></span>";if(sc>0)th+="<span class=\"tt-item\">S\u7ea7 <b class=\"hl\">"+sc+"</b></span>";if(ac>0)th+="<span class=\"tt-item\">A\u7ea7 <b class=\"hl2\">"+ac+"</b></span>";
+  document.getElementById("yesterdayTableTop").innerHTML=th;document.getElementById("yesterdaySub").textContent=(data.date||"")+" | "+tl+"\u573a";
+  var tb=document.getElementById("yesterdayTableBody");var rows="";
+  data.matches.forEach(function(m,i){var id=m.match_id||m.index||"#"+(i+201);var t=m.time||m.match_time||"--:--";var ho=m.home||m.home_team||"";var aw=m.away||m.away_team||"";var r=m.result||m.direction||m.prediction||"";var sc=m.actual_score||m.score||"-";var hf=m.half_full||m.hf||"";var scol=sc+(hf?" / "+hf:"");var ht=m.hit||false;var rat=m.rating||"";var rl=m.level||m.rating_level||"";var lv=rl||(m.rating&&/^[absABS]+$/.test(m.rating)?m.rating.toLowerCase():"b");var lc=getTagColor(lv);var rc=getResultClass(r);
+  rows+="<tr><td style=\"font-family:var(--mono);color:var(--t3)\">"+id+"</td><td style=\"font-family:var(--mono)\">"+t+"</td><td>"+ho+" vs "+aw+"</td><td class=\"c-result "+rc+"\">"+r+"</td><td style=\"font-family:var(--mono);font-size:11px\">"+scol+"</td><td class=\"c-status\">"+getHitTag(ht)+"</td><td class=\"c-rating\">"+getRatingHTML(rat,lv)+"</td></tr>";});
+  tb.innerHTML=rows;
+}
+
+function loadToday(){
+  document.querySelector(".sec-header h2").textContent="\u4eca\u65e5\u626b\u76d8";
+  document.getElementById("todayMatches").style.display="block";document.getElementById("yesterdayContent").style.display="none";
+  document.getElementById("todaySub").textContent="\u52a0\u8f7d\u4e2d...";
+  fetch("/api/latest").then(function(r){return r.json()}).then(function(d){
+    if(d&&d.matches){renderToday(d.matches);document.getElementById("todaySub").textContent=(d.date||"\u4eca\u5929")+" | "+d.matches.length+"\u573a";updateTodayOverview(d);}
+    else if(d&&Array.isArray(d)){renderToday(d);document.getElementById("todaySub").textContent="\u4eca\u5929 | "+d.length+"\u573a";}
+    else{renderToday([]);document.getElementById("todaySub").textContent="\u6682\u65e0\u6570\u636e";}
+  }).catch(function(){
+    var demo=[{time:"14:00",league:"\u65e5\u804c",home:"\u6a2a\u6ee8\u6c34\u624b",away:"\u5ddd\u5d0e\u524d\u950b",direction:"\u80dc",score:"2-1",half_full:"\u80dc-\u80dc",total_goals:"3",fit_score:8.2,rating:"86",level:"s",lambda_diff:0.42,scenario_type:"\u5f3a\u5f3a\u5bf9\u8bddDDI\u6821\u51c6",ddi_home_win:0.12},{time:"16:00",league:"\u97e9K",home:"\u851a\u5c71\u73b0\u4ee3",away:"\u5168\u5317\u73b0\u4ee3",direction:"\u8ba9\u8d1f",score:"1-1",half_full:"\u5e73-\u5e73",total_goals:"2",fit_score:7.5,rating:"72",level:"a",lambda_diff:0.18,scenario_type:"\u5fb7\u6bd4\u6218",ddi_home_win:-0.05},{time:"18:30",league:"\u6fb3\u8d85",home:"\u58a8\u5c14\u672c\u57ce",away:"\u6089\u5c3cFC",direction:"\u80dc",score:"3-0",half_full:"\u80dc-\u80dc",total_goals:"3",fit_score:9.1,rating:"94",level:"s",lambda_diff:0.63,scenario_type:"\u4e3b\u573a\u4f18\u52bfDDI\u6821\u51c6",ddi_home_win:0.28},{time:"20:00",league:"\u4e2d\u8d85",home:"\u4e0a\u6d77\u6d77\u6e2f",away:"\u5c71\u4e1c\u6cf0\u5c71",direction:"\u8d1f",score:"0-1",half_full:"\u5e73-\u8d1f",total_goals:"1",fit_score:3.8,rating:"45",level:"b",lambda_diff:0.05,scenario_type:"\u666e\u901a\u8054\u8d5b",ddi_home_win:0.01},{time:"22:00",league:"\u82f1\u8d85",home:"\u963f\u68ee\u7eb3",away:"\u5207\u5c14\u897f",direction:"\u80dc",score:"3-1",half_full:"\u80dc-\u80dc",total_goals:"4",fit_score:8.9,rating:"91",level:"s",lambda_diff:0.51,scenario_type:"\u4f26\u6566\u5fb7\u6bd4DDI\u6821\u51c6",ddi_home_win:0.19}];
+    renderToday(demo);document.getElementById("todaySub").textContent="\u4eca\u5929 | "+demo.length+"\u573a";updateTodayOverview({matches:demo,date:"2026-06-06"});
+  });
+}
+function loadYesterday(ds){
+  document.getElementById("yesterdaySub").textContent="\u52a0\u8f7d\u4e2d...";
+  if(!ds&&HISTORY_RUNS.length>0){var l=HISTORY_RUNS[HISTORY_RUNS.length-1];ds=l.prediction_date||l.date;}
+  var url=ds?"/api/history/matches?date="+encodeURIComponent(ds):"/api/history/matches?date=2026-06-05";
+  fetch(url).then(function(r){return r.json()}).then(function(d){renderYesterday(d);}).catch(function(){
+    renderYesterday({date:ds||"2026-06-05",stats:{total:8,hit:5,rate:62,s_count:2,a_count:3},matches:[
+      {index:"#201",time:"06-05 08:00",home:"\u65af\u6d1b\u6587\u5c3c\u4e9a",away:"\u585e\u6d66\u8def\u65af",result:"\u80dc",score:"1-1",hf:"\u8d1f\u5e73",hit:false,rating:"62",level:"b"},
+      {index:"#202",time:"06-05 10:00",home:"\u6ce2\u5170",away:"\u5a01\u5c14\u58eb",result:"\u8ba9\u8d1f",score:"2-1",hf:"\u80dc-\u5e73",hit:true,rating:"78",level:"a"},
+      {index:"#203",time:"06-05 12:30",home:"\u8461\u8404\u7259",away:"\u514b\u7f57\u5730\u4e9a",result:"\u80dc",score:"3-0",hf:"\u80dc-\u80dc",hit:true,rating:"88",level:"s"},
+      {index:"#204",time:"06-05 14:00",home:"\u8377\u5170",away:"\u5fb7\u56fd",result:"\u5e73",score:"1-1",hf:"\u5e73-\u5e73",hit:false,rating:"55",level:"b"},
+      {index:"#205",time:"06-05 16:30",home:"\u6cd5\u56fd",away:"\u610f\u5927\u5229",result:"\u80dc",score:"2-0",hf:"\u80dc-\u80dc",hit:true,rating:"91",level:"s"},
+      {index:"#206",time:"06-05 18:00",home:"\u897f\u73ed\u7259",away:"\u82f1\u683c\u5170",result:"\u8ba9\u8d1f",score:"1-2",hf:"\u5e73-\u8d1f",hit:true,rating:"74",level:"a"},
+      {index:"#207",time:"06-05 20:00",home:"\u5df4\u897f",away:"\u963f\u6839\u5ef7",result:"\u8d1f",score:"0-1",hf:"\u5e73-\u8d1f",hit:false,rating:"48",level:"b"},
+      {index:"#208",time:"06-05 22:30",home:"\u6bd4\u5229\u65f6",away:"\u4e39\u9ea6",result:"\u80dc",score:"2-1",hf:"\u80dc-\u5e73",hit:true,rating:"82",level:"a"}
+    ]});
+  });
+}
+function updateTodayOverview(data){
+  var m=data&&data.matches?data.matches:[];var dl=data&&data.date?data.date:"--";var tl=m.length;var hc=0,sc=0,ac=0,tf=0;
+  m.forEach(function(x){if(x.hit)hc++;if((x.level||"").toLowerCase()==="s"||(x.rating_level||"").toLowerCase()==="s")sc++;if((x.level||"").toLowerCase()==="a"||(x.rating_level||"").toLowerCase()==="a")ac++;tf+=x.fit_score||0;});
+  var af=tl>0?(tf/tl):0;var cc=af>=7.5?"high":(af>=5?"med":"low");var cn=af>=7.5?"\u9ad8":(af>=5?"\u4e2d":"\u4f4e");
+  document.getElementById("todayDateLabel").textContent="\U0001f4c5 "+dl;document.getElementById("todayMatchCount").textContent=tl+"\u573a";
+  document.getElementById("todayStats").innerHTML='<div class="today-stat-row"><span class="tsl">\u5df2\u626b\u76d8</span><span class="tsv">'+tl+' \u573a</span></div><div class="today-stat-row"><span class="tsl">S\u7ea7\u63a8\u8350</span><span class="tsv high">'+sc+'</span></div><div class="today-stat-row"><span class="tsl">A\u7ea7\u63a8\u8350</span><span class="tsv med">'+ac+'</span></div><div class="today-divider"></div><div class="today-stat-row"><span class="tsl">\u5e73\u5747\u4fe1\u5fc3</span><span class="tsv '+cc+'">'+af.toFixed(1)+'</span></div><div class="today-stat-row"><span class="tsl">\u4fe1\u5fc3\u6307\u6570</span><span class="tsv '+cc+'">'+cn+'</span></div>';
+}
+var HISTORY_ALL = [];
+var HISTORY_DISPLAY_LIMIT = 7;
+var HISTORY_CURRENT_LIMIT = 7;
+var HISTORY_TODAY_STR = "";
+function filterHistoryDates(val){
+  var items = document.querySelectorAll("#historyListContainer .hist-date-item");
+  if(items) items.forEach(function(it){
+    var d = it.getAttribute("data-date") || "";
+    it.style.display = (!val || d.indexOf(val) >= 0) ? "flex" : "none";
+  });
+}
+function loadMoreHistory(){
+  HISTORY_CURRENT_LIMIT += 7;
+  renderFilteredHistoryDates();
+}
+function getHistoryDays(){
+  return HISTORY_ALL.filter(function(r){
+    var d = r.prediction_date || r.date || "";
+    return d && d !== HISTORY_TODAY_STR;
+  });
+}
+function renderFilteredHistoryDates(){
+  var el = document.getElementById("historyListContainer");
+  if(!el) return;
+  var allDates = getHistoryDays();
+  var limit = Math.min(HISTORY_CURRENT_LIMIT, allDates.length);
+  var h = "";
+  if(allDates.length > 0){
+    for(var i = 0; i < limit; i++){
+      var r = allDates[i];
+      var d = r.prediction_date || r.date || "";
+      var a = (d === CURRENT_DATE) ? " active" : "";
+      var tl = r.total_matches || 0;
+      var hc = r.hit_count || 0;
+      var rt = tl > 0 ? Math.round(hc/tl*100) : 0;
+      h += '<div class="hist-date-item'+a+'" data-date="'+d+'"><span class="hd-arrow">▶</span><span class="hd-date">'+d+'</span><span class="hd-stats">'+tl+'场 '+hc+'胜 '+rt+'%</span></div><div class="hist-action"><button onclick="goToHistoryDate('+d+')">查看详细预测</button></div>';
+    }
+  } else {
+    h = '<div class="hist-empty">暂无历史预测数据</div>';
+  }
+  el.innerHTML = h;
+  el.querySelectorAll(".hist-date-item").forEach(function(it){
+    it.addEventListener("click", function(e){
+      var w = this.classList.contains("open");
+      el.querySelectorAll(".hist-date-item.open").forEach(function(x){ x.classList.remove("open"); });
+      if(!w) this.classList.add("open");
+      var d = this.getAttribute("data-date");
+      if(!d) return;
+      CURRENT_DATE = d;
+      el.querySelectorAll(".hist-date-item").forEach(function(x){ x.classList.remove("active"); });
+      this.classList.add("active");
+      document.querySelector(".sec-header h2").textContent = "历史扫盘 - "+d;
+      document.getElementById("todayMatches").style.display = "none";
+      document.getElementById("yesterdayContent").style.display = "block";
+      loadYesterday(d);
+    });
+  });
+  var lm = document.getElementById("historyLoadMore");
+  if(lm) lm.style.display = (limit < allDates.length) ? "block" : "none";
+}
+function renderHistoryDates(){
+  var today = new Date();
+  var mm = String(today.getMonth()+1).padStart(2,"0");
+  var dd = String(today.getDate()).padStart(2,"0");
+  HISTORY_TODAY_STR = today.getFullYear() + "-" + mm + "-" + dd;
+  if(HISTORY_ALL && HISTORY_ALL.length > 0){
+    var seen = {};
+    var sorted = [];
+    HISTORY_ALL.slice().sort(function(a,b){
+      var da = a.prediction_date || a.date || "";
+      var db = b.prediction_date || b.date || "";
+      return da > db ? -1 : da < db ? 1 : 0;
+    }).forEach(function(r){
+      var d = r.prediction_date || r.date || "";
+      if(!d || seen[d] || d === HISTORY_TODAY_STR) return;
+      seen[d] = true;
+      sorted.push(r);
+    });
+    HISTORY_ALL = sorted;
+    HISTORY_CURRENT_LIMIT = HISTORY_DISPLAY_LIMIT;
+    renderFilteredHistoryDates();
+  } else {
+    var el = document.getElementById("historyListContainer");
+    if(el) el.innerHTML = '<div class="hist-empty">暂无历史预测数据</div>';
+  }
+}
+
+function goToHistoryDate(d){CURRENT_DATE=d;var items=document.querySelectorAll("#historyListContainer .hist-date-item");items.forEach(function(x){x.classList.remove("active");});items.forEach(function(x){if(x.getAttribute("data-date")===d)x.classList.add("active");});document.querySelector(".sec-header h2").textContent="\u5386\u53f2\u626b\u76d8 - "+d;document.getElementById("todayMatches").style.display="none";document.getElementById("yesterdayContent").style.display="block";loadYesterday(d);openAccordion("accHistory");}
+
+function loadBacktest(){
+  var el=document.getElementById("backtestContainer");el.innerHTML='<div class="sd-loading">\u52a0\u8f7d\u4e2d...</div>';
+  fetch("/api/backtest/runs").then(function(r){return r.json()}).then(function(data){
+    var runs=data&&data.runs?data.runs:[];if(runs.length===0){el.innerHTML='<div class="hist-empty">\u6682\u65e0\u56de\u6d4b\u6570\u636e</div>';return;}
+    var h="";runs.forEach(function(bt){h+='<div class="bt-item" data-id="'+bt.id+'"><div class="bt-title">'+bt.label+'</div><div class="bt-meta"><span>\u6837\u672c '+bt.sample_size+'\u573a</span><span>\u547d\u4e2d\u7387 '+bt.hit_rate+'%</span>'+(bt.profit_ratio?'<span style="color:var(--green)">\u76c8\u4e8f +'+bt.profit_ratio+'%</span>':'')+'</div></div><div class="bt-detail" data-id="'+bt.id+'"><div class="bt-summ">'+(bt.summary||"")+'</div><button class="bt-link" onclick="alert(\'\u67e5\u770b\u5b8c\u6574\u56de\u6d4b\u62a5\u544a: '+bt.label+'\')">\u67e5\u770b\u56de\u6d4b\u62a5\u544a</button></div>';});
+    el.innerHTML=h;el.querySelectorAll(".bt-item").forEach(function(it){it.addEventListener("click",function(){var id=this.getAttribute("data-id");var dt=el.querySelector('.bt-detail[data-id="'+id+'"]');if(dt)dt.classList.toggle("show");});});
+  }).catch(function(){el.innerHTML='<div class="sd-error">\u52a0\u8f7d\u5931\u8d25</div>';});
+}
+function loadDoc(){
+  var el=document.getElementById("docContainer");el.innerHTML='<div class="sd-loading">\u52a0\u8f7d\u4e2d...</div>';
+  fetch("/api/doc/sections").then(function(r){return r.json()}).then(function(data){
+    var secs=data&&data.sections?data.sections:[];if(secs.length===0){el.innerHTML='<div class="hist-empty">\u6682\u65e0\u6587\u6863</div>';return;}
+    var h="";secs.forEach(function(s){h+='<div class="doc-item" data-id="'+s.id+'"><div class="doc-title">'+(s.icon||"")+' '+s.title+'</div></div><div class="doc-content" data-id="'+s.id+'">';(s.content||[]).forEach(function(e){h+='<div class="doc-entry"><span class="de-label">'+e.label+':</span><span class="de-value">'+e.value+'</span></div>';});h+='</div>';});
+    el.innerHTML=h;el.querySelectorAll(".doc-item").forEach(function(it){it.addEventListener("click",function(){var id=this.getAttribute("data-id");var ct=el.querySelector('.doc-content[data-id="'+id+'"]');if(ct)ct.classList.toggle("show");});});
+  }).catch(function(){el.innerHTML='<div class="sd-error">\u52a0\u8f7d\u5931\u8d25</div>';});
+}
+document.addEventListener("DOMContentLoaded",function(){
+  openAccordion("accToday");
+  if(typeof __DATA!=="undefined"&&__DATA&&__DATA.rating&&__DATA.rating.length>0){renderToday(__DATA.rating);document.getElementById("todaySub").textContent=__DATA.rating.length+"\u573a";updateTodayOverview({matches:__DATA.rating,date:"2026-06-06"});}else{loadToday();}
+  loadYesterday();
+  fetch("/api/history/runs").then(function(r){return r.json()}).then(function(d){HISTORY_RUNS=d||[];HISTORY_ALL=HISTORY_RUNS.slice();renderHistoryDates();}).catch(function(){if(document.getElementById("historyListContainer"))document.getElementById("historyListContainer").innerHTML="<div class=\"hist-empty\">暂无历史预测数据</div>";});
+  loadBacktest();loadDoc();
+});
+</script>
+</body>
+</html>

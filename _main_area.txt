@@ -1,0 +1,22 @@
+544: <div class="main">
+545:     <div class="wc-banner show" id="wcBanner">
+546:     <span class="wc-b-icon">🏆</span>
+547:     <div class="wc-b-text">
+548:       <div class="wc-b-title">2026 世界杯 · 量化分析</div>
+549:       <div class="wc-b-sub" id="wcBannerSub">小组赛 · 加载中...</div>
+550:     </div>
+551:     <div class="wc-b-info">
+552:       <div><span class="wc-b-num" id="wcRemainingCount">-</span></div>
+553:       <div style="font-size:10px;color:var(--t3)">剩余场次</div>
+554:     </div>
+555:   </div>
+556: <div class="sec-header">
+557:     <h2>今日赛事分析</h2>
+558:     <span class="sec-sub" id="todaySub">加载中...</span>
+559:     <div class="sec-actions">
+560:       <div class="sec-dropdown" id="sortDropdown">
+561:         <button class="sec-dropdown-btn" id="sortBtn" onclick="toggleSortMenu(event)">排序 ▾</button>
+562:         <div class="sec-dropdown-menu" id="sortMenu">
+563:           <div class="sec-dropdown-item active" data-sort="id" onclick="applySort('id', event)">按编号排序</div>
+564:           <div class="sec-dropdown-item" data-sort="rating" onclick="applySort('rating', event)">按评分排序</div>
+565:         </div>

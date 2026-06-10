@@ -1,0 +1,387 @@
+{
+  "Kawasaki Frontale vs Sanfrecce Hiroshima": {
+    "mid": 16231160,
+    "time": "06-06 18:00",
+    "comp": "J1 League"
+  },
+  "Belgium vs Tunisia": {
+    "mid": 15536791,
+    "time": "06-06 21:00",
+    "comp": "International Friendly Games"
+  },
+  "Belgium vs Egypt": {
+    "mid": 15186837,
+    "time": "06-16 03:00",
+    "comp": "FIFA World Cup"
+  },
+  "Belgium vs Iran": {
+    "mid": 15186499,
+    "time": "06-22 03:00",
+    "comp": "FIFA World Cup"
+  },
+  "New Zealand vs Belgium": {
+    "mid": 15186822,
+    "time": "06-27 11:00",
+    "comp": "FIFA World Cup"
+  },
+  "Italy vs Belgium": {
+    "mid": 15534037,
+    "time": "09-26 02:45",
+    "comp": "UEFA Nations League"
+  },
+  "Belgium vs France": {
+    "mid": 15534026,
+    "time": "09-29 02:45",
+    "comp": "UEFA Nations League"
+  },
+  "Belgium vs Türkiye": {
+    "mid": 15534040,
+    "time": "10-03 02:45",
+    "comp": "UEFA Nations League"
+  },
+  "Sweden vs Tunisia": {
+    "mid": 15186951,
+    "time": "06-15 10:00",
+    "comp": "FIFA World Cup"
+  },
+  "Tunisia vs Japan": {
+    "mid": 15186963,
+    "time": "06-21 12:00",
+    "comp": "FIFA World Cup"
+  },
+  "Tunisia vs Netherlands": {
+    "mid": 15186973,
+    "time": "06-26 07:00",
+    "comp": "FIFA World Cup"
+  },
+  "Portugal vs Chile": {
+    "mid": 15926543,
+    "time": "06-07 01:45",
+    "comp": "International Friendly Games"
+  },
+  "Portugal vs Nigeria": {
+    "mid": 16135568,
+    "time": "06-11 03:45",
+    "comp": "International Friendly Games"
+  },
+  "Portugal vs DR Congo": {
+    "mid": 15186709,
+    "time": "06-18 01:00",
+    "comp": "FIFA World Cup"
+  },
+  "Portugal vs Uzbekistan": {
+    "mid": 15186858,
+    "time": "06-24 01:00",
+    "comp": "FIFA World Cup"
+  },
+  "Colombia vs Portugal": {
+    "mid": 15186696,
+    "time": "06-28 07:30",
+    "comp": "FIFA World Cup"
+  },
+  "Portugal vs Wales": {
+    "mid": 15534097,
+    "time": "09-25 02:45",
+    "comp": "UEFA Nations League"
+  },
+  "Norway vs Portugal": {
+    "mid": 15534096,
+    "time": "09-28 02:45",
+    "comp": "UEFA Nations League"
+  },
+  "Denmark vs Portugal": {
+    "mid": 15534094,
+    "time": "10-02 02:45",
+    "comp": "UEFA Nations League"
+  },
+  "DR Congo vs Chile": {
+    "mid": 16223232,
+    "time": "06-09 23:00",
+    "comp": "International Friendly Games"
+  },
+  "Romania vs Wales": {
+    "mid": 16157427,
+    "time": "06-07 01:45",
+    "comp": "International Friendly Games"
+  },
+  "Sweden vs Romania": {
+    "mid": 15534178,
+    "time": "09-26 02:45",
+    "comp": "UEFA Nations League"
+  },
+  "Romania vs Bosnia & Herzegovina": {
+    "mid": 15534174,
+    "time": "09-29 02:45",
+    "comp": "UEFA Nations League"
+  },
+  "Poland vs Romania": {
+    "mid": 15534169,
+    "time": "10-03 02:45",
+    "comp": "UEFA Nations League"
+  },
+  "Denmark vs Wales": {
+    "mid": 15534101,
+    "time": "09-28 00:00",
+    "comp": "UEFA Nations League"
+  },
+  "Wales vs Norway": {
+    "mid": 15534104,
+    "time": "10-02 02:45",
+    "comp": "UEFA Nations League"
+  },
+  "USA vs Germany": {
+    "mid": 15184400,
+    "time": "06-07 02:30",
+    "comp": "International Friendly Games"
+  },
+  "USA vs Paraguay": {
+    "mid": 15186873,
+    "time": "06-13 09:00",
+    "comp": "FIFA World Cup"
+  },
+  "USA vs Australia": {
+    "mid": 15186878,
+    "time": "06-20 03:00",
+    "comp": "FIFA World Cup"
+  },
+  "Türkiye vs USA": {
+    "mid": 15186887,
+    "time": "06-26 10:00",
+    "comp": "FIFA World Cup"
+  },
+  "Germany vs Curaçao": {
+    "mid": 15186899,
+    "time": "06-15 01:00",
+    "comp": "FIFA World Cup"
+  },
+  "Germany vs Côte d'Ivoire": {
+    "mid": 15186905,
+    "time": "06-21 04:00",
+    "comp": "FIFA World Cup"
+  },
+  "Ecuador vs Germany": {
+    "mid": 15186907,
+    "time": "06-26 04:00",
+    "comp": "FIFA World Cup"
+  },
+  "Netherlands vs Germany": {
+    "mid": 15534057,
+    "time": "09-25 02:45",
+    "comp": "UEFA Nations League"
+  },
+  "Germany vs Greece": {
+    "mid": 15534060,
+    "time": "09-28 02:45",
+    "comp": "UEFA Nations League"
+  },
+  "Germany vs Serbia": {
+    "mid": 15534058,
+    "time": "10-02 02:45",
+    "comp": "UEFA Nations League"
+  },
+  "Switzerland vs Australia": {
+    "mid": 16118856,
+    "time": "06-07 03:00",
+    "comp": "International Friendly Games"
+  },
+  "Australia vs Türkiye": {
+    "mid": 15186874,
+    "time": "06-14 12:00",
+    "comp": "FIFA World Cup"
+  },
+  "Paraguay vs Australia": {
+    "mid": 15186891,
+    "time": "06-26 10:00",
+    "comp": "FIFA World Cup"
+  },
+  "Australia vs Singapore": {
+    "mid": 16173624,
+    "time": "01-09 18:00",
+    "comp": "AFC Asian Cup"
+  },
+  "Iraq vs Australia": {
+    "mid": 16173637,
+    "time": "01-14 18:00",
+    "comp": "AFC Asian Cup"
+  },
+  "Australia vs Tajikistan": {
+    "mid": 16173642,
+    "time": "01-19 18:00",
+    "comp": "AFC Asian Cup"
+  },
+  "Qatar vs Switzerland": {
+    "mid": 15186526,
+    "time": "06-14 03:00",
+    "comp": "FIFA World Cup"
+  },
+  "Switzerland vs Bosnia & Herzegovina": {
+    "mid": 15186806,
+    "time": "06-19 03:00",
+    "comp": "FIFA World Cup"
+  },
+  "Switzerland vs Canada": {
+    "mid": 15186821,
+    "time": "06-25 03:00",
+    "comp": "FIFA World Cup"
+  },
+  "Scotland vs Switzerland": {
+    "mid": 15534106,
+    "time": "09-25 02:45",
+    "comp": "UEFA Nations League"
+  },
+  "Switzerland vs Slovenia": {
+    "mid": 15534112,
+    "time": "09-25 02:45",
+    "comp": "UEFA Nations League"
+  },
+  "Switzerland vs North Macedonia": {
+    "mid": 15534114,
+    "time": "09-25 02:45",
+    "comp": "UEFA Nations League"
+  },
+  "Panama vs Bosnia & Herzegovina": {
+    "mid": 16130148,
+    "time": "06-07 03:00",
+    "comp": "International Friendly Games"
+  },
+  "Ghana vs Panama": {
+    "mid": 15186687,
+    "time": "06-18 07:00",
+    "comp": "FIFA World Cup"
+  },
+  "Panama vs Croatia": {
+    "mid": 15186520,
+    "time": "06-24 07:00",
+    "comp": "FIFA World Cup"
+  },
+  "Panama vs England": {
+    "mid": 15186676,
+    "time": "06-28 05:00",
+    "comp": "FIFA World Cup"
+  },
+  "England vs New Zealand": {
+    "mid": 15926544,
+    "time": "06-07 04:00",
+    "comp": "International Friendly Games"
+  },
+  "England vs Costa Rica": {
+    "mid": 15598106,
+    "time": "06-11 04:00",
+    "comp": "International Friendly Games"
+  },
+  "England vs Croatia": {
+    "mid": 15186504,
+    "time": "06-18 04:00",
+    "comp": "FIFA World Cup"
+  },
+  "England vs Ghana": {
+    "mid": 15186672,
+    "time": "06-24 04:00",
+    "comp": "FIFA World Cup"
+  },
+  "England vs Spain": {
+    "mid": 15534084,
+    "time": "09-27 02:45",
+    "comp": "UEFA Nations League"
+  },
+  "Czechia vs England": {
+    "mid": 15534092,
+    "time": "09-30 02:45",
+    "comp": "UEFA Nations League"
+  },
+  "Iran vs New Zealand": {
+    "mid": 15186832,
+    "time": "06-16 09:00",
+    "comp": "FIFA World Cup"
+  },
+  "New Zealand vs Egypt": {
+    "mid": 15186827,
+    "time": "06-22 09:00",
+    "comp": "FIFA World Cup"
+  },
+  "Bolivia vs Scotland": {
+    "mid": 16017800,
+    "time": "06-07 04:00",
+    "comp": "International Friendly Games"
+  },
+  "Haiti vs Scotland": {
+    "mid": 15186853,
+    "time": "06-14 09:00",
+    "comp": "FIFA World Cup"
+  },
+  "Scotland vs Morocco": {
+    "mid": 15186859,
+    "time": "06-20 06:00",
+    "comp": "FIFA World Cup"
+  },
+  "Scotland vs Brazil": {
+    "mid": 15186861,
+    "time": "06-25 06:00",
+    "comp": "FIFA World Cup"
+  },
+  "Scotland vs Slovenia": {
+    "mid": 15534108,
+    "time": "09-25 02:45",
+    "comp": "UEFA Nations League"
+  },
+  "Scotland vs North Macedonia": {
+    "mid": 15534110,
+    "time": "09-25 02:45",
+    "comp": "UEFA Nations League"
+  },
+  "Brazil vs Egypt": {
+    "mid": 15691379,
+    "time": "06-07 06:00",
+    "comp": "International Friendly Games"
+  },
+  "Brazil vs Morocco": {
+    "mid": 15186850,
+    "time": "06-14 06:00",
+    "comp": "FIFA World Cup"
+  },
+  "Brazil vs Haiti": {
+    "mid": 15186856,
+    "time": "06-20 08:30",
+    "comp": "FIFA World Cup"
+  },
+  "Egypt vs Iran": {
+    "mid": 15186828,
+    "time": "06-27 11:00",
+    "comp": "FIFA World Cup"
+  },
+  "Venezuela vs Türkiye": {
+    "mid": 16130144,
+    "time": "06-07 06:00",
+    "comp": "International Friendly Games"
+  },
+  "Iraq vs Venezuela": {
+    "mid": 16251282,
+    "time": "06-10 09:00",
+    "comp": "International Friendly Games"
+  },
+  "Argentina vs Honduras": {
+    "mid": 16118858,
+    "time": "06-07 08:00",
+    "comp": "International Friendly Games"
+  },
+  "Argentina vs Iceland": {
+    "mid": 16174777,
+    "time": "06-10 08:30",
+    "comp": "International Friendly Games"
+  },
+  "Argentina vs Algeria": {
+    "mid": 15186854,
+    "time": "06-17 09:00",
+    "comp": "FIFA World Cup"
+  },
+  "Argentina vs Austria": {
+    "mid": 15186502,
+    "time": "06-23 01:00",
+    "comp": "FIFA World Cup"
+  },
+  "Jordan vs Argentina": {
+    "mid": 15186734,
+    "time": "06-28 10:00",
+    "comp": "FIFA World Cup"
+  }
+}

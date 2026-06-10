@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>V3.3.3-Core分析系统</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#f5f4ed;--surface:#faf9f5;--surface-h:#f0efe8;--surface-2:#ebe9e2;--ink:#1B365D;--ink-l:#2D5A8A;--bd:#e8e6dc;--bd-h:#dbd9ce;--t1:#141413;--t2:#504e49;--t3:#6b6a64;--green:#4a7a5a;--amber:#b8943a;--red:#b05a5a;--mono:'SF Mono','Cascadia Code','Consolas','Monaco',monospace;--sans:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Noto Serif SC','Georgia',serif}
+body{font-family:var(--sans);background:var(--bg);color:var(--t1);min-height:100vh;-webkit-font-smoothing:antialiased}
+.app{max-width:1040px;margin:0 auto;padding:36px 24px 60px;position:relative;z-index:1}
+hdr{margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid var(--bd);text-align:center}
+.h1{font-size:34px;font-weight:700;color:var(--ink);letter-spacing:3px;line-height:1.3;margin-bottom:6px}
+.h1 small{font-size:14px;font-weight:400;color:var(--t3);letter-spacing:1px;margin-left:10px}
+.hr1{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:6px;flex-wrap:wrap}
+.hdate{font-size:12px;color:var(--t2);font-weight:500}
+.hdate em{font-style:normal;color:var(--t3);font-weight:400;margin-left:6px}
+.stats{display:flex;gap:10px;font-size:10px;color:var(--t3)}
+.stats b{font-family:var(--mono);color:var(--t2);font-weight:500;font-size:11px;margin-left:2px}
+.rd{display:flex;height:4px;border-radius:2px;overflow:hidden;gap:1px;margin-top:8px;background:var(--bd)}
+.rd div{height:100%;border-radius:1px;transition:width 0.3s}
+.sec{margin:28px 0 16px;display:flex;align-items:center;gap:10px}
+.sec-h{font-size:14px;color:var(--ink);font-weight:700;letter-spacing:1.5px}
+.sec-l{flex:1;height:1px;background:var(--bd)}
+.sec-dot{width:5px;height:5px;border-radius:50%;background:var(--ink)}
+.card{background:var(--surface);border:1px solid var(--bd);border-radius:6px;overflow:hidden;cursor:pointer;transition:border-color 0.2s,box-shadow 0.2s,background 0.2s}
+.card::before{content:"";display:block;height:2px;transition:opacity 0.15s}
+.card.rt-s::before{background:var(--ink);opacity:0.5}
+.card.rt-a::before{background:var(--amber);opacity:0.5}
+.card.rt-b::before{background:var(--green);opacity:0.4}
+.card.rt-c::before{background:var(--t3);opacity:0.3}
+.card:hover{background:var(--surface-h);border-color:var(--bd-h);box-shadow:0 2px 12px rgba(0,0,0,0.04)}
+.card.rt-hit{background:#fef0ee}
+.card.rt-hit:hover{background:#fce8e5}
+.card.rt-hit .cd{background:#fce8e5}
+.card.rt-miss{background:#f3f2ee}
+.card.rt-miss:hover{background:#ebeae5}
+.card.rt-miss .cd{background:#ebeae5}
+.card:hover::before{opacity:1}
+.card+.card{margin-top:0;border-top:none}
+.card.expanded{border-color:var(--ink-l);box-shadow:0 0 0 1px var(--ink-l)}
+.thr{display:flex;align-items:center;padding:10px 14px;font-size:15px;color:var(--ink);font-weight:700;letter-spacing:0.3px;border-bottom:2px solid var(--ink);background:var(--surface-2);text-transform:uppercase}
+.thr span:first-child{width:75px;text-align:center;white-space:nowrap}.thr span:nth-child(2){width:110px;text-align:center;white-space:nowrap}.thr span:nth-child(3){width:320px;white-space:nowrap}.thr span:nth-child(4){width:65px;text-align:center;white-space:nowrap}.thr span:nth-child(5){width:100px;text-align:center;white-space:nowrap}.thr span:nth-child(6){width:100px;text-align:center;white-space:nowrap}.thr span:nth-child(7){width:100px;text-align:center;white-space:nowrap}.thr span:last-child{width:110px;text-align:right;padding-right:28px;white-space:nowrap}
+.cg2{display:flex;align-items:center;padding:10px 14px;gap:0}
+.c2-col{white-space:nowrap}.c2-id{width:75px;text-align:center;font-family:var(--mono);font-size:15px;color:var(--t3)}.c2-tm{width:110px;text-align:center;font-family:var(--mono);font-size:15px;color:var(--t3)}.c2-mm{width:320px;min-width:0}.c2-dr{width:65px;text-align:center;font-weight:600;font-size:15px}.c2-dr .dir{font-size:15px;color:var(--t1)}.c2-g{width:100px;text-align:center;font-family:var(--mono);font-size:13px;color:var(--t2)}.c2-ht{width:100px;text-align:center;font-family:var(--mono);font-size:13px;color:var(--t2)}.c2-scr{width:100px;text-align:center;font-family:var(--mono);font-size:13px;color:var(--t2)}.c2-r{width:110px;text-align:right;display:flex;align-items:center;justify-content:flex-end;gap:4px;padding-right:14px}
+.cg2b{padding:0 14px 10px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 32px}
+.c2-mm{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.c2-h,.c2-a{font-weight:600;font-size:15px;color:var(--t1)}.c2-v{color:var(--t3);font-size:11px;margin:0 6px}
+.tag2{font-size:10px;color:var(--t3);background:var(--surface-2);padding:1px 6px;border-radius:3px;line-height:1.4;margin-left:4px}
+.c2-r{display:flex;align-items:center;gap:6px;margin-left:auto;white-space:nowrap}
+.c-sc2{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--ink)}
+.c2-s{display:flex;align-items:center;gap:13px;flex-wrap:wrap;font-size:11px}
+.c2-s .cs-l{font-size:13px;color:var(--t3);font-weight:700;letter-spacing:0.3px;text-transform:uppercase}
+.c2-s .cs-l.cs-l-lg{font-size:15px;font-family:Georgia,'Times New Roman',serif;vertical-align:middle}.c2-s .cs-v{font-family:var(--mono);color:var(--t2);font-size:11px;font-weight:500}
+.c2-s .cs-v.hot{color:var(--red)}.c2-s .cs-v.ok{color:var(--green)}.c2-s .cs-v.warn{color:var(--amber)}
+.c2-sp{color:var(--bd);margin:0 4px;font-size:10px;opacity:0.5}
+.prob2{display:flex;align-items:center;gap:10px;min-width:500px}
+.prob2 .prob-b{flex:1;height:6px;border-radius:3px}
+.prob2 .prob-n{font-family:var(--mono);font-size:10px;color:var(--t3);white-space:nowrap}
+.cg{display:grid;grid-template-columns:1fr auto;gap:10px;padding:12px 16px}
+.cl{min-width:0}.cr{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:4px;padding-left:14px}
+.c-t{display:flex;align-items:center;gap:8px;margin-bottom:3px}
+.c-id{font-family:var(--mono);font-size:12px;color:var(--t3)}.c-ti{font-family:var(--mono);font-size:12px;color:var(--t3)}
+.c-m{font-size:18px;font-weight:500;margin:3px 0 2px;letter-spacing:0.2px}
+.c-m .vs{color:var(--t3);font-size:12px;font-weight:400;margin:0 8px}
+.c-dr{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.dir{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:500;color:var(--t2)}
+.dir i{width:4px;height:4px;border-radius:50%;display:inline-block;background:var(--ink)}
+.dir-h{color:var(--green)}.dir-h i{background:var(--green)}
+.dir-a{color:var(--red)}.dir-a i{background:var(--red)}
+.dir-d{color:var(--amber)}.dir-d i{background:var(--amber)}
+.tag{font-size:11px;color:var(--t3);background:var(--surface-2);padding:2px 6px;border-radius:3px}
+.prob{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.prob-b{flex:1;display:flex;height:4px;border-radius:2px;overflow:hidden;gap:1px;background:var(--bd)}
+.prob-b div{height:100%;border-radius:1px;transition:width 0.2s}
+.prob-n{font-family:var(--mono);font-size:11px;color:var(--t3);white-space:nowrap}
+.cs{display:flex;flex-wrap:wrap;gap:2px;padding-top:8px;border-top:1px solid var(--bd)}
+.cs-i{display:flex;align-items:baseline;gap:4px;padding:0 10px;border-right:1px solid var(--bd);font-size:10px}
+.cs-i:first-child{padding-left:0}.cs-i:last-child{border:none;padding-right:0}
+.cs-l{font-size:11px;color:var(--t3);font-weight:500;letter-spacing:0.3px;text-transform:uppercase}
+.cs-v{font-family:var(--mono);color:var(--t1);font-size:13px;font-weight:500}
+.cs-v.hot{color:var(--red)}.cs-v.ok{color:var(--green)}.cs-v.warn{color:var(--amber)}
+.c-sc{font-family:var(--mono);font-size:24px;font-weight:600;color:var(--ink);line-height:1}
+.badge{display:inline-block;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;letter-spacing:0.3px}
+.badge-s{background:#eef2f7;color:var(--ink)}.c-bdg2{display:inline-flex;vertical-align:middle}
+.badge-a{background:#f5ede0;color:#b8943a}.badge-b{background:#eaf0ea;color:#4a7a5a}.badge-c{background:#f0efec;color:var(--t3)}
+.cd{display:none;padding:12px 16px;border-top:1px solid var(--bd);background:var(--surface-2)}
+.card.expanded .cd{display:block}
+.charts-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px}
+@media(max-width:640px){.charts-row{grid-template-columns:1fr}}
+.cb{background:var(--surface);border:1px solid var(--bd);border-radius:6px;padding:10px}
+.ct{font-size:11px;color:var(--t3);font-weight:600;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:6px}
+.ana{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:640px){.ana{grid-template-columns:1fr}}
+.ana-i{border-radius:4px;font-size:13px;line-height:1.7;color:var(--t2);background:var(--surface);padding:8px 10px}
+.ana-i.risk{background:#f5ecec;grid-column:1/-1}
+.ana-l{font-size:11px;color:var(--t3);font-weight:600;letter-spacing:0.3px;text-transform:uppercase;display:block;margin-bottom:1px}
+.ana-i.risk .ana-l{color:var(--red)}
+.rv{border-radius:6px;overflow:hidden;border:1px solid var(--bd)}
+.rv+.rv{margin-top:8px}.rv-in{padding:10px 14px;display:flex;align-items:center;gap:10px;background:var(--surface)}
+.rv-d{font-family:var(--mono);font-size:10px;color:var(--t3);min-width:70px}
+.rv-t{font-weight:500;font-size:13px}.rv-t small{font-weight:400;color:var(--t3);font-size:11px;margin:0 6px}
+.rv-sc{font-family:var(--mono);font-size:12px;color:var(--t2);font-weight:500;margin-left:auto}
+.rv-b{font-size:9px;padding:2px 6px;border-radius:3px;font-weight:500;white-space:nowrap}
+.rv-hit{background:#eaf0ea;color:var(--green)}.rv-miss{background:#f5ecec;color:var(--red)}.rv-na{background:var(--surface-2);color:var(--t3)}
+.rv-bf{display:none;padding:10px 14px;border-top:1px solid var(--bd);background:var(--surface-2);font-size:11px;line-height:1.7;color:var(--t2)}
+.rv.expanded .rv-bf{display:block}.rv{cursor:pointer;transition:border-color 0.15s}.rv:hover{border-color:var(--bd-h)}
+.sp-g-c{overflow:hidden;transition:max-height 0.25s ease}.sp-g-c:not(.open){max-height:0!important;padding-top:0!important}
+.sp-g.expanded>.sp-g-h::after{transform:rotate(90deg)}.sp-g-c.open{max-height:800px}
+.sp-l-wrap{position:fixed;left:0;top:50%;transform:translateY(-50%);z-index:100}
+.sp-l-btn{writing-mode:vertical-lr;padding:32px 14px;font-size:15px;letter-spacing:4px;background:var(--surface);color:var(--ink);border:1px solid var(--bd);border-right:none;cursor:pointer;border-radius:0 6px 6px 0;font-family:var(--sans);font-weight:500;transition:background 0.2s}
+.sp-l-btn:hover{background:var(--surface-h)}
+.sp-l{position:fixed;left:-420px;top:0;width:420px;height:100vh;overflow-y:auto;background:var(--surface);border-right:1px solid var(--bd);transition:left 0.3s cubic-bezier(0.4,0,0.2,1);z-index:200;box-shadow:4px 0 24px rgba(0,0,0,0.08)}
+.sp-l.open{left:0}
+.sp-l-hdr{padding:20px 20px 14px;border-bottom:1px solid var(--bd)}.sp-l-hdr h2{font-size:20px;font-weight:700;color:var(--ink);letter-spacing:0.5px}
+.sp-l-bd{padding:16px 20px}
+.v-item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--bd)}.v-item:last-child{border-bottom:none}
+.v-ver{font-size:11px;font-weight:700;color:var(--ink);font-family:var(--mono)}.v-date{font-size:10px;color:var(--t3);margin-left:6px}
+.v-msg{font-size:12px;color:var(--t2);line-height:1.6;margin-top:4px}
+.meth{margin-bottom:14px}.meth-h{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:4px;letter-spacing:0.3px}
+.meth-p{font-size:11px;color:var(--t2);line-height:1.7}
+.sp-wrap{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:100}
+.sp-btn{writing-mode:vertical-lr;padding:32px 14px;font-size:15px;letter-spacing:4px;background:var(--ink);color:#f5f4ed;border:none;cursor:pointer;border-radius:6px 0 0 6px;font-family:var(--sans);font-weight:500;transition:background 0.2s}
+.sp-btn:hover{background:var(--ink-l)}
+.sp{position:fixed;right:-420px;top:0;width:420px;height:100vh;overflow-y:auto;background:var(--surface);border-left:1px solid var(--bd);transition:right 0.3s cubic-bezier(0.4,0,0.2,1);z-index:200;box-shadow:-4px 0 24px rgba(0,0,0,0.08)}
+.sp.open{right:0}.sp-hdr{padding:20px 20px 14px;border-bottom:1px solid var(--bd)}.sp-hdr h2{font-size:20px;font-weight:700;color:var(--ink);letter-spacing:0.5px}
+.sp-bd{padding:16px 20px}.sp-g{margin-bottom:18px}
+.sp-g-h{font-size:14px;color:var(--ink);font-weight:600;letter-spacing:0.3px;cursor:pointer;padding:6px 0;border-bottom:1px solid var(--bd);position:relative;transition:color 0.15s;-webkit-user-select:none;user-select:none}
+.sp-g-i{margin-bottom:8px;font-size:13px;line-height:1.7;padding-left:4px}
+.sp-g-i .lk{color:var(--t2);font-weight:600;display:block;font-size:12px}
+.sp-g-i .lv{color:var(--ink);font-family:var(--mono);font-size:12px;background:var(--surface-2);padding:1px 6px;border-radius:3px}
+.sp-g-h::after{content:"\25B6";position:absolute;right:4px;top:7px;font-size:10px;color:var(--ink);transition:transform 0.2s ease}
+.fl-pill.on{background:var(--ink)!important;color:#f5f4ed!important;border-color:var(--ink)!important}
+.fl-pill:hover{border-color:var(--ink-l)!important}
+.loading{text-align:center;padding:60px 0;color:var(--t3);font-size:12px}
+.loading::after{content:"";display:block;width:16px;height:16px;border:2px solid var(--bd);border-top-color:var(--ink);border-radius:50%;margin:10px auto 0;animation:spin 0.6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.sp-g-tl{margin-bottom:22px}.sp-g-tl>.sp-g-h{font-size:16px;padding:10px 12px;background:var(--surface-2);border-bottom:1px solid var(--bd);margin-bottom:0}.sp-g-tl>.sp-g-h::after{right:12px;top:11px}
+.sp-g-tl>.sp-g-c{padding:6px 12px}
+.sp-g-tl>.sp-g-c>.sp-g{margin-bottom:14px}
+.sp-g-tl>.sp-g-c>.meth{margin-bottom:16px;padding-bottom:0;border:none}
+.sp-g-tl>.sp-g-c>.meth .meth-p{font-size:12px}
+</style>
+<script>var __DATA={"rating": [{"id": "001", "home": "\u4e39\u9ea6", "away": "\u521a\u679c\u91d1", "event": "\u56fd\u9645\u8d5b", "time": "2026-06-04 02:00", "direction": "\u8ba9\u8d1f", "fit_score": 5.180000000000001, "rating": "B", "downgrade_count": 0, "meltdown": false, "scenario_type": "\u4f4e\u8fd4\u8fd8\u7387\u8d5b\u4e8b", "direction_warning": false}, {"id": "002", "home": "\u8377\u5170", "away": "\u963f\u5c14\u53ca\u5229\u4e9a", "event": "\u56fd\u9645\u8d5b", "time": "2026-06-04 02:45", "direction": "\u80dc", "fit_score": 6.390000000000001, "rating": "A", "downgrade_count": 0, "meltdown": false, "scenario_type": "\u4f4e\u8fd4\u8fd8\u7387\u8d5b\u4e8b", "direction_warning": false}, {"id": "003", "home": "\u6ce2\u5170", "away": "\u5c3c\u65e5\u5229\u4e9a", "event": "\u56fd\u9645\u8d5b", "time": "2026-06-04 02:45", "direction": "\u80dc", "fit_score": 6.74, "rating": "A", "downgrade_count": 0, "meltdown": false, "scenario_type": "\u4f4e\u8fd4\u8fd8\u7387\u8d5b\u4e8b", "direction_warning": false}, {"id": "004", "home": "\u5362\u68ee\u5821", "away": "\u610f\u5927\u5229", "event": "\u56fd\u9645\u8d5b", "time": "2026-06-04 02:45", "direction": "\u8d1f", "fit_score": 7.01, "rating": "A", "downgrade_count": 0, "meltdown": false, "scenario_type": "\u4f4e\u8fd4\u8fd8\u7387\u8d5b\u4e8b", "direction_warning": false}], "mc": [{"id": "001", "home": "\u4e39\u9ea6", "away": "\u521a\u679c\u91d1", "lambda_raw_h": 0.0, "lambda_raw_a": 1.037, "lambda_h_final": 0.0, "lambda_a_final": 1.0215, "lambda_diff": -1.0215, "jc_handicap": -1, "physical": {"home_win": 0.0, "draw": 0.3775, "away_win": 0.6225}, "jc_handicap_prob": {"rang_sheng": 0.0, "rang_ping": 0.0, "rang_fu": 1.0}, "top2_total_goals": ["0\u7403", "1\u7403"], "top2_half_full": ["\u5e73\u8d1f", "\u5e73\u5e73"], "top3_scores": ["0-0", "0-1", "0-2"]}, {"id": "002", "home": "\u8377\u5170", "away": "\u963f\u5c14\u53ca\u5229\u4e9a", "lambda_raw_h": 1.4222, "lambda_raw_a": 0.8296, "lambda_h_final": 1.4009, "lambda_a_final": 0.8047, "lambda_diff": 0.5962, "jc_handicap": -1, "physical": {"home_win": 0.5144, "draw": 0.2792, "away_win": 0.2064}, "jc_handicap_prob": {"rang_sheng": 0.2548, "rang_ping": 0.2596, "rang_fu": 0.4856}, "top2_total_goals": ["2\u7403", "1\u7403"], "top2_half_full": ["\u5e73\u80dc", "\u80dc\u80dc"], "top3_scores": ["1-0", "1-1", "0-0"]}, {"id": "003", "home": "\u6ce2\u5170", "away": "\u5c3c\u65e5\u5229\u4e9a", "lambda_raw_h": 1.3037, "lambda_raw_a": 0.5926, "lambda_h_final": 1.2841, "lambda_a_final": 0.5748, "lambda_diff": 0.7093, "jc_handicap": -1, "physical": {"home_win": 0.5352, "draw": 0.3016, "away_win": 0.1632}, "jc_handicap_prob": {"rang_sheng": 0.2524, "rang_ping": 0.2828, "rang_fu": 0.4648}, "top2_total_goals": ["1\u7403", "2\u7403"], "top2_half_full": ["\u5e73\u80dc", "\u80dc\u80dc"], "top3_scores": ["1-0", "0-0", "2-0"]}, {"id": "004", "home": "\u5362\u68ee\u5821", "away": "\u610f\u5927\u5229", "lambda_raw_h": 1.1852, "lambda_raw_a": 3.2593, "lambda_h_final": 1.1496, "lambda_a_final": 3.2104, "lambda_diff": -2.0608, "jc_handicap": 1, "physical": {"home_win": 0.0935, "draw": 0.126, "away_win": 0.7805}, "jc_handicap_prob": {"rang_sheng": 0.2195, "rang_ping": 0.1875, "rang_fu": 0.593}, "top2_total_goals": ["4\u7403", "3\u7403"], "top2_half_full": ["\u8d1f\u8d1f", "\u5e73\u8d1f"], "top3_scores": ["1-2", "1-3", "0-3"]}], "info": [{"id": "001", "home": "\u4e39\u9ea6", "away": "\u521a\u679c\u91d1", "event": "\u56fd\u9645\u8d5b", "time": "2026-06-04 02:00", "sp_home": 1.34, "sp_draw": 4.1, "sp_away": 7.2, "initial_sp_home": 1.32, "initial_sp_draw": 4.2, "initial_sp_away": 7.5, "asian_handicap": -1.0, "handicap_change": 0, "match_type": "\u53cb\u8c0a\u8d5b", "is_home_life_death": false, "lambda_diff": -1.0215, "physical_direction": "home", "predicted_direction": "home", "h2h_missing": true, "xg_last3_missing": true, "xg_season_missing": true, "roster_missing": true, "injury_home_missing": true, "injury_away_missing": true, "injury_source_unreliable": true, "no_coach_statement": true, "motivation_ambiguous": true, "multi_team_linkage": false, "away_xg_missing": true, "home_goals": 1.4, "home_goals_conceded": 1.0, "away_goals": 1.4, "away_goals_conceded": 0.0}, {"id": "002", "home": "\u8377\u5170", "away": "\u963f\u5c14\u53ca\u5229\u4e9a", "event": "\u56fd\u9645\u8d5b", "time": "2026-06-04 02:45", "sp_home": 1.25, "sp_draw": 4.8, "sp_away": 8.25, "initial_sp_home": 1.29, "initial_sp_draw": 4.45, "initial_sp_away": 7.7, "asian_handicap": -1.25, "handicap_change": 0, "match_type": "\u53cb\u8c0a\u8d5b", "is_home_life_death": false, "lambda_diff": 0.5962, "physical_direction": "home", "predicted_direction": "home", "h2h_missing": true, "xg_last3_missing": true, "xg_season_missing": true, "roster_missing": true, "injury_home_missing": true, "injury_away_missing": true, "injury_source_unreliable": true, "no_coach_statement": true, "motivation_ambiguous": true, "multi_team_linkage": false, "away_xg_missing": true, "home_goals": 3.2, "home_goals_conceded": 0.4, "away_goals": 2.8, "away_goals_conceded": 0.6}, {"id": "003", "home": "\u6ce2\u5170", "away": "\u5c3c\u65e5\u5229\u4e9a", "event": "\u56fd\u9645\u8d5b", "time": "2026-06-04 02:45", "sp_home": 1.88, "sp_draw": 3.1, "sp_away": 3.65, "initial_sp_home": 1.84, "initial_sp_draw": 3.15, "initial_sp_away": 3.75, "asian_handicap": -0.5, "handicap_change": 0, "match_type": "\u53cb\u8c0a\u8d5b", "is_home_life_death": false, "lambda_diff": 0.7093, "physical_direction": "home", "predicted_direction": "home", "h2h_missing": true, "xg_last3_missing": true, "xg_season_missing": true, "roster_missing": true, "injury_home_missing": true, "injury_away_missing": true, "injury_source_unreliable": true, "no_coach_statement": true, "motivation_ambiguous": true, "multi_team_linkage": false, "away_xg_missing": true, "home_goals": 2.2, "home_goals_conceded": 0.8, "away_goals": 1.0, "away_goals_conceded": 0.8}, {"id": "004", "home": "\u5362\u68ee\u5821", "away": "\u610f\u5927\u5229", "event": "\u56fd\u9645\u8d5b", "time": "2026-06-04 02:45", "sp_home": 5.8, "sp_draw": 3.75, "sp_away": 1.45, "initial_sp_home": 5.1, "initial_sp_draw": 3.5, "initial_sp_away": 1.55, "asian_handicap": 1.25, "handicap_change": 0, "match_type": "\u53cb\u8c0a\u8d5b", "is_home_life_death": false, "lambda_diff": -2.0608, "physical_direction": "home", "predicted_direction": "home", "h2h_missing": true, "xg_last3_missing": true, "xg_season_missing": true, "roster_missing": true, "injury_home_missing": true, "injury_away_missing": true, "injury_source_unreliable": true, "no_coach_statement": true, "motivation_ambiguous": true, "multi_team_linkage": false, "away_xg_missing": true, "home_goals": 1.6, "home_goals_conceded": 2.2, "away_goals": 2.0, "away_goals_conceded": 1.0}], "ddi": [{"id": "001", "p_physical": {"home_win": 0.0, "draw": 0.3775, "away_win": 0.6225}, "p_market": {"home_win": 0.661, "draw": 0.216, "away_win": 0.123}, "ddi": {"home_win": -0.661, "draw": 0.1615, "away_win": 0.4995}, "calibrated": {"home_win": -0.05, "draw": 0.4259, "away_win": 0.6725}, "protection_triggered": false, "sp_missing": false}, {"id": "002", "p_physical": {"home_win": 0.5144, "draw": 0.2792, "away_win": 0.2064}, "p_market": {"home_win": 0.7082, "draw": 0.1844, "away_win": 0.1073}, "ddi": {"home_win": -0.1938, "draw": 0.0948, "away_win": 0.0991}, "calibrated": {"home_win": 0.4644, "draw": 0.3076, "away_win": 0.2361}, "protection_triggered": false, "sp_missing": false}, {"id": "003", "p_physical": {"home_win": 0.5352, "draw": 0.3016, "away_win": 0.1632}, "p_market": {"home_win": 0.4714, "draw": 0.2859, "away_win": 0.2428}, "ddi": {"home_win": 0.0638, "draw": 0.0157, "away_win": -0.0796}, "calibrated": {"home_win": 0.5352, "draw": 0.3016, "away_win": 0.1632}, "protection_triggered": false, "sp_missing": false}, {"id": "004", "p_physical": {"home_win": 0.0935, "draw": 0.126, "away_win": 0.7805}, "p_market": {"home_win": 0.1527, "draw": 0.2363, "away_win": 0.611}, "ddi": {"home_win": -0.0592, "draw": -0.1103, "away_win": 0.1695}, "calibrated": {"home_win": 0.0935, "draw": 0.0929, "away_win": 0.8305}, "protection_triggered": false, "sp_missing": false}], "ai": [{"id": "001", "s7_score": 0.2, "s7_reason": "\u53cb\u8c0a\u8d5b\u4e0d\u786e\u5b9a\u6027\u5927\uff0c\u53ef\u80fd\u5927\u9762\u79ef\u8f6e\u6362", "opponent_predictability": 0.95, "opponent_reason": "\u521a\u679c(\u91d1)\u8fd1\u5e74\u672a\u4e0e\u6b27\u6d32\u5f3a\u961f\u4ea4\u624b\uff0c\u6253\u6cd5\u9002\u5e94\u6027\u5b58\u7591", "trap_analysis": "\u4e39\u9ea6\u4e3b\u80dcSP1.34\u504f\u4f4e\uff0c\u4f46\u53cb\u8c0a\u8d5b\u8f6e\u6362\u53ef\u80fd\u5bfc\u81f4\u51b7\u95e8", "key_risk": "\u4e39\u9ea6\u53ef\u80fd\u5927\u89c4\u6a21\u8f6e\u6362\uff0c\u521a\u679c(\u91d1)\u5ba2\u573a\u97e7\u6027\u672a\u77e5"}, {"id": "002", "s7_score": 0.2, "s7_reason": "\u53cb\u8c0a\u8d5b\u4e0d\u786e\u5b9a\u6027\u5927\uff0c\u8377\u5170\u4e3b\u573a\u4f46\u53ef\u80fd\u8f6e\u6362", "opponent_predictability": 0.95, "opponent_reason": "\u963f\u5c14\u53ca\u5229\u4e9a\u975e\u6d32\u9884\u9009\u8868\u73b0\u5f3a\u52bf\uff0c\u4f46\u53cb\u8c0a\u8d5b\u9762\u5bf9\u5f3a\u961f\u7ed3\u679c\u4e0d\u786e\u5b9a", "trap_analysis": "\u8377\u5170\u4e3b\u80dcSP1.25\u6781\u4f4e\uff0c\u5b58\u5728\u8fc7\u70ed\u98ce\u9669", "key_risk": "\u8377\u5170\u53cb\u8c0a\u8d5b\u53ef\u80fd\u8bd5\u9a8c\u9635\u5bb9\uff0c\u963f\u5c14\u53ca\u5229\u4e9a\u8fd1\u51b5\u4e0d\u9519"}, {"id": "003", "s7_score": 0.2, "s7_reason": "\u53cb\u8c0a\u8d5b\u4e0d\u786e\u5b9a\u6027\u5927\uff0c\u4e24\u961f\u5b9e\u529b\u63a5\u8fd1", "opponent_predictability": 0.95, "opponent_reason": "\u5c3c\u65e5\u5229\u4e9a\u975e\u6d32\u7403\u961f\u6253\u6cd5\u98ce\u683c\u4e0e\u6b27\u6d32\u4e0d\u540c", "trap_analysis": "\u6ce2\u5170\u4e3b\u80dcSP1.88\u5bf9\u5e94\u6982\u7387\u7ea648%\uff0c\u4f46\u8ba9\u7403SP\u663e\u793a\u5ba2\u961f\u65b9\u5411\u6982\u7387\u66f4\u9ad8", "key_risk": "\u6ce2\u5170FIFA\u6392\u540d35\u4f4e\u4e8e\u5c3c\u65e5\u5229\u4e9a26\uff0c\u4e3b\u80dcSP\u53ef\u80fd\u5b58\u5728\u9ad8\u4f30"}, {"id": "004", "s7_score": 0.15, "s7_reason": "\u53cb\u8c0a\u8d5b\u4f46\u610f\u5927\u5229\u5b9e\u529b\u78be\u538b", "opponent_predictability": 0.98, "opponent_reason": "\u5362\u68ee\u5821\u6253\u6cd5\u56fa\u5b9a\uff0c\u5b9e\u529b\u5dee\u8ddd\u660e\u663e", "trap_analysis": "\u610f\u5927\u5229\u5ba2\u80dcSP1.45\u642d\u914d\u53d7\u8ba9+1\uff0c\u8ba9\u8d1fSP2.55\u503c\u5f97\u5173\u6ce8", "key_risk": "\u610f\u5927\u5229\u53ef\u80fd\u5927\u91cf\u8f6e\u6362\u4e3b\u529b\uff0c\u5362\u68ee\u5821\u4e3b\u573a\u6216\u6709\u60ca\u559c"}]};</script></head>
+<body>
+<div class="app">
+  <hdr>
+    <div class="h1">V3.3.3-Core分析系统<small>扫盘数据</small></div>
+    <div class="hr1">
+      <div class="hdate">2026.6.3 <em>扫盘</em></div>
+      <div class="stats" id="stats"></div>
+    </div>
+    <div class="rd" id="rd"></div>
+  </hdr>
+  <div id="r"><div class="loading">Loading</div></div>
+  <div id="rv"></div>
+</div>
+
+<div class="sp-wrap" id="spWrap">
+  <button class="sp-btn">分析框架</button>
+</div>
+<div class="sp" id="spPanel"><div class="sp-hdr"><h2>V3.3.3-Core 分析框架</h2></div>
+<div class="sp-bd">
+  <div class="sp-g sp-g-tl">
+    <div class="sp-g-h" onclick="var p=this.parentNode;var c=p.querySelector('.sp-g-c');if(c){c.classList.toggle('open');p.classList.toggle('expanded');}">V3.3.3-Core 分析框架</div>    <div class="sp-g-c">
+      <div class="sp-g">
+        <div class="sp-g-h" onclick="var p=this.parentNode;var c=p.querySelector('.sp-g-c');if(c){c.classList.toggle('open');p.classList.toggle('expanded');}">分析系统介绍</div>
+        <div class="sp-g-c"><div class="meth-p">V3.3.3-Core 是一套完整的足球比赛预测与分析框架，覆盖从数据采集、模型运算到赛后复盘的全流程。系统基于泽松分布建模，通过蒙特卡洛模拟（2000次/场）计算胜平负概率，引入DDI（盘口偏差指数）校准市场热度偏差，并叠加多维度因子修正：</div>
+<div class="meth-p" style="margin-top:6px">- <b>伤停因子</b> — 核心球员缺阵对攻防能力的量化影响，区分核心（+-20%）与轮换（+-5%）两个层级</div>
+<div class="meth-p">- <b>战意因子</b> — 保级、争冠、德比等场景下的战意修正，决赛期+-5%，常规期+-15%</div>
+<div class="meth-p">- <b>松懈扣减</b> — 已保级/已出线球队的lambda降8%</div>
+<div class="meth-p">- <b>高原加成</b> — 海拔>2500m主场优势加成15%</div>
+<div class="meth-p" style="margin-top:6px">最终输出推荐方向、适配度评分（0-10）和置信等级（S/A/B/C），兼顾数据面与市场情绪的双重视角。</div></div>
+      </div>
+      <div class="sp-g">
+        <div class="sp-g-h" onclick="var p=this.parentNode;var c=p.querySelector('.sp-g-c');if(c){c.classList.toggle('open');p.classList.toggle('expanded');}">核心逻辑</div>
+        <div class="sp-g-c"><div class="meth-p">基于泽松分布的进球期望模型（lambda），通过蒙特卡洛模拟（2000次/场）生成胜平负概率分布。结合DDI（盘口偏差指数）校准与因子修正系统，输出推荐方向与适配度评分。</div></div>
+      </div>
+      <div class="sp-g">
+        <div class="sp-g-h" onclick="var p=this.parentNode;var c=p.querySelector('.sp-g-c');if(c){c.classList.toggle('open');p.classList.toggle('expanded');}">Lambda 计算</div>
+        <div class="sp-g-c"><div class="meth-p">从竞彩SP反推市场隐咸lambda，与基于xG/实际进球的物理lambda进行交叉验证。最终lambda在两者之间加权平衡，兼顾市场预期与基本面实力。</div></div>
+      </div>
+      <div class="sp-g">
+        <div class="sp-g-h" onclick="var p=this.parentNode;var c=p.querySelector('.sp-g-c');if(c){c.classList.toggle('open');p.classList.toggle('expanded');}">DDI 校准</div>
+        <div class="sp-g-c"><div class="meth-p">DDI = P(物理) - P(市场)，衡量模型与市场之间的偏差。|DDI| > 0.08 时触发校准，方向与市场热度相反时降级处理。校准幅度不超过0.05，防止过度修正。</div></div>
+      </div>
+      <div class="sp-g">
+        <div class="sp-g-h" onclick="var p=this.parentNode;var c=p.querySelector('.sp-g-c');if(c){c.classList.toggle('open');p.classList.toggle('expanded');}">因子修正</div>
+        <div class="sp-g-c"><div class="meth-p">伤病影响（核心+-20%，轮换+-5%）、战意修正（决赛期+-5%，常规期+-15%）、松懈扣减（8%）、高原加成（15%）。多因子叠加后重新归一化lambda。</div></div>
+      </div>
+      <div class="sp-g">
+        <div class="sp-g-h" onclick="var p=this.parentNode;var c=p.querySelector('.sp-g-c');if(c){c.classList.toggle('open');p.classList.toggle('expanded');}">风控降级</div>
+        <div class="sp-g-c"><div class="meth-p">深盘（AH>=2.0）自动降级1级；中盘（1.0<=AH<=1.25）且lambda差<0.5额外降级；适配度<4.0触发熔断，标记为C级。</div></div>
+      </div>
+      <div class="sp-g">
+        <div class="sp-g-h" onclick="var p=this.parentNode;var c=p.querySelector('.sp-g-c');if(c){c.classList.toggle('open');p.classList.toggle('expanded');}">版本更新</div>
+        <div class="sp-g-c">
+        <div class="v-item"><span class="v-ver">Rev1.13</span><span class="v-date">2026-05-31</span><div class="v-msg">DDI振幅比例参数化；客阵冷处理机制；Lambda归一化重算逻辑优化；自适应评分区间。</div></div>
+        <div class="v-item"><span class="v-ver">Rev1.12</span><span class="v-date">2026-05-28</span><div class="v-msg">新增数据缺失标记系统；蒙特卡洛模拟次数从1000提升至2000；半全场预测逻辑修正。</div></div>
+        <div class="v-item"><span class="v-ver">Rev1.11</span><span class="v-date">2026-05-25</span><div class="v-msg">多因子叠加归一化；战意修正与伤病因子独立评估；风控降级模型重构。</div></div>
+        <div class="v-item"><span class="v-ver">Rev1.10</span><span class="v-date">2026-05-20</span><div class="v-msg">初始版本：泽松lambda模型 + 蒙特卡洛模拟 + DDI校准 + 基础因子修正。</div></div>
+      </div>
+      </div>
+    </div>
+  </div>
+  <div class="sp-g sp-g-tl">
+    <div class="sp-g-h" onclick="var p=this.parentNode;var c=p.querySelector('.sp-g-c');if(c){c.classList.toggle('open');p.classList.toggle('expanded');}">框架参数说明</div>
+    <div class="sp-g-c">
+<div class="sp-g"><div class="sp-g-h" onclick="var p=this.parentNode;var c=p.querySelector('.sp-g-c');if(c){c.classList.toggle('open');p.classList.toggle('expanded');}">蒙特卡洛模拟</div><div class="sp-g-c">
+<div class="sp-g-i"><span class="lk">运行次数</span> <span class="lv">MONTE_CARLO_RUNS = 2000</span><br>每场比赛跑2000次随机模拟，算出最可能的赛果概率分布。</div>
+<div class="sp-g-i"><span class="lk">半场比例</span> <span class="lv">HALF_TIME_RATIO = 0.44</span><br>半场进球占全场的比例系数，用于半全场预测。</div></div></div>
+<div class="sp-g"><div class="sp-g-h" onclick="var p=this.parentNode;var c=p.querySelector('.sp-g-c');if(c){c.classList.toggle('open');p.classList.toggle('expanded');}">DDI 校准</div><div class="sp-g-c">
+<div class="sp-g-i"><span class="lk">Kelly因子</span> <span class="lv">D_KELLY_DEFAULT = 0.05</span><br>凯利系数，控制资金管理模型的风险偏好。</div>
+<div class="sp-g-i"><span class="lk">资金流偏差</span> <span class="lv">VBAL_DEFAULT = 0.15</span><br>市场资金流向偏差的默认估计值。</div>
+<div class="sp-g-i"><span class="lk">触发阈值</span> <span class="lv">DDI_TRIGGER_THRESHOLD = 0.08</span><br>DDI偏差超过此值触发校准，市场热度异常。</div>
+<div class="sp-g-i"><span class="lk">振幅封顶</span> <span class="lv">DDI_AMPLITUDE_CAP = 0.05</span><br>单次DDI校准最大幅度，防止过度修正。</div>
+<div class="sp-g-i"><span class="lk">振幅比例</span> <span class="lv">DDI_AMPLITUDE_RATIO = 0.30</span><br>DDA校准占总偏差的比例（0-1）。</div>
+<div class="sp-g-i"><span class="lk">客阵冷处理</span> <span class="lv">AWAY_COLD_TREATMENT = 0.08</span><br>特殊赛事客队冷却处理幅度，防止反向走热。</div></div></div>
+<div class="sp-g"><div class="sp-g-h" onclick="var p=this.parentNode;var c=p.querySelector('.sp-g-c');if(c){c.classList.toggle('open');p.classList.toggle('expanded');}">因子修正</div><div class="sp-g-c">
+<div class="sp-g-i"><span class="lk">伤病核心上限</span> <span class="lv">INJURY_CORE_MAX = 0.20</span><br>核心球员缺阵最大影响：lambda修正不超过+-20%。</div>
+<div class="sp-g-i"><span class="lk">轮换上限</span> <span class="lv">INJURY_ROTATION_MAX = 0.05</span><br>轮换伤病影响上限，不超过+-5%。</div>
+<div class="sp-g-i"><span class="lk">松懈罚款</span> <span class="lv">SLACK_PENALTY = 0.08</span><br>已保级/已出线球队松懈扣减，lambda降8%。</div>
+<div class="sp-g-i"><span class="lk">高原加成</span> <span class="lv">ALTITUDE_BONUS = 0.15</span><br>海拔>2500m主场优势：lambda加成15%。</div></div></div>
+<div class="sp-g"><div class="sp-g-h" onclick="var p=this.parentNode;var c=p.querySelector('.sp-g-c');if(c){c.classList.toggle('open');p.classList.toggle('expanded');}">战意修正</div><div class="sp-g-c">
+<div class="sp-g-i"><span class="lk">决赛期上限</span> <span class="lv">MOTIVATION_CAP_PLAYOFF = 0.05</span><br>附加赛/末轮生死战：战意修正上限+-5%。</div>
+<div class="sp-g-i"><span class="lk">常规期上限</span> <span class="lv">MOTIVATION_CAP_REGULAR = 0.15</span><br>常规联赛：战意修正上限+-15%。</div></div></div>
+<div class="sp-g"><div class="sp-g-h" onclick="var p=this.parentNode;var c=p.querySelector('.sp-g-c');if(c){c.classList.toggle('open');p.classList.toggle('expanded');}">风控降级</div>
+<div class="sp-g-c">
+<div class="sp-g-i"><span class="lk">深盘阈值</span> <span class="lv">DEEP_HANDICAP_THRESHOLD = 2.0</span><br>让球>=2球触发深盘降级，评级+1级风险。</div>
+<div class="sp-g-i"><span class="lk">中盘区间</span> <span class="lv">1.0 <= AH <= 1.25</span><br>中盘区间：让球1-1.25且lambda差<0.5额外降级。</div>
+<div class="sp-g-i"><span class="lk">熔断阈值</span> <span class="lv">FIT_SCORE_THRESHOLD_MELTDOWN = 4.0</span></div></div></div>
+    </div>
+  </div>
+</div>
+<script src="/charts.js"></script>
+<script>
+(function(){
+  var w=document.getElementById('spWrap'),p=document.getElementById('spPanel'),t,o=false;
+  w.addEventListener('mouseenter',function(){clearTimeout(t);p.classList.add('open');});
+  w.addEventListener('mouseleave',function(){t=setTimeout(function(){p.classList.remove('open');},100);});
+  p.addEventListener('mouseenter',function(){clearTimeout(t);p.classList.add('open');});
+  p.addEventListener('mouseleave',function(){t=setTimeout(function(){p.classList.remove('open');},100);});
+  w.querySelector('button').addEventListener('click',function(e){e.stopPropagation();o=!o;p.classList.toggle('open',o);clearTimeout(t);});
+  document.addEventListener('click',function(e){if(!p.contains(e.target)&&!w.contains(e.target)&&o){o=false;p.classList.remove('open');}});
+})();
+</script>
+
+
+<div class="sp-l-wrap" id="hisWrap">
+  <button class="sp-l-btn">????</button>
+</div>
+<div class="sp-l" id="hisPanel">
+  <div class="sp-l-hdr" style="display:flex;align-items:center;justify-content:space-between">
+    <h2>????????</h2>
+    <button id="sortBtn" style="background:var(--surface-2);border:1px solid var(--bd);border-radius:4px;padding:4px 10px;font-size:12px;color:var(--t2);font-family:var(--sans);cursor:pointer;outline:none" onclick="toggleSort()">? ??</button>
+  </div>
+  <div class="sp-l-bd" id="historyDateList">
+    <div class="loading" style="padding:30px 0">???...</div>
+  </div>
+</div>
+
+<div id="historyContent" style="display:none">
+  <div class="sec"><span class="sec-dot"></span><span class="sec-h" id="historyTitle">??????</span><span class="sec-l"></span></div>
+  <div id="historyMatches"></div>
+</div>
+
+
+<script>
+var HISTORY_RUNS = [];
+var SORT_ASC = false;
+
+function toggleSort() {
+  SORT_ASC = !SORT_ASC;
+  document.getElementById("sortBtn").textContent = SORT_ASC ? "? ??" : "? ??";
+  renderDateList();
+}
+
+function renderDateList() {
+  var h = "";
+  var sorted = HISTORY_RUNS.slice().sort(function(a, b) {
+    var da=a.prediction_date||'',db=b.prediction_date||'';return SORT_ASC?da.localeCompare(db):db.localeCompare(da);
+  });
+  var seen = {};
+  for (var i = 0; i < sorted.length; i++) {
+    var r = sorted[i];
+    var pd = r.prediction_date;
+    if (seen[pd]) continue;
+    seen[pd] = true;
+    var hits = 0;
+    var total = 0;
+    for (var j = 0; j < sorted.length; j++) {
+      if (sorted[j].prediction_date === pd) {
+        total += sorted[j].total_matches || 0;
+        hits += sorted[j].hit_count || 0;
+      }
+    }
+    // Format date display
+    var disp = pd.replace(/-/g, ".");
+    var rate = total > 0 ? Math.round(hits / total * 100) : "--";
+    h += '<div class="v-item" style="cursor:pointer;transition:background 0.15s" onclick="selectDate('' + pd + '')" onmouseenter="this.style.background=\'var(--surface-h)\'" onmouseleave="this.style.background=\'transparent\'">';
+    h += '<div style="font-size:14px;font-weight:600;color:var(--ink)">' + disp + ' ????</div>';
+    h += '<div style="font-size:11px;color:var(--t3);margin-top:4px">?' + total + '? ? ??' + hits + '? ? ' + rate + '%</div>';
+    h += '</div>';
+  }
+  document.getElementById("historyDateList").innerHTML = h;
+}
+
+function selectDate(date) {
+  // Highlight selected
+  document.querySelectorAll("#historyDateList .v-item").forEach(function(el) {
+    el.style.borderLeft = "none";
+  });
+  // Highlight this date
+  var items = document.querySelectorAll("#historyDateList .v-item");
+  for (var i = 0; i < items.length; i++) {
+    if (items[i].textContent.indexOf(date.replace(/-/g, ".")) >= 0) {
+      items[i].style.borderLeft = "3px solid var(--ink)";
+    }
+  }
+
+  fetch("/api/history/matches?date=" + date).then(function(r) { return r.json(); }).then(function(data) {
+    if (!data.matches || data.matches.length === 0) {
+      document.getElementById("historyContent").style.display = "none";
+      return;
+    }
+    document.getElementById("historyContent").style.display = "block";
+    document.getElementById("historyTitle").textContent = (date||"??").replace(/-/g, ".") + " ????";
+    
+    var ms = data.matches;
+    var h = "";
+    
+    // Header row
+    h += '<div class="thr"><span>??</span><span>??</span><span>??vs??</span><span>??</span><span>???</span><span>???</span><span>??</span><span>???</span><span style="width:70px;text-align:center">??</span></div>';
+    
+    ms.forEach(function(m) {
+      var hasResult = m.actual_score && m.actual_score !== "None" && m.actual_score !== "";
+      var isHit = m.hit === 1;
+      var rtClass = hasResult ? (isHit ? "rt-hit" : "rt-miss") : "";
+      
+      var ko = "";
+      if (m.match_time && m.match_time.length >= 16) {
+        ko = m.match_time.substring(5, 10) + " " + m.match_time.substring(11, 16);
+      }
+      
+      // Parse top2_total_goals
+      var g2_s = m.top2_total_goals || "[]";
+      try { g2_s = JSON.parse(g2_s).join("/"); } catch(e) { g2_s = "--"; }
+      
+      // Parse half_full
+      var hf = m.top2_half_full || "[]";
+      try { hf = JSON.parse(hf).join("/"); } catch(e) { hf = "--"; }
+      
+      // Parse scores
+      var s3 = m.top3_scores || "[]";
+      try { s3 = JSON.parse(s3).join("/"); } catch(e) { s3 = "--"; }
+      
+      var dir = m.direction || "--";
+      var dirClass = "";
+      if (dir.indexOf("?") >= 0) dirClass = "dir-h";
+      else if (dir.indexOf("?") >= 0) dirClass = "dir-a";
+      else if (dir.indexOf("?") >= 0) dirClass = "dir-d";
+      
+      var fit = m.fit_score ? m.fit_score.toFixed(1) : "--";
+      var rating = m.rating || "C";
+      
+      h += '<div class="card ' + rtClass + '"><div class="cg2">';
+      h += '<div class="c2-col c2-id"><span class="c-id">#' + (m.match_id || "") + '</span></div>';
+      h += '<div class="c2-col c2-tm"><span class="c-ti">' + ko + '</span></div>';
+      h += '<div class="c2-col c2-mm"><span class="c2-h">' + (m.home || "") + '</span><span class="c2-v">vs</span><span class="c2-a">' + (m.away || "") + '</span></div>';
+      h += '<div class="c2-col c2-dr"><span class="dir ' + dirClass + '"><i></i>' + dir + '</span></div>';
+      h += '<div class="c2-col c2-g">' + g2_s + '</div>';
+      h += '<div class="c2-col c2-ht">' + hf + '</div>';
+      h += '<div class="c2-col c2-scr">' + s3 + '</div>';
+      h += '<div class="c2-col c2-r"><div class="c-sc2">' + fit + '</div><span class="badge badge-' + rating.toLowerCase() + '">' + rating + '</span></div>';
+      h += '<div class="c2-col" style="width:70px;text-align:center">';
+      if (hasResult) {
+        var hitColor = isHit ? "#c0392b" : "#555";
+        h += '<span style="display:inline-block;background:' + hitColor + ';color:#fff;font-size:11px;padding:2px 8px;border-radius:3px;font-weight:600">' + m.actual_score + '</span>';
+      } else {
+        h += '<span style="color:var(--t3);font-size:11px">???</span>';
+      }
+      h += '</div>';
+      h += '</div></div>';
+    });
+    
+    document.getElementById("historyMatches").innerHTML = h;
+  }).catch(function() {
+    document.getElementById("historyContent").style.display = "none";
+  });
+}
+
+// Load history on page load
+document.addEventListener("DOMContentLoaded", function() {
+  fetch("/api/history/runs").then(function(r) { return r.json(); }).then(function(data) {
+    HISTORY_RUNS = data || [];
+    renderDateList();
+  }).catch(function() {
+    document.getElementById("historyDateList").innerHTML = "<div style='text-align:center;padding:30px;color:var(--t3);font-size:12px'>????</div>";
+  });
+});
+
+// Left panel hover logic
+(function(){
+  var w = document.getElementById("hisWrap"), p = document.getElementById("hisPanel"), t, o = false;
+  if (w && p) {
+    w.addEventListener("mouseenter", function(){ clearTimeout(t); p.classList.add("open"); });
+    w.addEventListener("mouseleave", function(){ t = setTimeout(function(){ p.classList.remove("open"); }, 200); });
+    p.addEventListener("mouseenter", function(){ clearTimeout(t); p.classList.add("open"); });
+    p.addEventListener("mouseleave", function(){ t = setTimeout(function(){ p.classList.remove("open"); }, 200); });
+    w.querySelector("button").addEventListener("click", function(e){ e.stopPropagation(); o = !o; p.classList.toggle("open", o); clearTimeout(t); });
+    document.addEventListener("click", function(e){ if (!p.contains(e.target) && !w.contains(e.target) && o) { o = false; p.classList.remove("open"); } });
+  }
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,5 @@
+Diff at pos 163:
+  Pattern (0x3f): '?'
+  File    (0x25b6): '▶'
+  Context pattern: 'cc-arrow">?</span>\n        <sp'
+  Context file:    'cc-arrow">▶</span>\n        <sp'

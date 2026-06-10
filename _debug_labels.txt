@@ -1,0 +1,10 @@
+[0] has_zhu=True char0=0xfffd label=��看 墨西哥 对阵 南非 的详细信息, 组 A, 6月12日周五, 03:00
+[1] has_zhu=True char0=0xfffd label=��看 韩国 对阵 捷克 的详细信息, 组 A, 6月12日周五, 10:00
+[2] has_zhu=True char0=0xfffd label=��看 加拿大 对阵 波斯尼亚和黑塞哥维那 的详细信息, 组 B, 6月13日周六, 03:00
+[3] has_zhu=True char0=0xfffd label=��看 美国 对阵 巴拉圭 的详细信息, 组 D, 6月13日周六, 09:00
+[4] has_zhu=True char0=0xfffd label=��看 卡塔尔 对阵 瑞士 的详细信息, 组 B, 6月14日周日, 03:00
+[5] has_zhu=True char0=0xfffd label=��看 巴西 对阵 摩洛哥 的详细信息, 组 C, 6月14日周日, 06:00
+[6] has_zhu=True char0=0xfffd label=��看 海地 对阵 苏格兰 的详细信息, 组 C, 6月14日周日, 09:00
+[7] has_zhu=True char0=0xfffd label=��看 澳大利亚 对阵 土耳其 的详细信息, 组 D, 6月14日周日, 12:00
+[8] has_zhu=True char0=0xfffd label=��看 德国 对阵 库拉索岛 的详细信息, 组 E, 6月15日周一, 01:00
+[9] has_zhu=True char0=0xfffd label=��看 荷兰 对阵 日本 的详细信息, 组 F, 6月15日周一, 04:00

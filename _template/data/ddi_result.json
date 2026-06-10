@@ -1,0 +1,29 @@
+{
+  "matches": [
+    {
+      "id": "003",
+      "p_physical": {
+        "home_win": 0.878,
+        "draw": 0.087,
+        "away_win": 0.035
+      },
+      "p_market": {
+        "home_win": 0.7851,
+        "draw": 0.1466,
+        "away_win": 0.0682
+      },
+      "ddi": {
+        "home_win": 0.0929,
+        "draw": -0.0596,
+        "away_win": -0.0332
+      },
+      "calibrated": {
+        "home_win": 0.9059,
+        "draw": 0.087,
+        "away_win": 0.035
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    }
+  ]
+}

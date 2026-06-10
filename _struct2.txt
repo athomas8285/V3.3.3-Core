@@ -1,0 +1,19 @@
+eader">
+      <button class="sec-back-btn" onclick="switchNav('home')">← 返回首页</button>
+      <h2>🔍 比赛分析</h2>
+      <div class="sec-bar"></div>
+    </div>
+    <div id="analysisInner"></div>
+  </div>
+  
+===== ANALYSIS START =====
+<!-- ====== View: ????? ====== -->
+  <div id="docContent" class="view-content" style="display:none">
+    <div id="docInner"></div>
+  </div>
+<script>
+// 球队国旗映射（本地 PNG）
+var TEAM_FLAGS = {
+  "墨西哥":"/static/flags/mexico.png","南非":"/static/flags/south_africa.png","韩国":"/static/flags/korea.png","捷克":"/static/flags/czech.png",
+  "加拿大":"/static/flags/canada.png","波黑":"/static/flags/bosnia.png","美国":"/static/flags/usa.png","巴拉圭":"/static/flags/paraguay.png",
+  "卡塔尔":"/static/flags/qatar.png","瑞士":"/stati

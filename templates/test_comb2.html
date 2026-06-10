@@ -1,0 +1,284 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><script>
+
+var HISTORY_RUNS = [];
+var CURRENT_DATE = null;
+// 2026 世界杯 小组赛 72场对阵
+var WC_MATCHES = [
+  // 6月12日
+  {d:"6月12日",t:"03:00",g:"A",h:"墨西哥",a:"南非",v:"墨西哥城"},
+  {d:"6月12日",t:"10:00",g:"A",h:"韩国",a:"捷克",v:"瓜达拉哈拉"},
+  // 6月13日
+  {d:"6月13日",t:"03:00",g:"B",h:"加拿大",a:"波黑",v:"多伦多"},
+  {d:"6月13日",t:"09:00",g:"D",h:"美国",a:"巴拉圭",v:"洛杉矶"},
+  // 6月14日
+  {d:"6月14日",t:"03:00",g:"B",h:"卡塔尔",a:"瑞士",v:"旧金山湾区"},
+  {d:"6月14日",t:"06:00",g:"C",h:"巴西",a:"摩洛哥",v:"纽约/新泽西"},
+  {d:"6月14日",t:"09:00",g:"C",h:"海地",a:"苏格兰",v:"波士顿"},
+  {d:"6月14日",t:"12:00",g:"D",h:"奥大利亚",a:"土耳其",v:"温哥华"},
+  // 6月15日
+  {d:"6月15日",t:"01:00",g:"E",h:"德国",a:"库拉索",v:"休斯敦"},
+  {d:"6月15日",t:"04:00",g:"F",h:"荷兰",a:"日本",v:"达拉斯"},
+  {d:"6月15日",t:"07:00",g:"E",h:"科特迪瓦",a:"厄瓜多尔",v:"费城"},
+  {d:"6月15日",t:"10:00",g:"F",h:"瑞典",a:"突尼斯",v:"蒙特雷"},
+  // 6月16日
+  {d:"6月16日",t:"00:00",g:"H",h:"西班牙",a:"佛得角",v:"亚特兰大"},
+  {d:"6月16日",t:"03:00",g:"G",h:"比利时",a:"埃及",v:"西雅图"},
+  {d:"6月16日",t:"06:00",g:"H",h:"沙特",a:"乌拉圭",v:"迈阿密"},
+  {d:"6月16日",t:"09:00",g:"G",h:"伊朗",a:"新西兰",v:"洛杉矶"},
+  // 6月17日
+  {d:"6月17日",t:"03:00",g:"I",h:"法国",a:"塞内加尔",v:"纽约/新泽西"},
+  {d:"6月17日",t:"06:00",g:"I",h:"伊拉克",a:"挪威",v:"波士顿"},
+  {d:"6月17日",t:"09:00",g:"J",h:"阿根廷",a:"阿尔及利亚",v:"堪萨斯城"},
+  {d:"6月17日",t:"12:00",g:"J",h:"奥地利",a:"约旦",v:"旧金山湾区"},
+  // 6月18日
+  {d:"6月18日",t:"01:00",g:"K",h:"葡萄牙",a:"民主刚果",v:"休斯敦"},
+  {d:"6月18日",t:"04:00",g:"L",h:"英格兰",a:"克罗地亚",v:"达拉斯"},
+  {d:"6月18日",t:"07:00",g:"L",h:"加纳",a:"巴拿马",v:"多伦多"},
+  {d:"6月18日",t:"10:00",g:"K",h:"乌兹别克斯坦",a:"哥伦比亚",v:"墨西哥城"},
+  // 6月19日
+  {d:"6月19日",t:"00:00",g:"A",h:"捷克",a:"南非",v:"亚特兰大"},
+  {d:"6月19日",t:"03:00",g:"B",h:"瑞士",a:"波黑",v:"洛杉矶"},
+  {d:"6月19日",t:"06:00",g:"B",h:"加拿大",a:"卡塔尔",v:"温哥华"},
+  {d:"6月19日",t:"09:00",g:"A",h:"墨西哥",a:"韩国",v:"瓜达拉哈拉"},
+  // 6月20日
+  {d:"6月20日",t:"03:00",g:"D",h:"美国",a:"奥大利亚",v:"西雅图"},
+  {d:"6月20日",t:"06:00",g:"C",h:"苏格兰",a:"摩洛哥",v:"波士顿"},
+  {d:"6月20日",t:"09:00",g:"C",h:"巴西",a:"海地",v:"费城"},
+  {d:"6月20日",t:"12:00",g:"D",h:"土耳其",a:"巴拉圭",v:"蒙特雷"},
+  // 6月21日
+  {d:"6月21日",t:"01:00",g:"F",h:"荷兰",a:"瑞典",v:"休斯敦"},
+  {d:"6月21日",t:"04:00",g:"E",h:"德国",a:"科特迪瓦",v:"多伦多"},
+  {d:"6月21日",t:"08:00",g:"E",h:"厄瓜多尔",a:"库拉索",v:"堪萨斯城"},
+  {d:"6月21日",t:"12:00",g:"F",h:"突尼斯",a:"日本",v:"蒙特雷"},
+  // 6月22日
+  {d:"6月22日",t:"00:00",g:"H",h:"西班牙",a:"沙特",v:"亚特兰大"},
+  {d:"6月22日",t:"03:00",g:"G",h:"比利时",a:"伊朗",v:"洛杉矶"},
+  {d:"6月22日",t:"06:00",g:"H",h:"乌拉圭",a:"佛得角",v:"迈阿密"},
+  {d:"6月22日",t:"09:00",g:"G",h:"新西兰",a:"埃及",v:"温哥华"},
+  // 6月23日
+  {d:"6月23日",t:"01:00",g:"J",h:"阿根廷",a:"奥地利",v:"达拉斯"},
+  {d:"6月23日",t:"05:00",g:"I",h:"法国",a:"伊拉克",v:"费城"},
+  {d:"6月23日",t:"08:00",g:"I",h:"挪威",a:"塞内加尔",v:"纽约/新泽西"},
+  {d:"6月23日",t:"11:00",g:"J",h:"约旦",a:"阿尔及利亚",v:"堪萨斯城"},
+  // 6月24日
+  {d:"6月24日",t:"01:00",g:"K",h:"葡萄牙",a:"乌兹别克斯坦",v:"休斯敦"},
+  {d:"6月24日",t:"04:00",g:"L",h:"英格兰",a:"加纳",v:"波士顿"},
+  {d:"6月24日",t:"07:00",g:"L",h:"巴拿马",a:"克罗地亚",v:"多伦多"},
+  {d:"6月24日",t:"10:00",g:"K",h:"哥伦比亚",a:"民主刚果",v:"墨西哥城"},
+  // 6月25日
+  {d:"6月25日",t:"03:00",g:"B",h:"瑞士",a:"加拿大",v:"温哥华"},
+  {d:"6月25日",t:"03:00",g:"B",h:"波黑",a:"卡塔尔",v:"西雅图"},
+  {d:"6月25日",t:"06:00",g:"C",h:"苏格兰",a:"巴西",v:"迈阿密"},
+  {d:"6月25日",t:"06:00",g:"C",h:"摩洛哥",a:"海地",v:"亚特兰大"},
+  {d:"6月25日",t:"09:00",g:"A",h:"捷克",a:"墨西哥",v:"墨西哥城"},
+  {d:"6月25日",t:"09:00",g:"A",h:"南非",a:"韩国",v:"蒙特雷"},
+  // 6月26日
+  {d:"6月26日",t:"04:00",g:"E",h:"厄瓜多尔",a:"德国",v:"纽约/新泽西"},
+  {d:"6月26日",t:"04:00",g:"E",h:"库拉索",a:"科特迪瓦",v:"费城"},
+  {d:"6月26日",t:"07:00",g:"F",h:"日本",a:"瑞典",v:"达拉斯"},
+  {d:"6月26日",t:"07:00",g:"F",h:"突尼斯",a:"荷兰",v:"堪萨斯城"},
+  {d:"6月26日",t:"10:00",g:"D",h:"土耳其",a:"美国",v:"洛杉矶"},
+  {d:"6月26日",t:"10:00",g:"D",h:"巴拉圭",a:"奥大利亚",v:"旧金山湾区"},
+  // 6月27日
+  {d:"6月27日",t:"03:00",g:"I",h:"挪威",a:"法国",v:"波士顿"},
+  {d:"6月27日",t:"03:00",g:"I",h:"塞内加尔",a:"伊拉克",v:"费城"},
+  {d:"6月27日",t:"08:00",g:"H",h:"佛得角",a:"沙特",v:"亚特兰大"},
+  {d:"6月27日",t:"08:00",g:"H",h:"乌拉圭",a:"西班牙",v:"迈阿密"},
+  {d:"6月27日",t:"11:00",g:"G",h:"埃及",a:"伊朗",v:"西雅图"},
+  {d:"6月27日",t:"11:00",g:"G",h:"新西兰",a:"比利时",v:"温哥华"},
+  // 6月28日
+  {d:"6月28日",t:"03:00",g:"L",h:"巴拿马",a:"英格兰",v:"纽约/新泽西"},
+  {d:"6月28日",t:"03:00",g:"L",h:"克罗地亚",a:"加纳",v:"费城"},
+  {d:"6月28日",t:"07:30",g:"K",h:"哥伦比亚",a:"葡萄牙",v:"迈阿密"},
+  {d:"6月28日",t:"07:30",g:"K",h:"民主刚果",a:"乌兹别克斯坦",v:"亚特兰大"},
+  {d:"6月28日",t:"10:00",g:"J",h:"阿尔及利亚",a:"奥地利",v:"堪萨斯城"},
+  {d:"6月28日",t:"10:00",g:"J",h:"约旦",a:"阿根廷",v:"旧金山湾区"},
+];
+
+// 渲染小组赛程
+function renderCalendarView(){
+  var main = document.querySelector(".main");
+  main.scrollTop = 0;
+  document.querySelector(".sec-header h2").textContent = "????";
+  document.getElementById("todaySub").textContent = "72? ??? A-L?";
+  document.getElementById("todayMatches").style.display = "block";
+  document.getElementById("yesterdayContent").style.display = "none";
+
+  // Build match lookup by date
+  var matchByDate = {};
+  for(var i = 0; i < WC_MATCHES.length; i++){
+    var m = WC_MATCHES[i];
+    if(!matchByDate[m.d]) matchByDate[m.d] = [];
+    matchByDate[m.d].push(m);
+  }
+
+  var now = new Date();
+  var y = now.getFullYear();
+  var m = now.getMonth();
+  var d = now.getDate();
+  var todayKey = y + "-" + (m+1) + "-" + d;
+
+  var calYear = 2026;
+  var calMonth = 5; // June (0-indexed)
+
+  function pad2(v){return v<10?"0"+v:""+v;}
+
+  function buildHTML(year, month){
+    var firstDay = new Date(year, month, 1);
+    var startDow = firstDay.getDay();
+    var startCol = startDow === 0 ? 6 : startDow - 1;
+    var daysInMonth = new Date(year, month + 1, 0).getDate();
+    var dayNames = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+
+    var h = '<div class="wc-calendar-wrap">';
+
+    // Toolbar
+    h += '<div class="wc-cal-toolbar">';
+    h += '<div class="calt-left">';
+    h += '<div class="calt-month-nav">';
+    h += '<button class="calt-nav-prev" onclick="prevMonth()">&lt;</button>';
+    h += '<span class="calt-month-label">' + (month+1) + '? ' + year + '</span>';
+    h += '<button class="calt-nav-next" onclick="nextMonth()">&gt;</button>';
+    h += '</div>';
+    h += '<span class="calt-stats">' + WC_MATCHES.length + '???</span>';
+    h += '</div>';
+    h += '<div class="calt-right">';
+    h += '<button class="calt-today-btn" onclick="scrollToToday()">\uD83D\uDCCC ??</button>';
+    h += '</div>';
+    h += '</div>';
+
+    // Grid
+    h += '<div class="wc-cal-grid">';
+    for(var dw = 0; dw < 7; dw++){
+      h += '<div class="wc-cal-day-head">' + dayNames[dw] + '</div>';
+    }
+
+    // Empty cells before first day
+    for(var e = 0; e < startCol; e++){
+      h += '<div class="wc-cal-day other-month"></div>';
+    }
+
+    // Day cells
+    for(var day = 1; day <= daysInMonth; day++){
+      var dateKey = (month+1) + "\u6708" + day + "\u65e5";
+      var matches = matchByDate[dateKey] || [];
+      var isToday = (year + "-" + pad2(month+1) + "-" + pad2(day) === todayKey);
+      var hasMatches = matches.length > 0;
+
+      var cls = "wc-cal-day";
+      if(hasMatches) cls += " has-matches";
+      if(isToday) cls += " today";
+
+      h += '<div class="' + cls + '" onclick="showDayPopup(' + day + ', event)" data-day="' + day + '">';
+      h += '<div class="cday-num">' + day + '</div>';
+
+      if(hasMatches){
+        var groups = {};
+        for(var mi = 0; mi < matches.length; mi++) groups[matches[mi].g] = true;
+        var gkeys = Object.keys(groups);
+        h += '<div class="cday-badges">';
+        for(var gi = 0; gi < Math.min(gkeys.length, 4); gi++){
+          h += '<span class="cday-badge">' + gkeys[gi] + '\u7ec4</span>';
+        }
+        if(gkeys.length > 4) h += '<span class="cday-badge">+' + (gkeys.length-4) + '</span>';
+        h += '</div>';
+
+        var showCount = matches.length <= 3 ? matches.length : 2;
+        for(var mi = 0; mi < showCount; mi++){
+          var mt = matches[mi];
+          h += '<div class="cday-match"><span class="cdm-time">' + mt.t.slice(0,5) + '</span>' + mt.h.slice(0,4) + ' vs ' + mt.a.slice(0,4) + '</div>';
+        }
+        if(matches.length > 3){
+          h += '<div class="cday-more">+' + (matches.length - 2) + ' \u573a</div>';
+        }
+      }
+
+      h += '</div>';
+    }
+
+    // Remaining empty cells
+    var totalCells = startCol + daysInMonth;
+    var rem = (7 - totalCells % 7) % 7;
+    for(var r = 0; r < rem; r++){
+      h += '<div class="wc-cal-day other-month"></div>';
+    }
+
+    h += '</div></div>';
+    return h;
+  }
+
+  document.getElementById("todayMatches").innerHTML = buildHTML(calYear, calMonth);
+  window.__CAL_YEAR = calYear;
+  window.__CAL_MONTH = calMonth;
+}
+
+// Month navigation
+function prevMonth(){
+  var y = window.__CAL_YEAR || 2026;
+  var m = window.__CAL_MONTH || 5;
+  // Only June 2026 for now
+}
+
+function nextMonth(){
+  var y = window.__CAL_YEAR || 2026;
+  var m = window.__CAL_MONTH || 5;
+}
+
+// Scroll to today
+function scrollToToday(){
+  var el = document.querySelector(".wc-cal-day.today");
+  if(el) setTimeout(function(){ el.scrollIntoView({behavior:"smooth",block:"center"}); }, 50);
+}
+
+// Show popup
+function showDayPopup(day, event){
+  var existing = document.querySelector(".wc-cal-popup");
+  if(existing) existing.remove();
+
+  var dateKey = "6\u6708" + day + "\u65e5";
+  var matches = [];
+  for(var i = 0; i < WC_MATCHES.length; i++){
+    if(WC_MATCHES[i].d === dateKey) matches.push(WC_MATCHES[i]);
+  }
+  if(matches.length === 0) return;
+
+  var popup = document.createElement("div");
+  popup.className = "wc-cal-popup show";
+  popup.innerHTML = '<div class="pop-title">6\u6708' + day + '\u65e5 \u8d5b\u7a0b (' + matches.length + '\u573a)</div>';
+  for(var i = 0; i < matches.length; i++){
+    var m = matches[i];
+    popup.innerHTML += '<div class="pop-match" onclick="this.closest('.wc-cal-popup').remove()">' +
+      '<span class="pm-time">' + m.t.slice(0,5) + '</span>' +
+      '<span class="pm-group">' + m.g + '\u7ec4</span>' +
+      '<span class="pm-teams">' + m.h + ' vs ' + m.a + '</span>' +
+      '<span class="pm-venue">' + m.v + '</span>' +
+      '</div>';
+  }
+
+  document.body.appendChild(popup);
+
+  var x = Math.min(event.clientX, window.innerWidth - 340);
+  var y = Math.min(event.clientY, window.innerHeight - 400);
+  if(x < 10) x = 10;
+  if(y < 10) y = 10;
+  popup.style.left = x + "px";
+  popup.style.top = y + "px";
+}
+
+// Close popup on click outside
+document.addEventListener("click", function(e){
+  if(!e.target.closest(".wc-cal-popup") && !e.target.closest(".wc-cal-day")){
+    var p = document.querySelector(".wc-cal-popup.show");
+    if(p) p.remove();
+  }
+});
+function toggleAccordion(id){var el=document.getElementById(id);if(el)el.classList.toggle('open');}
+function openAccordion(id){var el=document.getElementById(id);if(el)el.classList.add('open');}
+function getTagColor(t){t=(t||"").toLowerCase();if(t==="s")return"s";if(t==="a")return"a";if(t==="c"||t==="meltdown")return"c";return"b";}
+function getDirBadge(d){var v=(d||"").toLowerCase();if(v.indexOf("\u80dc")>=0||v==="\u4e0a\u76d8"||v==="\u5927\u7403")return"<span class=\"mc-badge g\">"+d+"</span>";if(v.indexOf("\u8d1f")>=0||v==="\u4e0b\u76d8"||v==="\u5c0f\u7403")return"<span class=\"mc-badge r\">"+d+"</span>";if(v.indexOf("\u5e73")>=0||v==="\u8d70\u6c34")return"<span class=\"mc-badge b\">"+d+"</span>";return"<span class=\"mc-badge gray\">"+(d||"-")+"</span>";}
+
+function getRatingClass(r){var v=(r||"").toLowerCase();if(v==="s")return"s";if(v==="a")return"a";if(v==="c"||v==="meltdown")return"c";if(v==="m")return"m";return"b";}
+function getDirClass(d){var v=(d||"").toLowerCase();if(v.indexOf("胜")>=0||v==="上盘")return"win";if(v.indexOf("负")>=0||v==="下盘")return"lose";if(v.indexOf("平")>=0)return"draw";return"";}
+function getHitTag(h){return h?"<span class=\"tag hit\">\u547d\u4e2d</span>":"<span class=\"tag miss\">\u672a\u4e2d</span>";}
+function getRatingHTML(r,l){var n=r||"";var c=getTagColor(l);return"<span class=\"r-num\">"+n+"</span><span class=\"r-lvl "+c+"\">"+l.toUpperCase()+"</span>";}
+</script></body></html>

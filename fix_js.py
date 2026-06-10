@@ -1,0 +1,80 @@
+with open('D:/V3.3.3-Core/templates/index.html','r',encoding='utf-8-sig') as f:
+    c = f.read()
+
+# Find and replace the broken loadWCSchedule function
+old = 'function loadWCSchedule(){'
+idx = c.find(old)
+if idx < 0:
+    print('ERROR: loadWCSchedule not found!')
+else:
+    # Find the end of this function (next 'function' keyword)
+    end = c.find('\nfunction ', idx + 10)
+    if end < 0:
+        # Might be last function before EOF
+        end = c.find('\n//', idx)
+    
+    new_func = '''function loadWCSchedule(){
+  var container=document.getElementById("wcViewToday");
+  if(!container)return;
+  if(container.getAttribute("data-loaded")=="1")return;
+  container.setAttribute("data-loaded","1");
+  container.innerHTML="\\u52a0\\u8f7d\\u8d5b\\u7a0b\\u4e2d...";
+  fetch("/api/wc/schedule").then(function(r){return r.json()}).then(function(d){
+    if(!d||!d.matches||d.matches.length===0){
+      container.innerHTML="\\u6682\\u65e0\\u6570\\u636e";
+      return;
+    }
+    var total=d.matches.length;
+    var withOdds=d.odds_count||0;
+    var bannerSub=document.getElementById("wcBannerSub");
+    if(bannerSub)bannerSub.textContent="\\u5c0f\\u7ec4\\u8d5b \\u00b7 \\u5171"+total+"\\u573a";
+    var remCount=document.getElementById("wcRemainingCount");
+    if(remCount)remCount.textContent=total;
+    var wcCount=document.getElementById("wcMatchCount");
+    if(wcCount)wcCount.textContent=total+"\\u573a";
+    var html="";
+    var byDate={};
+    d.matches.forEach(function(m){
+      var dt=m.date||"";
+      if(!byDate[dt])byDate[dt]=[];
+      byDate[dt].push(m);
+    });
+    Object.keys(byDate).forEach(function(dt){
+      byDate[dt].sort(function(a,b){return (a.time||"").localeCompare(b.time||"");});
+      var ms=byDate[dt];
+      html+="<div class=\\"sec-header\\" style=\\"margin-top:0;padding:14px 0 6px\\"><h2 style=\\"font-size:13px;color:var(--gold);font-weight:700;letter-spacing:.5px\\">"+dt+"</h2><div class=\\"sec-bar\\"></div></div>";
+      ms.forEach(function(m){
+        var gb="<span style=\\"font-size:10px;color:var(--gold);background:rgba(251,191,36,.1);padding:1px 6px;border-radius:3px;border:1px solid rgba(251,191,36,.15);font-weight:600\\">"+m.group+"</span>";
+        var rndText="\\u7b2c"+m.round+"\\u8f6e";
+        var timeStr=m.time||"--:--";
+        var venueText=m.venue||"";
+        var oh="";
+        if(m.odds){
+          var o=m.odds;
+          oh="<div style=\\"display:flex;gap:4px;font-size:10px;font-family:var(--mono);color:var(--t3)\\"><span>\\u80dc <b style=color:var(--t1);font-weight:600>"+o.sp_h+"</b></span><span>\\u5e73 <b style=color:var(--t1);font-weight:600>"+o.sp_d+"</b></span><span>\\u8d1f <b style=color:var(--t1);font-weight:600>"+o.sp_a+"</b></span></div>";
+        }
+        html+="<div class=\\"wc-card\\" style=\\"background:rgba(16,22,42,.78);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:10px 14px;margin-bottom:6px\\">";
+        html+="<div style=\\"display:flex;align-items:center;gap:6px;justify-content:space-between;flex-wrap:wrap\\">";
+        html+="<div style=\\"display:flex;align-items:center;gap:4px\\"><span style=\\"font-size:10px;color:var(--t3);font-family:var(--mono);background:rgba(255,255,255,.04);padding:1px 5px;border-radius:3px\\">"+timeStr+"</span>"+gb;
+        html+="<span style=\\"font-size:10px;color:var(--t3);background:rgba(0,229,255,.06);padding:1px 5px;border-radius:3px\\">"+rndText+"</span></div>";
+        html+=oh;
+        html+="</div>";
+        html+="<div style=\\"display:flex;align-items:center;justify-content:center;gap:10px;margin-top:6px\\">";
+        html+="<div style=\\"display:flex;align-items:center;gap:4px;flex:1;justify-content:flex-end\\"><span style=\\"font-size:16px\\">"+(m.home_flag||"")+"</span><span style=\\"font-size:14px;font-weight:700;color:var(--t1)\\">"+m.home+"</span></div>";
+        html+="<span style=\\"font-size:11px;color:var(--t3);font-weight:600\\">VS</span>";
+        html+="<div style=\\"display:flex;align-items:center;gap:4px;flex:1;justify-content:flex-start\\"><span style=\\"font-size:14px;font-weight:700;color:var(--t1)\\">"+m.away+"</span><span style=\\"font-size:16px\\">"+(m.away_flag||"")+"</span></div>";
+        html+="</div>";
+        html+="<div style=\\"font-size:10px;color:var(--t3);text-align:center;margin-top:4px\\">"+venueText+"</div>";
+        html+="</div>";
+      });
+    });
+    container.innerHTML=html;
+  }).catch(function(){
+    container.innerHTML="\\u52a0\\u8f7d\\u5931\\u8d25";
+  });
+}'''
+    
+    c = c[:idx] + new_func + c[end:]
+    with open('D:/V3.3.3-Core/templates/index.html','w',encoding='utf-8') as f:
+        f.write(c)
+    print('Fixed loadWCSchedule function')

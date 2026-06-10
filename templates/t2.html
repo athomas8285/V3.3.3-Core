@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Test2</title></head>
+<body>
+<div id="js-status">JS初始化中...</div>
+<script>
+document.getElementById('js-status').textContent = 'JS已加载 OK...';
+var currentRating = [];
+var currentData = null;
+
+function switchTab(name){
+document.querySelectorAll('.tab-nav button').forEach(function(b){b.classList.remove('active');});
+document.querySelectorAll('.tab-content').forEach(function(c){c.classList.remove('active');});
+if(name==='summary'){document.getElementById('tab-summary').classList.add('active');document.getElementById('summary-tab').classList.add('active');}
+else{document.getElementById('tab-review').classList.add('active');document.getElementById('review-tab').classList.add('active');}
+}
+
+window.onload=function(){
+fetch('/api/latest').then(function(r){return r.json();}).then(function(d){
+if(d.rating&&d.rating.length>0){currentData=d;currentRating=d.rating;renderSummary(d);}
+}).catch(function(){document.getElementById('js-status').textContent='API请求失败 ✗';});
+};
+
+function parseRawData(){
+var t=document.getElementById('raw-input').value.trim();
+if(!t){alert('请先粘贴原始数据');return;}
+document.getElementById('parse-status').textContent='将另一个AI采集的完整原始数据粘贴到下方，系统自动解析...';
+fetch('/api/parse',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:t})})
+.then(function(r){return r.json();})
+.then(function(d){if(d.error){alert(d.error);document.getElementById('parse-status').textContent='';return;}document.getElementById('parse-status').textContent='\u2713 '+'解析并保存数据';})
+.catch(function(e){alert('请求失败: '+e.message);document.getElementById('parse-status').textContent='';});
+}
+
+function startAnalysis(){
+var btn=document.getElementById('analyze-btn');btn.disabled=true;
+document.getElementById('loading').style.display='block';
+document.getElementById('analyze-status').textContent='';
+var f;
+try{f=JSON.parse(document.getElementById('factors-input').value);}
+catch(e){alert('factor_params.json 格式错误: '+e.message);btn.disabled=false;document.getElementById('loading').style.display='none';return;}
+fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({factor_params:f})})
+.then(function(r){return r.json();})
+.then(function(d){if(d.error){alert(d.error);}else{currentData=d;currentRating=d.rating;renderSummary(d);}})
+.catch(function(e){alert('请求失败: '+e.message);})
+.finally(function(){btn.disabled=false;document.getElementById('loading').style.display='none';document.getElementById('analyze-status').textContent='\u2713 '+'开始分析';});
+}
+
+function badge(rate,fit){
+if(rate==='BACKUP'){return fit>=9.0?'<span class="badge badge-s">S级</span>':'<span class="badge badge-a">A级</span>';}
+if(rate==='WATCH'){return fit>=7.0?'<span class="badge badge-b">B级</span>':'<span class="badge badge-c">C级</span>';}
+if(rate==='S'){return '<span class="badge badge-s">S级</span>';}
+if(rate==='A'){return '<span class="badge badge-a">A级</span>';}
+if(rate==='C'){return '<span class="badge badge-c">C级</span>';}
+if(fit>=9.0){return '<span class="badge badge-s">S级</span>';}
+if(fit>=7.0){return '<span class="badge badge-a">A级</span>';}document.getElementById('js-status').textContent = '第二阶段OK';
+</script>
+</body></html>

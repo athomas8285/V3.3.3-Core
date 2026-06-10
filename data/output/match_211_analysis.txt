@@ -1,0 +1,53 @@
+============================================================
+  211 | 06-07 03:00 | 澳大利亚 vs 瑞士
+============================================================
+
+[一、比赛基本信息]
+赛事: 国际赛
+主队: 澳大利亚 (SofaScore: Switzerland)
+客队: 瑞士 (SofaScore: Australia)
+时间: 2026-06-07 03:00
+场地: Not specified, San Diego
+海拔: 正常
+
+[二、竞彩赔率]
+标准 SP:        5.90 / 3.70 / 1.45
+让球盘:         主队 +1 (主队受让)
+让球 SP:        2.35 / 3.10 / 2.62
+倾向: 客队 SP=1.45 更低 主队 SP=5.90
+差距: 实力差距明显 (SP差>2)
+
+[澳大利亚 近5场 (Switzerland)]
+  11-19 Switzerland 1-1 Kosovo [EURO, Qualification]
+  11-22 Romania 1-0 Switzerland [EURO, Qualification]
+  03-24 Denmark 0-0 Switzerland [International Friendly Games]
+  03-27 Ireland 0-1 Switzerland [International Friendly Games]
+  06-05 Switzerland 4-0 Estonia [International Friendly Games]
+  战绩: 2W 2D 1L | 进1.2/失0.4 场均
+
+[瑞士 近5场 (Australia)]
+  11-21 Palestine 0-1 Australia [World Cup Qual. AFC]
+  01-06 Bahrain 0-2 Australia [International Friendly Games]
+  01-13 Australia 2-0 India [AFC Asian Cup]
+  01-18 Syria 0-1 Australia [AFC Asian Cup]
+  01-23 Australia 1-1 Uzbekistan [AFC Asian Cup]
+  战绩: 4W 1D 0L | 进1.4/失0.2 场均
+
+[三、H2H历史交锋]
+  (近30场无交锋)
+
+[六、伤停信息]
+澳大利亚:
+  (阵型未确认，暂无伤停数据)
+瑞士:
+  Patrick Yazbek (M) - 伤病
+
+[七、战意背景]
+赛事性质: 国际友谊赛/热身赛
+战意评估: 中低 — 考察阵容、磨合为主，轮换可能性大
+背景: 2026世界杯前热身周期，各队以确定23人大名单为核心目标
+
+[八、特殊事项]
+* 海拔正常
+* 6月国际比赛日窗口，世界杯前最后热身机会
+* 友谊赛性质下，需关注首发阵容是否为全主力

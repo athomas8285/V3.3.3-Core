@@ -1,0 +1,34 @@
+{
+  "changes": [
+    {
+      "file": "_changes.json, _status.py, SKILL.md",
+      "at": "2026-06-02 16:54",
+      "by": "agent",
+      "summary": "Added multi-thread change tracking protocol"
+    },
+    {
+      "file": "templates/index.html",
+      "at": "2026-06-02 17:03",
+      "by": "agent",
+      "summary": "Added dark theme toggle (CSS vars + button + JS)"
+    },
+    {
+      "file": "templates/index.html",
+      "at": "2026-06-02 17:34",
+      "by": "agent",
+      "summary": "Merged left+right panels, dark theme toggle, disclaimer"
+    },
+    {
+      "file": ".codex/skills/data-acquisition/SKILL.md",
+      "at": "2026-06-03 15:11",
+      "by": "agent",
+      "summary": "Added Step 1: fetch today matches from sporttery.cn, table output, wait for confirmation"
+    },
+    {
+      "file": ".codex/skills/data-acquisition/SKILL.md",
+      "at": "2026-06-03 15:21",
+      "by": "agent",
+      "summary": "Added Step 2: full data collection flow (8 sections, wait for user confirm after each step)"
+    }
+  ]
+}

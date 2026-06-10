@@ -1,0 +1,64 @@
+{
+  "matches": [
+    {
+      "id": "201",
+      "injury_home": 0,
+      "injury_away": 0.15,
+      "injury_home_boost": 0,
+      "injury_away_boost": 0,
+      "motivation_home": -0.03,
+      "motivation_away": -0.05,
+      "pressure_home": false,
+      "pressure_away": false,
+      "slack_home": false,
+      "slack_away": false,
+      "altitude_home": 0,
+      "altitude_away": 0
+    },
+    {
+      "id": "202",
+      "injury_home": 0,
+      "injury_away": 0.05,
+      "injury_home_boost": 0,
+      "injury_away_boost": 0,
+      "motivation_home": 0.03,
+      "motivation_away": 0.03,
+      "pressure_home": false,
+      "pressure_away": false,
+      "slack_home": false,
+      "slack_away": false,
+      "altitude_home": 0,
+      "altitude_away": 0
+    },
+    {
+      "id": "203",
+      "injury_home": 0,
+      "injury_away": 0,
+      "injury_home_boost": 0,
+      "injury_away_boost": 0,
+      "motivation_home": 0.03,
+      "motivation_away": 0.03,
+      "pressure_home": false,
+      "pressure_away": false,
+      "slack_home": false,
+      "slack_away": false,
+      "altitude_home": 0,
+      "altitude_away": 0
+    },
+    {
+      "id": "204",
+      "injury_home": 0.08,
+      "injury_away": 0,
+      "injury_home_boost": 0,
+      "injury_away_boost": 0,
+      "motivation_home": 0.03,
+      "motivation_away": 0.03,
+      "pressure_home": false,
+      "pressure_away": false,
+      "slack_home": false,
+      "slack_away": false,
+      "altitude_home": 0,
+      "altitude_away": 0
+    }
+  ]
+}

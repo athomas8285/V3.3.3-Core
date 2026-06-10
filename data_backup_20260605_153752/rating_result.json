@@ -1,0 +1,74 @@
+{
+  "matches": [
+    {
+      "id": "201",
+      "home": "斯洛文尼亚",
+      "away": "塞浦路斯",
+      "event": "国际赛",
+      "time": "2026-06-05 00:00",
+      "direction": "胜",
+      "fit_score": 9.68,
+      "rating": "A",
+      "downgrade_count": 0,
+      "meltdown": false,
+      "scenario_type": "低返还率赛事",
+      "direction_warning": false
+    },
+    {
+      "id": "202",
+      "home": "瑞典",
+      "away": "希腊",
+      "event": "国际赛",
+      "time": "2026-06-05 01:00",
+      "direction": "让负",
+      "fit_score": 8.27,
+      "rating": "B",
+      "downgrade_count": 1,
+      "meltdown": false,
+      "scenario_type": "低返还率赛事",
+      "direction_warning": false
+    },
+    {
+      "id": "203",
+      "home": "西班牙",
+      "away": "伊拉克",
+      "event": "国际赛",
+      "time": "2026-06-05 03:00",
+      "direction": "胜",
+      "fit_score": 9.82,
+      "rating": "B",
+      "downgrade_count": 1,
+      "meltdown": false,
+      "scenario_type": "低返还率赛事",
+      "direction_warning": false
+    },
+    {
+      "id": "204",
+      "home": "法国",
+      "away": "科特迪瓦",
+      "event": "国际赛",
+      "time": "2026-06-05 03:10",
+      "direction": "胜",
+      "fit_score": 9.18,
+      "rating": "A",
+      "downgrade_count": 0,
+      "meltdown": false,
+      "scenario_type": "低返还率赛事",
+      "direction_warning": false
+    },
+    {
+      "id": "205",
+      "home": "墨西哥",
+      "away": "塞尔维亚",
+      "event": "国际赛",
+      "time": "2026-06-05 10:00",
+      "direction": "让负",
+      "fit_score": 8.18,
+      "rating": "B",
+      "downgrade_count": 1,
+      "meltdown": false,
+      "scenario_type": "低返还率赛事",
+      "direction_warning": false
+    }
+  ]
+}

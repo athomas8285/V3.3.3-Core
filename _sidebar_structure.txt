@@ -1,0 +1,28 @@
+[0] Label=[今日概览] pos=30462
+[1] Label=[今日概览] pos=30528
+[2] Label=[(unknown)] pos=30895
+[3] Label=[(unknown)] pos=30926
+[4] Label=[精选计划单] pos=31183
+  -> plan-item" onclick="location.href=\'/plan/2.0\'">
+            <span class="plan-
+[5] Label=[精选计划单] pos=31220
+  -> plan-item" onclick="location.href=\'/plan/2.0\'">
+            <span class="plan-
+[6] Label=[(unknown)] pos=31525
+  -> plan-item" onclick="location.href=\'/plan/2.0\'">
+            <span class="plan-
+[7] Label=[(unknown)] pos=31556
+  -> plan-item" onclick="location.href=\'/plan/2.0\'">
+            <span class="plan-
+[8] Label=[历史预测数据] pos=32087
+[9] Label=[历史预测数据] pos=32127
+[10] Label=[(unknown)] pos=32436
+[11] Label=[(unknown)] pos=32467
+[12] Label=[历史比赛回测] pos=33430
+[13] Label=[历史比赛回测] pos=33471
+[14] Label=[(unknown)] pos=33781
+[15] Label=[(unknown)] pos=33812
+[16] Label=[系统说明书] pos=33949
+[17] Label=[系统说明书] pos=33985
+[18] Label=[(unknown)] pos=34189
+[19] Label=[(unknown)] pos=34220

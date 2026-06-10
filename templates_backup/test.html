@@ -1,0 +1,16 @@
+﻿<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>JS Test</title></head>
+<body>
+<div id="status">等待JS...</div>
+<script>
+document.getElementById('status').textContent = 'JS运行正常!';
+fetch('/api/latest').then(function(r){
+  document.getElementById('status').textContent = 'API状态: ' + r.status;
+  return r.json();
+}).then(function(d){
+  document.getElementById('status').textContent = '数据: ' + d.rating.length + '条比赛';
+}).catch(function(e){
+  document.getElementById('status').textContent = 'API失败: ' + e.message;
+});
+</script>
+</body></html>
