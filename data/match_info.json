@@ -16,7 +16,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0.4148,
+      "lambda_diff": 2.3343,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -33,11 +33,7 @@
       "home_goals": 1.5,
       "home_goals_conceded": 1.3,
       "away_goals": 1.3,
-      "away_goals_conceded": 1.5,
-      "jc_handicap": -1,
-      "jc_hhad_win": 2.07,
-      "jc_hhad_draw": 3.28,
-      "jc_hhad_lose": 2.93
+      "away_goals_conceded": 1.5
     },
     {
       "id": "周四002",
@@ -51,11 +47,11 @@
       "initial_sp_home": null,
       "initial_sp_draw": null,
       "initial_sp_away": null,
-      "asian_handicap": 0.0,
+      "asian_handicap": -1.0,
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0.4148,
+      "lambda_diff": -0.4371,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -72,11 +68,7 @@
       "home_goals": 1.5,
       "home_goals_conceded": 1.3,
       "away_goals": 1.3,
-      "away_goals_conceded": 1.5,
-      "jc_handicap": -1,
-      "jc_hhad_win": 5.8,
-      "jc_hhad_draw": 4.05,
-      "jc_hhad_lose": 1.41
+      "away_goals_conceded": 1.5
     },
     {
       "id": "周五003",
@@ -94,7 +86,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0.4148,
+      "lambda_diff": 0.4291,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -111,11 +103,7 @@
       "home_goals": 1.5,
       "home_goals_conceded": 1.3,
       "away_goals": 1.3,
-      "away_goals_conceded": 1.5,
-      "jc_handicap": -1,
-      "jc_hhad_win": 2.95,
-      "jc_hhad_draw": 3.3,
-      "jc_hhad_lose": 2.05
+      "away_goals_conceded": 1.5
     },
     {
       "id": "周五004",
@@ -133,7 +121,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0.4148,
+      "lambda_diff": 0.5275,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -150,11 +138,7 @@
       "home_goals": 1.5,
       "home_goals_conceded": 1.3,
       "away_goals": 1.3,
-      "away_goals_conceded": 1.5,
-      "jc_handicap": -1,
-      "jc_hhad_win": 3.8,
-      "jc_hhad_draw": 3.35,
-      "jc_hhad_lose": 1.76
+      "away_goals_conceded": 1.5
     },
     {
       "id": "周六005",
@@ -172,7 +156,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0.4148,
+      "lambda_diff": -1.9515,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -189,11 +173,7 @@
       "home_goals": 1.5,
       "home_goals_conceded": 1.3,
       "away_goals": 1.3,
-      "away_goals_conceded": 1.5,
-      "jc_handicap": 2,
-      "jc_hhad_win": 1.98,
-      "jc_hhad_draw": 3.85,
-      "jc_hhad_lose": 2.74
+      "away_goals_conceded": 1.5
     },
     {
       "id": "周六006",
@@ -211,7 +191,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0.4148,
+      "lambda_diff": 1.3261,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -228,11 +208,7 @@
       "home_goals": 1.5,
       "home_goals_conceded": 1.3,
       "away_goals": 1.3,
-      "away_goals_conceded": 1.5,
-      "jc_handicap": -1,
-      "jc_hhad_win": 2.75,
-      "jc_hhad_draw": 3.26,
-      "jc_hhad_lose": 2.18
+      "away_goals_conceded": 1.5
     },
     {
       "id": "周六007",
@@ -250,7 +226,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0.4148,
+      "lambda_diff": -2.3029,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -267,11 +243,7 @@
       "home_goals": 1.5,
       "home_goals_conceded": 1.3,
       "away_goals": 1.3,
-      "away_goals_conceded": 1.5,
-      "jc_handicap": 1,
-      "jc_hhad_win": 2.81,
-      "jc_hhad_draw": 3.35,
-      "jc_hhad_lose": 2.11
+      "away_goals_conceded": 1.5
     },
     {
       "id": "周六008",
@@ -289,7 +261,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0.4148,
+      "lambda_diff": -0.7051,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -306,11 +278,7 @@
       "home_goals": 1.5,
       "home_goals_conceded": 1.3,
       "away_goals": 1.3,
-      "away_goals_conceded": 1.5,
-      "jc_handicap": 1,
-      "jc_hhad_win": 2.11,
-      "jc_hhad_draw": 3.25,
-      "jc_hhad_lose": 2.88
+      "away_goals_conceded": 1.5
     },
     {
       "id": "周日009",
@@ -328,7 +296,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0.4148,
+      "lambda_diff": 2.4564,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -345,11 +313,7 @@
       "home_goals": 1.5,
       "home_goals_conceded": 1.3,
       "away_goals": 1.3,
-      "away_goals_conceded": 1.5,
-      "jc_handicap": -3,
-      "jc_hhad_win": 1.94,
-      "jc_hhad_draw": 4.6,
-      "jc_hhad_lose": 2.52
+      "away_goals_conceded": 1.5
     },
     {
       "id": "周日010",
@@ -367,7 +331,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0.4148,
+      "lambda_diff": 1.1392,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -384,11 +348,7 @@
       "home_goals": 1.5,
       "home_goals_conceded": 1.3,
       "away_goals": 1.3,
-      "away_goals_conceded": 1.5,
-      "jc_handicap": -1,
-      "jc_hhad_win": 3.5,
-      "jc_hhad_draw": 3.45,
-      "jc_hhad_lose": 1.81
+      "away_goals_conceded": 1.5
     },
     {
       "id": "周日011",
@@ -406,7 +366,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0.4148,
+      "lambda_diff": -0.8564,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -423,11 +383,7 @@
       "home_goals": 1.5,
       "home_goals_conceded": 1.3,
       "away_goals": 1.3,
-      "away_goals_conceded": 1.5,
-      "jc_handicap": 1,
-      "jc_hhad_win": 1.51,
-      "jc_hhad_draw": 3.6,
-      "jc_hhad_lose": 5.3
+      "away_goals_conceded": 1.5
     },
     {
       "id": "周日012",
@@ -445,7 +401,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0.4148,
+      "lambda_diff": 1.7221,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -462,11 +418,7 @@
       "home_goals": 1.5,
       "home_goals_conceded": 1.3,
       "away_goals": 1.3,
-      "away_goals_conceded": 1.5,
-      "jc_handicap": -1,
-      "jc_hhad_win": 3.55,
-      "jc_hhad_draw": 3.3,
-      "jc_hhad_lose": 1.84
+      "away_goals_conceded": 1.5
     },
     {
       "id": "周一013",
@@ -484,7 +436,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0.4148,
+      "lambda_diff": 2.2899,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -501,11 +453,7 @@
       "home_goals": 1.5,
       "home_goals_conceded": 1.3,
       "away_goals": 1.3,
-      "away_goals_conceded": 1.5,
-      "jc_handicap": -2,
-      "jc_hhad_win": 1.85,
-      "jc_hhad_draw": 4.0,
-      "jc_hhad_lose": 2.95
+      "away_goals_conceded": 1.5
     },
     {
       "id": "周一014",
@@ -523,7 +471,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0.4148,
+      "lambda_diff": 1.7121,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -540,11 +488,7 @@
       "home_goals": 1.5,
       "home_goals_conceded": 1.3,
       "away_goals": 1.3,
-      "away_goals_conceded": 1.5,
-      "jc_handicap": -1,
-      "jc_hhad_win": 2.65,
-      "jc_hhad_draw": 3.15,
-      "jc_hhad_lose": 2.3
+      "away_goals_conceded": 1.5
     },
     {
       "id": "周一015",
@@ -562,7 +506,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0.4148,
+      "lambda_diff": -1.4774,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -579,11 +523,7 @@
       "home_goals": 1.5,
       "home_goals_conceded": 1.3,
       "away_goals": 1.3,
-      "away_goals_conceded": 1.5,
-      "jc_handicap": 1,
-      "jc_hhad_win": 2.95,
-      "jc_hhad_draw": 3.3,
-      "jc_hhad_lose": 2.05
+      "away_goals_conceded": 1.5
     },
     {
       "id": "周一016",
@@ -601,7 +541,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0.4148,
+      "lambda_diff": 1.8255,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -618,11 +558,7 @@
       "home_goals": 1.5,
       "home_goals_conceded": 1.3,
       "away_goals": 1.3,
-      "away_goals_conceded": 1.5,
-      "jc_handicap": -1,
-      "jc_hhad_win": 3.1,
-      "jc_hhad_draw": 3.1,
-      "jc_hhad_lose": 2.07
+      "away_goals_conceded": 1.5
     },
     {
       "id": "周二017",
@@ -640,7 +576,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0.4148,
+      "lambda_diff": 1.5976,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -657,11 +593,7 @@
       "home_goals": 1.5,
       "home_goals_conceded": 1.3,
       "away_goals": 1.3,
-      "away_goals_conceded": 1.5,
-      "jc_handicap": -1,
-      "jc_hhad_win": 2.35,
-      "jc_hhad_draw": 3.2,
-      "jc_hhad_lose": 2.56
+      "away_goals_conceded": 1.5
     },
     {
       "id": "周二018",
@@ -679,7 +611,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0.4148,
+      "lambda_diff": -2.2834,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -696,11 +628,7 @@
       "home_goals": 1.5,
       "home_goals_conceded": 1.3,
       "away_goals": 1.3,
-      "away_goals_conceded": 1.5,
-      "jc_handicap": 2,
-      "jc_hhad_win": 2.03,
-      "jc_hhad_draw": 3.89,
-      "jc_hhad_lose": 2.64
+      "away_goals_conceded": 1.5
     },
     {
       "id": "周二019",
@@ -718,7 +646,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0.4148,
+      "lambda_diff": 1.9038,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -735,11 +663,7 @@
       "home_goals": 1.5,
       "home_goals_conceded": 1.3,
       "away_goals": 1.3,
-      "away_goals_conceded": 1.5,
-      "jc_handicap": -1,
-      "jc_hhad_win": 2.07,
-      "jc_hhad_draw": 3.25,
-      "jc_hhad_lose": 2.95
+      "away_goals_conceded": 1.5
     },
     {
       "id": "周二020",
@@ -757,7 +681,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0.4148,
+      "lambda_diff": 2.3188,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -774,11 +698,7 @@
       "home_goals": 1.5,
       "home_goals_conceded": 1.3,
       "away_goals": 1.3,
-      "away_goals_conceded": 1.5,
-      "jc_handicap": -1,
-      "jc_hhad_win": 1.86,
-      "jc_hhad_draw": 3.45,
-      "jc_hhad_lose": 3.32
+      "away_goals_conceded": 1.5
     },
     {
       "id": "周三021",
@@ -796,7 +716,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0.4148,
+      "lambda_diff": 2.2882,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -813,11 +733,7 @@
       "home_goals": 1.5,
       "home_goals_conceded": 1.3,
       "away_goals": 1.3,
-      "away_goals_conceded": 1.5,
-      "jc_handicap": -2,
-      "jc_hhad_win": 2.86,
-      "jc_hhad_draw": 3.75,
-      "jc_hhad_lose": 1.95
+      "away_goals_conceded": 1.5
     },
     {
       "id": "周三022",
@@ -835,7 +751,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0.4148,
+      "lambda_diff": 0.9209,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -852,11 +768,7 @@
       "home_goals": 1.5,
       "home_goals_conceded": 1.3,
       "away_goals": 1.3,
-      "away_goals_conceded": 1.5,
-      "jc_handicap": -1,
-      "jc_hhad_win": 2.94,
-      "jc_hhad_draw": 3.2,
-      "jc_hhad_lose": 2.1
+      "away_goals_conceded": 1.5
     },
     {
       "id": "周三023",
@@ -874,7 +786,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0.4148,
+      "lambda_diff": 1.2565,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -891,11 +803,7 @@
       "home_goals": 1.5,
       "home_goals_conceded": 1.3,
       "away_goals": 1.3,
-      "away_goals_conceded": 1.5,
-      "jc_handicap": -1,
-      "jc_hhad_win": 4.25,
-      "jc_hhad_draw": 3.4,
-      "jc_hhad_lose": 1.67
+      "away_goals_conceded": 1.5
     },
     {
       "id": "周三024",
@@ -913,7 +821,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0.4148,
+      "lambda_diff": -2.0309,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -930,11 +838,7 @@
       "home_goals": 1.5,
       "home_goals_conceded": 1.3,
       "away_goals": 1.3,
-      "away_goals_conceded": 1.5,
-      "jc_handicap": 1,
-      "jc_hhad_win": 3.02,
-      "jc_hhad_draw": 3.3,
-      "jc_hhad_lose": 2.02
+      "away_goals_conceded": 1.5
     }
   ]
 }

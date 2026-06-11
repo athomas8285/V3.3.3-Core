@@ -1,0 +1,604 @@
+{
+  "matches": [
+    {
+      "id": "周四001",
+      "p_physical": {
+        "home_win": 0.484,
+        "draw": 0.2464,
+        "away_win": 0.2696
+      },
+      "p_market": {
+        "home_win": 0.6812,
+        "draw": 0.2134,
+        "away_win": 0.1054
+      },
+      "ddi": {
+        "home_win": -0.1972,
+        "draw": 0.033,
+        "away_win": 0.1642
+      },
+      "calibrated": {
+        "home_win": 0.434,
+        "draw": 0.2464,
+        "away_win": 0.3189
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "周四002",
+      "p_physical": {
+        "home_win": 0.484,
+        "draw": 0.2464,
+        "away_win": 0.2696
+      },
+      "p_market": {
+        "home_win": 0.3646,
+        "draw": 0.312,
+        "away_win": 0.3234
+      },
+      "ddi": {
+        "home_win": 0.1194,
+        "draw": -0.0656,
+        "away_win": -0.0538
+      },
+      "calibrated": {
+        "home_win": 0.5198,
+        "draw": 0.2464,
+        "away_win": 0.2696
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "周五003",
+      "p_physical": {
+        "home_win": 0.484,
+        "draw": 0.2464,
+        "away_win": 0.2696
+      },
+      "p_market": {
+        "home_win": 0.5571,
+        "draw": 0.2621,
+        "away_win": 0.1808
+      },
+      "ddi": {
+        "home_win": -0.0731,
+        "draw": -0.0157,
+        "away_win": 0.0888
+      },
+      "calibrated": {
+        "home_win": 0.484,
+        "draw": 0.2464,
+        "away_win": 0.2962
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "周五004",
+      "p_physical": {
+        "home_win": 0.484,
+        "draw": 0.2464,
+        "away_win": 0.2696
+      },
+      "p_market": {
+        "home_win": 0.4838,
+        "draw": 0.2903,
+        "away_win": 0.2259
+      },
+      "ddi": {
+        "home_win": 0.0002,
+        "draw": -0.0439,
+        "away_win": 0.0437
+      },
+      "calibrated": {
+        "home_win": 0.484,
+        "draw": 0.2464,
+        "away_win": 0.2696
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "周六005",
+      "p_physical": {
+        "home_win": 0.484,
+        "draw": 0.2464,
+        "away_win": 0.2696
+      },
+      "p_market": {
+        "home_win": 0,
+        "draw": 0,
+        "away_win": 0
+      },
+      "ddi": {
+        "home_win": 0,
+        "draw": 0,
+        "away_win": 0
+      },
+      "calibrated": {
+        "home_win": 0.484,
+        "draw": 0.2464,
+        "away_win": 0.2696
+      },
+      "protection_triggered": true,
+      "sp_missing": true
+    },
+    {
+      "id": "周六006",
+      "p_physical": {
+        "home_win": 0.484,
+        "draw": 0.2464,
+        "away_win": 0.2696
+      },
+      "p_market": {
+        "home_win": 0.5785,
+        "draw": 0.2529,
+        "away_win": 0.1686
+      },
+      "ddi": {
+        "home_win": -0.0945,
+        "draw": -0.0065,
+        "away_win": 0.101
+      },
+      "calibrated": {
+        "home_win": 0.4556,
+        "draw": 0.2464,
+        "away_win": 0.2999
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "周六007",
+      "p_physical": {
+        "home_win": 0.484,
+        "draw": 0.2464,
+        "away_win": 0.2696
+      },
+      "p_market": {
+        "home_win": 0.1157,
+        "draw": 0.2083,
+        "away_win": 0.6759
+      },
+      "ddi": {
+        "home_win": 0.3683,
+        "draw": 0.0381,
+        "away_win": -0.4063
+      },
+      "calibrated": {
+        "home_win": 0.534,
+        "draw": 0.2464,
+        "away_win": 0.2196
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "周六008",
+      "p_physical": {
+        "home_win": 0.484,
+        "draw": 0.2464,
+        "away_win": 0.2696
+      },
+      "p_market": {
+        "home_win": 0.172,
+        "draw": 0.2567,
+        "away_win": 0.5713
+      },
+      "ddi": {
+        "home_win": 0.312,
+        "draw": -0.0103,
+        "away_win": -0.3017
+      },
+      "calibrated": {
+        "home_win": 0.534,
+        "draw": 0.2464,
+        "away_win": 0.2196
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "周日009",
+      "p_physical": {
+        "home_win": 0.484,
+        "draw": 0.2464,
+        "away_win": 0.2696
+      },
+      "p_market": {
+        "home_win": 0,
+        "draw": 0,
+        "away_win": 0
+      },
+      "ddi": {
+        "home_win": 0,
+        "draw": 0,
+        "away_win": 0
+      },
+      "calibrated": {
+        "home_win": 0.484,
+        "draw": 0.2464,
+        "away_win": 0.2696
+      },
+      "protection_triggered": true,
+      "sp_missing": true
+    },
+    {
+      "id": "周日010",
+      "p_physical": {
+        "home_win": 0.484,
+        "draw": 0.2464,
+        "away_win": 0.2696
+      },
+      "p_market": {
+        "home_win": 0.5059,
+        "draw": 0.2683,
+        "away_win": 0.2258
+      },
+      "ddi": {
+        "home_win": -0.0219,
+        "draw": -0.0219,
+        "away_win": 0.0438
+      },
+      "calibrated": {
+        "home_win": 0.484,
+        "draw": 0.2464,
+        "away_win": 0.2696
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "周日011",
+      "p_physical": {
+        "home_win": 0.484,
+        "draw": 0.2464,
+        "away_win": 0.2696
+      },
+      "p_market": {
+        "home_win": 0.2635,
+        "draw": 0.3341,
+        "away_win": 0.4024
+      },
+      "ddi": {
+        "home_win": 0.2205,
+        "draw": -0.0877,
+        "away_win": -0.1328
+      },
+      "calibrated": {
+        "home_win": 0.534,
+        "draw": 0.2201,
+        "away_win": 0.2298
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "周日012",
+      "p_physical": {
+        "home_win": 0.484,
+        "draw": 0.2464,
+        "away_win": 0.2696
+      },
+      "p_market": {
+        "home_win": 0.5087,
+        "draw": 0.2855,
+        "away_win": 0.2058
+      },
+      "ddi": {
+        "home_win": -0.0247,
+        "draw": -0.0391,
+        "away_win": 0.0638
+      },
+      "calibrated": {
+        "home_win": 0.484,
+        "draw": 0.2464,
+        "away_win": 0.2696
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "周一013",
+      "p_physical": {
+        "home_win": 0.484,
+        "draw": 0.2464,
+        "away_win": 0.2696
+      },
+      "p_market": {
+        "home_win": 0,
+        "draw": 0,
+        "away_win": 0
+      },
+      "ddi": {
+        "home_win": 0,
+        "draw": 0,
+        "away_win": 0
+      },
+      "calibrated": {
+        "home_win": 0.484,
+        "draw": 0.2464,
+        "away_win": 0.2696
+      },
+      "protection_triggered": true,
+      "sp_missing": true
+    },
+    {
+      "id": "周一014",
+      "p_physical": {
+        "home_win": 0.484,
+        "draw": 0.2464,
+        "away_win": 0.2696
+      },
+      "p_market": {
+        "home_win": 0.6062,
+        "draw": 0.2425,
+        "away_win": 0.1513
+      },
+      "ddi": {
+        "home_win": -0.1222,
+        "draw": 0.0039,
+        "away_win": 0.1183
+      },
+      "calibrated": {
+        "home_win": 0.4473,
+        "draw": 0.2464,
+        "away_win": 0.3051
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "周一015",
+      "p_physical": {
+        "home_win": 0.484,
+        "draw": 0.2464,
+        "away_win": 0.2696
+      },
+      "p_market": {
+        "home_win": 0.1048,
+        "draw": 0.2035,
+        "away_win": 0.6917
+      },
+      "ddi": {
+        "home_win": 0.3792,
+        "draw": 0.0429,
+        "away_win": -0.4221
+      },
+      "calibrated": {
+        "home_win": 0.534,
+        "draw": 0.2464,
+        "away_win": 0.2196
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "周一016",
+      "p_physical": {
+        "home_win": 0.484,
+        "draw": 0.2464,
+        "away_win": 0.2696
+      },
+      "p_market": {
+        "home_win": 0.5677,
+        "draw": 0.2683,
+        "away_win": 0.164
+      },
+      "ddi": {
+        "home_win": -0.0837,
+        "draw": -0.0219,
+        "away_win": 0.1056
+      },
+      "calibrated": {
+        "home_win": 0.4589,
+        "draw": 0.2464,
+        "away_win": 0.3013
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "周二017",
+      "p_physical": {
+        "home_win": 0.484,
+        "draw": 0.2464,
+        "away_win": 0.2696
+      },
+      "p_market": {
+        "home_win": 0.6417,
+        "draw": 0.2271,
+        "away_win": 0.1312
+      },
+      "ddi": {
+        "home_win": -0.1577,
+        "draw": 0.0193,
+        "away_win": 0.1384
+      },
+      "calibrated": {
+        "home_win": 0.4367,
+        "draw": 0.2464,
+        "away_win": 0.3111
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "周二018",
+      "p_physical": {
+        "home_win": 0.484,
+        "draw": 0.2464,
+        "away_win": 0.2696
+      },
+      "p_market": {
+        "home_win": 0,
+        "draw": 0,
+        "away_win": 0
+      },
+      "ddi": {
+        "home_win": 0,
+        "draw": 0,
+        "away_win": 0
+      },
+      "calibrated": {
+        "home_win": 0.484,
+        "draw": 0.2464,
+        "away_win": 0.2696
+      },
+      "protection_triggered": true,
+      "sp_missing": true
+    },
+    {
+      "id": "周二019",
+      "p_physical": {
+        "home_win": 0.484,
+        "draw": 0.2464,
+        "away_win": 0.2696
+      },
+      "p_market": {
+        "home_win": 0.692,
+        "draw": 0.2084,
+        "away_win": 0.0995
+      },
+      "ddi": {
+        "home_win": -0.208,
+        "draw": 0.038,
+        "away_win": 0.1701
+      },
+      "calibrated": {
+        "home_win": 0.434,
+        "draw": 0.2464,
+        "away_win": 0.3196
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "周二020",
+      "p_physical": {
+        "home_win": 0.484,
+        "draw": 0.2464,
+        "away_win": 0.2696
+      },
+      "p_market": {
+        "home_win": 0.7198,
+        "draw": 0.1807,
+        "away_win": 0.0995
+      },
+      "ddi": {
+        "home_win": -0.2358,
+        "draw": 0.0657,
+        "away_win": 0.1701
+      },
+      "calibrated": {
+        "home_win": 0.434,
+        "draw": 0.2464,
+        "away_win": 0.3196
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "周三021",
+      "p_physical": {
+        "home_win": 0.484,
+        "draw": 0.2464,
+        "away_win": 0.2696
+      },
+      "p_market": {
+        "home_win": 0.7766,
+        "draw": 0.1553,
+        "away_win": 0.0681
+      },
+      "ddi": {
+        "home_win": -0.2926,
+        "draw": 0.0911,
+        "away_win": 0.2015
+      },
+      "calibrated": {
+        "home_win": 0.434,
+        "draw": 0.2737,
+        "away_win": 0.3196
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "周三022",
+      "p_physical": {
+        "home_win": 0.484,
+        "draw": 0.2464,
+        "away_win": 0.2696
+      },
+      "p_market": {
+        "home_win": 0.5711,
+        "draw": 0.2603,
+        "away_win": 0.1686
+      },
+      "ddi": {
+        "home_win": -0.0871,
+        "draw": -0.0139,
+        "away_win": 0.101
+      },
+      "calibrated": {
+        "home_win": 0.4579,
+        "draw": 0.2464,
+        "away_win": 0.2999
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "周三023",
+      "p_physical": {
+        "home_win": 0.484,
+        "draw": 0.2464,
+        "away_win": 0.2696
+      },
+      "p_market": {
+        "home_win": 0.4588,
+        "draw": 0.2952,
+        "away_win": 0.246
+      },
+      "ddi": {
+        "home_win": 0.0252,
+        "draw": -0.0488,
+        "away_win": 0.0236
+      },
+      "calibrated": {
+        "home_win": 0.484,
+        "draw": 0.2464,
+        "away_win": 0.2696
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "周三024",
+      "p_physical": {
+        "home_win": 0.484,
+        "draw": 0.2464,
+        "away_win": 0.2696
+      },
+      "p_market": {
+        "home_win": 0.0984,
+        "draw": 0.199,
+        "away_win": 0.7027
+      },
+      "ddi": {
+        "home_win": 0.3856,
+        "draw": 0.0474,
+        "away_win": -0.4331
+      },
+      "calibrated": {
+        "home_win": 0.534,
+        "draw": 0.2464,
+        "away_win": 0.2196
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    }
+  ]
+}

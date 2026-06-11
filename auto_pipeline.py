@@ -1,4 +1,4 @@
-﻿# auto_pipeline.py
+# auto_pipeline.py
 # V3.3.3-Core-Rev1.15 一键全流程：读取 locked_data → 自动生成所有输入 → 运行 pipeline → 输出汇总
 # 用法: python auto_pipeline.py
 #       或: python auto_pipeline.py --factor-json path/to/factor_params.json
@@ -201,8 +201,16 @@ def main():
         print(f"  [4/5] ai_judgment.json 不存在，生成占位")
         save_json(generate_ai_judgment_placeholder(locked_data), ai_path)
 
-    # 5. 运行全流程
-    print(f"  [5/5] 运行全流程分析...")
+    # 6. 运行全流程分析
+
+    # 5. 赔率趋势特征提取
+    print("  [5/6] Extracting odds trend features...")
+    if not run_step("trend_features.py", "Trend"):
+        print("         [WARN] trend features failed, continuing")
+    else:
+        print("        -> data/trend_features.json")
+
+    print("  [6/6] Running full pipeline analysis...")
     print(f"  {'='*58}")
 
     if not run_step("run_all.py", "全流程"):
@@ -212,15 +220,15 @@ def main():
     print(f"\n  [OK] 全流程分析完成")
     print_summary()
 
-    # 6. 从竞彩网获取实时赔率
-    print(f"\n  [6/7] 获取竞彩网实时赔率...")
+    # 7. 从竞彩网获取实时赔率
+    print(f"\n  [7/8] 获取竞彩网实时赔率...")
     if not run_step("fetch_jczq.py", "竞彩网数据"):
         print(f"         [WARN] 竞彩网数据获取失败，跳过 (不影响核心流程)")
     else:
         print(f"        -> data/raw_jczq.json")
 
-        # 7. 将竞彩网赔率写入 match_info.json / locked_data.json
-        print(f"  [7/7] 同步竞彩网赔率到数据文件...")
+    # 8. 将竞彩网赔率写入数据文件
+        print(f"  [8/8] 同步竞彩网赔率到数据文件...")
         if not run_step("enrich_odds.py", "赔率同步"):
             print(f"         [WARN] 赔率同步失败，跳过 (不影响核心流程)")
         else:

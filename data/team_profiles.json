@@ -1,0 +1,402 @@
+{
+  "阿根廷": {
+    "fifa_rank": 1,
+    "total_value_m": 820,
+    "top5_value_m": 420,
+    "star_ratio": 0.51,
+    "avg_age": 27.2,
+    "confed": "CONMEBOL"
+  },
+  "法国": {
+    "fifa_rank": 2,
+    "total_value_m": 1100,
+    "top5_value_m": 480,
+    "star_ratio": 0.44,
+    "avg_age": 26.5,
+    "confed": "UEFA"
+  },
+  "英格兰": {
+    "fifa_rank": 3,
+    "total_value_m": 1350,
+    "top5_value_m": 550,
+    "star_ratio": 0.41,
+    "avg_age": 26.1,
+    "confed": "UEFA"
+  },
+  "葡萄牙": {
+    "fifa_rank": 4,
+    "total_value_m": 950,
+    "top5_value_m": 420,
+    "star_ratio": 0.44,
+    "avg_age": 27.0,
+    "confed": "UEFA"
+  },
+  "巴西": {
+    "fifa_rank": 5,
+    "total_value_m": 980,
+    "top5_value_m": 430,
+    "star_ratio": 0.44,
+    "avg_age": 26.8,
+    "confed": "CONMEBOL"
+  },
+  "西班牙": {
+    "fifa_rank": 6,
+    "total_value_m": 1050,
+    "top5_value_m": 440,
+    "star_ratio": 0.42,
+    "avg_age": 25.9,
+    "confed": "UEFA"
+  },
+  "荷兰": {
+    "fifa_rank": 7,
+    "total_value_m": 720,
+    "top5_value_m": 380,
+    "star_ratio": 0.53,
+    "avg_age": 26.3,
+    "confed": "UEFA"
+  },
+  "德国": {
+    "fifa_rank": 8,
+    "total_value_m": 780,
+    "top5_value_m": 350,
+    "star_ratio": 0.45,
+    "avg_age": 27.1,
+    "confed": "UEFA"
+  },
+  "比利时": {
+    "fifa_rank": 9,
+    "total_value_m": 650,
+    "top5_value_m": 300,
+    "star_ratio": 0.46,
+    "avg_age": 27.8,
+    "confed": "UEFA"
+  },
+  "克罗地亚": {
+    "fifa_rank": 10,
+    "total_value_m": 420,
+    "top5_value_m": 200,
+    "star_ratio": 0.48,
+    "avg_age": 28.2,
+    "confed": "UEFA"
+  },
+  "乌拉圭": {
+    "fifa_rank": 11,
+    "total_value_m": 480,
+    "top5_value_m": 240,
+    "star_ratio": 0.5,
+    "avg_age": 27.5,
+    "confed": "CONMEBOL"
+  },
+  "墨西哥": {
+    "fifa_rank": 12,
+    "total_value_m": 280,
+    "top5_value_m": 140,
+    "star_ratio": 0.5,
+    "avg_age": 27.9,
+    "confed": "CONCACAF"
+  },
+  "美国": {
+    "fifa_rank": 13,
+    "total_value_m": 350,
+    "top5_value_m": 180,
+    "star_ratio": 0.51,
+    "avg_age": 25.5,
+    "confed": "CONCACAF"
+  },
+  "哥伦比亚": {
+    "fifa_rank": 14,
+    "total_value_m": 380,
+    "top5_value_m": 160,
+    "star_ratio": 0.42,
+    "avg_age": 27.3,
+    "confed": "CONMEBOL"
+  },
+  "瑞士": {
+    "fifa_rank": 15,
+    "total_value_m": 320,
+    "top5_value_m": 120,
+    "star_ratio": 0.38,
+    "avg_age": 27.6,
+    "confed": "UEFA"
+  },
+  "日本": {
+    "fifa_rank": 16,
+    "total_value_m": 250,
+    "top5_value_m": 100,
+    "star_ratio": 0.4,
+    "avg_age": 26.9,
+    "confed": "AFC"
+  },
+  "瑞典": {
+    "fifa_rank": 17,
+    "total_value_m": 340,
+    "top5_value_m": 150,
+    "star_ratio": 0.44,
+    "avg_age": 26.7,
+    "confed": "UEFA"
+  },
+  "摩洛哥": {
+    "fifa_rank": 18,
+    "total_value_m": 260,
+    "top5_value_m": 130,
+    "star_ratio": 0.5,
+    "avg_age": 27.0,
+    "confed": "CAF"
+  },
+  "厄瓜多尔": {
+    "fifa_rank": 19,
+    "total_value_m": 210,
+    "top5_value_m": 90,
+    "star_ratio": 0.43,
+    "avg_age": 26.2,
+    "confed": "CONMEBOL"
+  },
+  "塞内加尔": {
+    "fifa_rank": 20,
+    "total_value_m": 220,
+    "top5_value_m": 110,
+    "star_ratio": 0.5,
+    "avg_age": 27.4,
+    "confed": "CAF"
+  },
+  "奥地利": {
+    "fifa_rank": 21,
+    "total_value_m": 300,
+    "top5_value_m": 120,
+    "star_ratio": 0.4,
+    "avg_age": 27.3,
+    "confed": "UEFA"
+  },
+  "韩国": {
+    "fifa_rank": 22,
+    "total_value_m": 190,
+    "top5_value_m": 100,
+    "star_ratio": 0.53,
+    "avg_age": 27.1,
+    "confed": "AFC"
+  },
+  "捷克": {
+    "fifa_rank": 23,
+    "total_value_m": 200,
+    "top5_value_m": 80,
+    "star_ratio": 0.4,
+    "avg_age": 27.5,
+    "confed": "UEFA"
+  },
+  "挪威": {
+    "fifa_rank": 24,
+    "total_value_m": 420,
+    "top5_value_m": 280,
+    "star_ratio": 0.67,
+    "avg_age": 26.4,
+    "confed": "UEFA"
+  },
+  "巴拉圭": {
+    "fifa_rank": 25,
+    "total_value_m": 160,
+    "top5_value_m": 70,
+    "star_ratio": 0.44,
+    "avg_age": 27.8,
+    "confed": "CONMEBOL"
+  },
+  "加拿大": {
+    "fifa_rank": 26,
+    "total_value_m": 240,
+    "top5_value_m": 120,
+    "star_ratio": 0.5,
+    "avg_age": 26.0,
+    "confed": "CONCACAF"
+  },
+  "丹麦": {
+    "fifa_rank": 27,
+    "total_value_m": 360,
+    "top5_value_m": 160,
+    "star_ratio": 0.44,
+    "avg_age": 27.6,
+    "confed": "UEFA"
+  },
+  "澳大利亚": {
+    "fifa_rank": 28,
+    "total_value_m": 140,
+    "top5_value_m": 55,
+    "star_ratio": 0.39,
+    "avg_age": 27.2,
+    "confed": "AFC"
+  },
+  "沙特阿拉伯": {
+    "fifa_rank": 29,
+    "total_value_m": 80,
+    "top5_value_m": 30,
+    "star_ratio": 0.38,
+    "avg_age": 28.1,
+    "confed": "AFC"
+  },
+  "科特迪瓦": {
+    "fifa_rank": 30,
+    "total_value_m": 180,
+    "top5_value_m": 90,
+    "star_ratio": 0.5,
+    "avg_age": 27.0,
+    "confed": "CAF"
+  },
+  "土耳其": {
+    "fifa_rank": 31,
+    "total_value_m": 310,
+    "top5_value_m": 140,
+    "star_ratio": 0.45,
+    "avg_age": 26.8,
+    "confed": "UEFA"
+  },
+  "埃及": {
+    "fifa_rank": 32,
+    "total_value_m": 150,
+    "top5_value_m": 75,
+    "star_ratio": 0.5,
+    "avg_age": 27.9,
+    "confed": "CAF"
+  },
+  "伊朗": {
+    "fifa_rank": 33,
+    "total_value_m": 120,
+    "top5_value_m": 50,
+    "star_ratio": 0.42,
+    "avg_age": 28.0,
+    "confed": "AFC"
+  },
+  "苏格兰": {
+    "fifa_rank": 34,
+    "total_value_m": 250,
+    "top5_value_m": 110,
+    "star_ratio": 0.44,
+    "avg_age": 27.3,
+    "confed": "UEFA"
+  },
+  "波黑": {
+    "fifa_rank": 35,
+    "total_value_m": 130,
+    "top5_value_m": 60,
+    "star_ratio": 0.46,
+    "avg_age": 27.7,
+    "confed": "UEFA"
+  },
+  "阿尔及利亚": {
+    "fifa_rank": 36,
+    "total_value_m": 170,
+    "top5_value_m": 80,
+    "star_ratio": 0.47,
+    "avg_age": 27.4,
+    "confed": "CAF"
+  },
+  "加纳": {
+    "fifa_rank": 37,
+    "total_value_m": 200,
+    "top5_value_m": 100,
+    "star_ratio": 0.5,
+    "avg_age": 26.6,
+    "confed": "CAF"
+  },
+  "突尼斯": {
+    "fifa_rank": 38,
+    "total_value_m": 100,
+    "top5_value_m": 40,
+    "star_ratio": 0.4,
+    "avg_age": 27.9,
+    "confed": "CAF"
+  },
+  "斯洛伐克": {
+    "fifa_rank": 39,
+    "total_value_m": 160,
+    "top5_value_m": 70,
+    "star_ratio": 0.44,
+    "avg_age": 27.5,
+    "confed": "UEFA"
+  },
+  "卡塔尔": {
+    "fifa_rank": 40,
+    "total_value_m": 50,
+    "top5_value_m": 20,
+    "star_ratio": 0.4,
+    "avg_age": 27.8,
+    "confed": "AFC"
+  },
+  "佛得角": {
+    "fifa_rank": 41,
+    "total_value_m": 40,
+    "top5_value_m": 15,
+    "star_ratio": 0.38,
+    "avg_age": 28.2,
+    "confed": "CAF"
+  },
+  "乌兹别克斯坦": {
+    "fifa_rank": 42,
+    "total_value_m": 60,
+    "top5_value_m": 25,
+    "star_ratio": 0.42,
+    "avg_age": 27.6,
+    "confed": "AFC"
+  },
+  "巴拿马": {
+    "fifa_rank": 43,
+    "total_value_m": 30,
+    "top5_value_m": 12,
+    "star_ratio": 0.4,
+    "avg_age": 28.3,
+    "confed": "CONCACAF"
+  },
+  "刚果(金)": {
+    "fifa_rank": 44,
+    "total_value_m": 90,
+    "top5_value_m": 40,
+    "star_ratio": 0.44,
+    "avg_age": 27.5,
+    "confed": "CAF"
+  },
+  "新西兰": {
+    "fifa_rank": 45,
+    "total_value_m": 35,
+    "top5_value_m": 15,
+    "star_ratio": 0.43,
+    "avg_age": 27.8,
+    "confed": "OFC"
+  },
+  "伊拉克": {
+    "fifa_rank": 46,
+    "total_value_m": 25,
+    "top5_value_m": 10,
+    "star_ratio": 0.4,
+    "avg_age": 28.0,
+    "confed": "AFC"
+  },
+  "约旦": {
+    "fifa_rank": 47,
+    "total_value_m": 20,
+    "top5_value_m": 8,
+    "star_ratio": 0.4,
+    "avg_age": 28.1,
+    "confed": "AFC"
+  },
+  "海地": {
+    "fifa_rank": 48,
+    "total_value_m": 15,
+    "top5_value_m": 6,
+    "star_ratio": 0.4,
+    "avg_age": 27.9,
+    "confed": "CONCACAF"
+  },
+  "库拉索": {
+    "fifa_rank": 49,
+    "total_value_m": 10,
+    "top5_value_m": 4,
+    "star_ratio": 0.4,
+    "avg_age": 28.4,
+    "confed": "CONCACAF"
+  },
+  "南非": {
+    "fifa_rank": 60,
+    "total_value_m": 65,
+    "top5_value_m": 25,
+    "star_ratio": 0.38,
+    "avg_age": 27.5,
+    "confed": "CAF"
+  }
+}

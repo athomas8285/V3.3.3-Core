@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -172,7 +172,7 @@ body{font-family:var(--sans);background:linear-gradient(rgba(26,26,32,0.12),rgba
 .doc-entry .de-value{color:var(--t2)}
 .sd-loading{color:var(--t3);font-size:12px;padding:12px;text-align:center}
 .sd-error{color:var(--red);font-size:12px;padding:12px;text-align:center}
-.main{flex:1;min-width:0;padding:0 24px 60px;overflow-y:scroll;overflow-x:hidden}
+.main{flex:1;min-width:0;padding:0 24px 60px;overflow-y:auto;overflow-x:hidden}
 .sec-header{display:flex;align-items:baseline;gap:12px;padding:18px 0 10px}
 .sec-header h2{font-size:16px;font-weight:700;color:var(--t1)}
 .sec-header .sec-sub{font-size:12px;color:var(--t2);font-weight:500}
@@ -258,6 +258,15 @@ td.c-rating .r-lvl.b{background:var(--t3);color:#fff}
 .sd-contact-btn:hover{background:rgba(0,229,255,.12);border-color:rgba(0,229,255,.6);color:#fff;box-shadow:0 0 20px rgba(0,229,255,.25),inset 0 0 20px rgba(0,229,255,.05);animation:none}
 .sd-contact-btn .cb-icon{font-size:16px}
 .sd-contact-btn .cb-text{font-weight:500}
+/* Contact modal */
+.wc-modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);z-index:9999;justify-content:center;align-items:center}
+.wc-modal-overlay.active{display:flex}
+.wc-modal{background:#1a1d2e;border:1px solid rgba(0,229,255,.15);border-radius:12px;padding:32px;text-align:center;max-width:320px;width:90%;box-shadow:0 8px 40px rgba(0,0,0,.5)}
+.wc-modal img{max-width:100%;height:auto;border-radius:8px;margin:0 auto 16px;display:block}
+.wc-modal p{font-size:13px;color:var(--t2);line-height:1.6;margin:0;white-space:nowrap}
+.wc-modal .close-btn{position:absolute;top:12px;right:16px;font-size:22px;color:var(--t3);cursor:pointer;background:none;border:none;font-family:var(--sans)}
+.wc-modal-wrap{position:relative}
+
 
 /* Today module highlight */
 
@@ -377,19 +386,19 @@ td.c-rating .r-lvl.b{background:var(--t3);color:#fff}
 .exp-c{min-width:0;display:flex;flex-direction:column;gap:6px}
 
 /* Chart boxes inside expanded */
-.exp-a .chart-box,.exp-b .chart-box{background:rgba(12,16,33,.4);border:1px solid rgba(0,229,255,.05);border-radius:8px;padding:8px 10px 10px;height:100%;min-height:200px;width:100%}
+.exp-a .chart-box,.exp-b .chart-box{background:rgba(12,16,33,.4);border:1px solid rgba(0,229,255,.05);border-radius:8px;padding:8px 10px 10px;width:100%}
 .exp-a .chart-box .ch-title,.exp-b .chart-box .ch-title{font-size:11px;font-weight:600;color:rgba(0,229,255,.65);margin-bottom:4px;letter-spacing:.3px;font-family:var(--mono);text-transform:uppercase}
 .exp-a .chart-box .ch-sub,.exp-b .chart-box .ch-sub{display:flex;gap:12px;font-size:11px;margin-bottom:4px}
 .exp-a .chart-box .ch-sub .delta{color:#fbbf24;font-weight:600;font-family:var(--mono)}
 .exp-a .chart-box .ch-sub .doi{color:#10b981;font-weight:600;font-family:var(--mono)}
 .chart-svg-wrap{width:100%}
-.chart-svg-wrap svg{display:block;width:100%;height:100%;min-height:160px}
+.chart-svg-wrap svg{display:block;width:100%;max-width:300px;height:auto}
 .legend-wrap{display:flex;gap:10px;justify-content:flex-end;margin-bottom:2px}
 .legend-item{display:flex;align-items:center;gap:3px;font-size:10px;color:#94a3b8}
 .legend-item .dot{width:7px;height:7px;border-radius:2px}
 
 /* C column: Vertical analysis items */
-.exp-c .analysis-item{background:rgba(12,16,33,.35);border:1px solid rgba(0,229,255,.04);border-radius:8px;padding:9px 12px;flex:1;display:flex;flex-direction:column;justify-content:center}
+.exp-c .analysis-item{background:rgba(12,16,33,.35);border:1px solid rgba(0,229,255,.04);border-radius:8px;padding:7px 10px;display:flex;flex-direction:column;justify-content:center}
 .exp-c .analysis-item .ai-head{display:flex;align-items:center;gap:5px;margin-bottom:2px}
 .exp-c .analysis-item .ai-head .ai-icon{font-size:14px;flex-shrink:0}
 .exp-c .analysis-item .ai-head .ai-label{font-size:11px;font-weight:600;color:rgba(0,229,255,.75);letter-spacing:.2px}
@@ -582,7 +591,7 @@ td.c-rating .r-lvl.b{background:var(--t3);color:#fff}
 .hcc-clock-digits.green{color:var(--green);text-shadow:0 0 30px rgba(0,230,118,.3),0 0 80px rgba(0,230,118,.12),0 0 160px rgba(0,230,118,.06)}
 .hcc-clock-label{font-size:10px;color:#475569;letter-spacing:3px;text-transform:uppercase;margin-top:8px;font-weight:600;font-family:var(--mono)}
 .hcc-clock-sep{font-size:80px;font-weight:200;color:rgba(148,163,184,.15);font-family:var(--mono);line-height:1;padding:0 6px;margin-top:-16px}
-.hcc-match-card{width:100%;max-width:580px;background:rgba(12,18,34,.65);border:1px solid rgba(0,229,255,.08);border-radius:20px;padding:24px 28px;backdrop-filter:blur(20px);box-shadow:0 8px 40px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.04);position:relative;overflow:hidden;transition:all .4s ease}
+.hcc-match-card{width:100%;max-width:580px;background:rgba(12,18,34,.65);border:1px solid rgba(0,229,255,.08);border-radius:20px;padding:24px 28px;backdrop-filter:blur(20px);box-shadow:0 8px 40px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.04);position:relative;cursor:pointer;overflow:hidden;transition:all .4s ease}
 .hcc-match-card::before{content:"";position:absolute;inset:-1px;border-radius:20px;padding:1px;background:linear-gradient(135deg,rgba(0,229,255,.2),transparent 40%,transparent 60%,rgba(251,191,36,.15));-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .6s ease}
 .hcc-match-card:hover::before{opacity:1}
 .hcc-match-card:hover{border-color:rgba(0,229,255,.15);box-shadow:0 12px 56px rgba(0,0,0,.5),0 0 32px rgba(0,229,255,.06)}
@@ -738,6 +747,7 @@ td.c-rating .r-lvl.b{background:var(--t3);color:#fff}
   border-color: rgba(0,229,255,.15);
   box-shadow: 0 2px 0 rgba(0,229,255,.12), 0 6px 20px rgba(0,0,0,.3);
 }
+@keyframes anaHigh{0%{box-shadow:0 0 0 0 rgba(251,191,36,.6),0 2px 0 rgba(0,229,255,.12),0 6px 20px rgba(0,0,0,.3)}50%{box-shadow:0 0 24px 8px rgba(251,191,36,.2),0 2px 0 rgba(0,229,255,.12),0 6px 20px rgba(0,0,0,.3)}to{box-shadow:0 2px 0 rgba(0,229,255,.12),0 6px 20px rgba(0,0,0,.3)}}.ana-card.highlight{animation:anaHigh 1.4s ease-out}
 
 .ana-card-top-row {
   display: grid;
@@ -1041,6 +1051,69 @@ td.c-rating .r-lvl.b{background:var(--t3);color:#fff}
   .ana-expanded { padding: 10px 12px; }
 }
 
+
+/* ====== Footer / Disclaimer ====== */
+.page-footer {
+    width: 100%;
+    margin-top: 50px;
+    padding: 20px;
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+.disclaimer-box p {
+    color: #888;
+    font-size: 12px;
+    text-align: center;
+    line-height: 1.6;
+    margin: 5px 0;
+}
+.disclaimer-box .icon {
+    color: #ffcc00;
+}
+
+
+/* Reasoning summary */
+.exp-reasoning {
+    margin-top: 12px;
+    padding: 12px 14px;
+    background: rgba(12, 16, 33, 0.4);
+    border: 1px solid rgba(0, 229, 255, 0.08);
+    border-radius: 8px;
+}
+.exp-reasoning .reasoning-head {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--cyan);
+    margin-bottom: 8px;
+}
+.exp-reasoning .reasoning-body p {
+    font-size: 12px;
+    color: var(--t2);
+    display: inline;
+    margin: 0;
+    line-height: 1.7;
+}
+.exp-reasoning .reasoning-body p:not(:last-child)::after {
+    content: " · ";
+    color: var(--t3);
+    margin: 0 4px;
+}
+
+
+/* Odds trend chart */
+.ana-exp-trend-wrap{margin:10px 14px 8px;background:rgba(0,229,255,.03);border:1px solid rgba(0,229,255,.08);border-radius:6px;padding:10px 12px;}
+.aet-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.aet-title{font-size:13px;color:var(--gold);font-weight:600;}
+.aet-refresh{background:none;border:1px solid rgba(0,229,255,.12);color:var(--cyan);border-radius:4px;cursor:pointer;font-size:14px;padding:2px 8px;transition:.15s;}
+.aet-refresh:hover{background:rgba(0,229,255,.1);border-color:var(--cyan);}
+.aet-chart-area{min-height:80px;}
+.aet-loading,.aet-empty{text-align:center;color:var(--t3);font-size:12px;padding:20px 0;}
+.aet-svg{width:100%;max-width:640px;height:auto;display:block;margin:0 auto;background:rgba(0,0,0,.15);border-radius:4px;}
+.aet-chart-title{text-align:center;font-size:11px;color:var(--t2);margin-bottom:6px;}
+.aet-legend{display:flex;gap:14px;justify-content:center;margin-top:6px;font-size:11px;color:var(--t2);flex-wrap:wrap;}
+.aet-leg-item{display:inline-flex;align-items:center;gap:4px;cursor:default;}
+.aet-leg-dot{width:14px;height:2px;border-radius:1.5px;display:inline-block;}
+
 </style>
 <body>
 <div class="sd-wrap">
@@ -1188,7 +1261,7 @@ td.c-rating .r-lvl.b{background:var(--t3);color:#fff}
   </div>
   <div class="sd-divider"></div>
 <div class="sd-contact">
-    <button class="sd-contact-btn" onclick="prompt('复制微信号：codex_analysis', '微信号：codex_analysis')">
+    <button class="sd-contact-btn" onclick="showContactModal()">
       <span class="cb-icon">💬</span>
       <span class="cb-text">🚀 联系作者</span>
     </button>
@@ -1263,6 +1336,29 @@ td.c-rating .r-lvl.b{background:var(--t3);color:#fff}
   <div id="docContent" class="view-content" style="display:none">
     <div id="docInner"></div>
   </div>
+
+<footer class="page-footer">
+    <div class="disclaimer-box">
+      <p>
+        <span class="icon">⚠️</span>
+        <strong>免责声明：</strong>本网站所提供的所有赛事分析及预测结果，仅供体育爱好者交流参考，不构成任何投注建议或承诺。
+      </p>
+      <p>
+        <span class="icon">⚠️</span>
+        <strong>风险提示：</strong>彩票有风险，投注需谨慎。请理性购彩，量力而行。未满18岁不得购买彩票。
+      </p>
+    </div>
+  </footer>
+
+<!-- 免责声明 -->
+<div class=ft-disclaimer style=margin-top:40px;padding:18px 24px;border-top:1px solid rgba(255,255,255,0.06);text-align:center;font-size:11px;line-height:1.8;color:#64748b;>
+  <div class=ft-row style=max-width:640px;margin:0 auto;>
+    ⚠️ 免责声明：本网站所提供的所有贺事分析及预测结果，仅供体育爱好者交流参考，不构成任何何投注建议或承诺。
+  </div>
+  <div class=ft-row style=max-width:640px;margin:0 auto;>
+    ⚠️ 彩票有风险，投注需谨慎。请理性购彩，量力而行。未满18岁不得购买彩票。
+  </div>
+</div>
 </div>
 </div>
 <script>
@@ -1853,16 +1949,19 @@ function renderAnalysisView(){
   } else {
     renderFromWC();
   }
+  __expandTargetMatch();
 }
 
 function renderFromData(){
   var el = document.getElementById('analysisInner');
   if(!el) return;
   var infoList = __DATA.info || [];
-  var ratingIdx = {}, mcIdx = {}, ddiIdx = {}, aiIdx = {};
+  var ratingIdx = {}, mcIdx = {}, ddiIdx = {}, aiIdx = {}, fitIdx = {}, trendIdx = {};
   (__DATA.rating || []).forEach(function(m){ if(m.id) ratingIdx[m.id]=m; });
   (__DATA.mc || []).forEach(function(m){ if(m.id) mcIdx[m.id]=m; });
   (__DATA.ddi || []).forEach(function(m){ if(m.id) ddiIdx[m.id]=m; });
+  (__DATA.fit || []).forEach(function(m){ if(m.id && m.fit_score) fitIdx[m.id]=m.fit_score; });
+  (__DATA.trend || []).forEach(function(m){ if(m.id) trendIdx[m.id]=m; });
   (__DATA.ai || []).forEach(function(m){ if(m.id) aiIdx[m.id]=m; });
 
   var h = '<div class="ana-intro" style="padding:8px 4px 12px;color:var(--t2);font-size:13px;border-bottom:1px solid rgba(255,255,255,.04);margin-bottom:12px;">📊 ' + infoList.length + ' 场分析结果 &mdash; 点击卡片展开详情</div>';
@@ -1895,6 +1994,8 @@ function renderFromData(){
       var mc = mcIdx[mid] || {};
       var ddi = ddiIdx[mid] || {};
       var ai = aiIdx[mid] || {};
+      var fit = fitIdx[mid] || {};
+      var trend = trendIdx[mid] || {};
 
       var home = info.home || '';
       var away = info.away || '';
@@ -2055,9 +2156,30 @@ function renderFromData(){
       h+='<div class="analysis-item"><div class="ai-head"><span class="ai-icon" style="color:var(--cyan)">&#8505;&#65039;</span><span class="ai-label">S7说明</span></div><div class="ai-body-muted">'+(s7Reason||(s7>0?'S7评分: '+s7.toFixed(2):'无特殊场景'))+'</div></div>';
       h+='<div class="analysis-item"><div class="ai-head"><span class="ai-icon" style="color:#fbbf24">&#128161;</span><span class="ai-label">诱盘分析</span></div><div class="ai-body-muted">'+(trapTxt||'无异常信号')+'</div></div>';
       h+='<div class="analysis-item"><div class="ai-head"><span class="ai-icon" style="color:#f59e0b">&#9888;&#65039;</span><span class="ai-label">风险提示</span></div><div class="ai-body-muted">'+(riskTxt||'模型信号正常')+'</div></div>';
-      h+='</div></div></div></div>';
+      h+='</div></div>';
+      // Match analysis - use backend narrative
+      h+='<div class="exp-reasoning"><div class="reasoning-head"> 比赛解读</div><div class="reasoning-body">';
+      var preNarr = (__DATA.narratives||{})[mid] || '';
+      if(preNarr){
+        h += '<p>'+preNarr+'</p>';
+      } else if(dir){
+        var hPct = (phys.home_win||0)*100;
+        var aPct = (phys.away_win||0)*100;
+        h += '<p>方向'+dir+'（主'+hPct.toFixed(0)+'%/客'+aPct.toFixed(0)+'%）</p>';
       } else {
-      h += '<div class="ana-expanded" style="padding:20px;text-align:center;color:var(--t3);font-size:13px;">等待预测数据</div>';
+        h += '<p>暂无分析数据</p>';
+      }
+      h += '</div></div>';
+            // Odds trend chart            // Odds trend chart            // Odds trend chart
+      h += '<div class="ana-exp-trend-wrap" data-home="' + home.replace(/"/g,"&quot;") + '" data-away="' + away.replace(/"/g,"&quot;") + '">';
+      h += '<div class="aet-header">';
+      h += '<span class="aet-title">📈 赔率走势</span>';
+      h += '<button class="aet-refresh" onclick="renderOddsTrend(this.closest(\'.ana-card\'))">⟳</button>';
+      h += '</div>';
+      h += '<div class="aet-chart-area"><div class="aet-loading">加载中...</div></div>';
+      h += '</div>';
+h+='</div></div>';} else {
+      h += '<div class="ana-expanded" style="padding:20px;text-align:center;color:var(--t3);font-size:13px;">等待预测数据</div></div>';
       }
     }
     h += '</div>';
@@ -2134,6 +2256,15 @@ function renderFromWC(){
         h += '<div class="dc-desc">' + spHint + ' &#x6700;&#x4F4E;&#xFF0C;&#x5E02;&#x573A;&#x504F;&#x5411;&#x660E;&#x663E;</div>';
       } else { h += '<div class="dc-desc" style="color:#64748b;">&#x65E0;&#x7ADE;&#x5F69;SP&#x6570;&#x636E;</div>'; }
       h += '</div><div class="ana-exp-detail-cell risk"><div class="dc-label">&#x26A0; &#x98CE;&#x63A7;</div><div class="dc-desc">&#x8D5B;&#x524D;&#x5206;&#x6790;&#x4EC5;&#x4F9B;&#x53C2;&#x8003;</div></div>';
+      // D: Odds trend chart
+      h += '<div class="ana-exp-trend-wrap" data-home="' + m.h.replace(/"/g,"&quot;") + '" data-away="' + m.a.replace(/"/g,"&quot;") + '">';
+      h += '<div class="aet-header">';
+      h += '<span class="aet-title">📈 赔率走势</span>';
+      h += '<button class="aet-refresh" onclick="renderOddsTrend(this.closest(\'.ana-card\'))">⟳</button>';
+      h += '</div>';
+      h += '<div class="aet-chart-area"><div class="aet-loading">加载中...</div></div>';
+      h += '</div>';
+
       h += '</div></div></div>';
     }
     h += '</div>';
@@ -2143,7 +2274,7 @@ function renderFromWC(){
 
 
 function toggleAnaCard(el){
-  if(!el.classList.contains("ana-card")) el = el.closest(".ana-card");
+  if(!el.classList.contains("ana-card")) el = el.closest('.ana-card');
   if(!el) return;
   var wasExpanded = el.classList.contains("expanded");
   document.querySelectorAll(".ana-card.expanded").forEach(function(x){
@@ -2151,6 +2282,160 @@ function toggleAnaCard(el){
   });
   if(wasExpanded) el.classList.remove("expanded");
   else el.classList.add("expanded");
+}
+
+// ====== Odds trend chart ======
+var __ODDS_HISTORY = null;
+var __ODDS_HISTORY_BY_NAME = null;
+
+function loadOddsHistory(cb){
+  if(__ODDS_HISTORY){ if(cb) cb(__ODDS_HISTORY); return; }
+  fetch('/api/odds/history').then(function(r){ return r.json(); }).then(function(d){
+    __ODDS_HISTORY = d;
+    __ODDS_HISTORY_BY_NAME = {};
+    for(var k in d){
+      var m = d[k];
+      if(m.home && m.away) __ODDS_HISTORY_BY_NAME[m.home + '|' + m.away] = k;
+    }
+    if(cb) cb(d);
+  }).catch(function(){});
+}
+
+function findMatchId(home, away){
+  if(!__ODDS_HISTORY_BY_NAME) return null;
+  return __ODDS_HISTORY_BY_NAME[home + '|' + away] || null;
+}
+
+function renderOddsTrend(cardEl){
+  if(!cardEl || !cardEl.classList.contains('expanded')) return;
+  var wrap = cardEl.querySelector('.ana-exp-trend-wrap');
+  if(!wrap) return;
+  var area = wrap.querySelector('.aet-chart-area');
+  if(!area) return;
+  var home = wrap.getAttribute('data-home') || '';
+  var away = wrap.getAttribute('data-away') || '';
+  loadOddsHistory(function(data){
+    var mid = findMatchId(home, away);
+    if(!mid || !data[mid]){
+      area.innerHTML = '<div class="aet-empty">\u6682\u65e0\u8d54\u7387\u5386\u53f2\u6570\u636e</div>';
+      return;
+    }
+    var md = data[mid];
+    var tracks = md.tracks && md.tracks.hhad;
+    if(!tracks || tracks.length < 2){
+      area.innerHTML = '<div class="aet-empty">\u8d54\u7387\u5386\u53f2\u4e0d\u8db3\u4e24\u6761</div>';
+      return;
+    }
+    var W = 640, H = 200, padL = 70, padR = 40, padT = 20, padB = 40;
+    var cw = W - padL - padR, ch = H - padT - padB;
+    var n = tracks.length;
+    var allVals = [];
+    for(var ti = 0; ti < n; ti++){
+      allVals.push(tracks[ti].h); allVals.push(tracks[ti].d); allVals.push(tracks[ti].a);
+    }
+    var yMin = Math.min.apply(null, allVals) * 0.97;
+    var yMax = Math.max.apply(null, allVals) * 1.03;
+    var yRng = yMax - yMin;
+    function xp(i){ return padL + cw * i / (n - 1); }
+    function yp(v){ return padT + ch - ch * (v - yMin) / yRng; }
+    var gl = md.goalLine || 0;
+    var glStr = gl >= 0 ? '+' + gl : '' + gl;
+    var hh = '';
+    hh += '<div class="aet-chart-title">\u8ba9\u7403(' + glStr + ')\u8d54\u7387\u8d70\u52bf (' + n + '\u6b21\u53d8\u5316)</div>';
+    hh += '<svg viewBox="0 0 ' + W + ' ' + H + '" class="aet-svg">';
+    for(var gi = 0; gi < 5; gi++){
+      var yv = yMin + yRng * gi / 4;
+      var yy = yp(yv);
+      hh += '<line x1="' + padL + '" y1="' + yy + '" x2="' + (padL+cw) + '" y2="' + yy + '" stroke="rgba(255,255,255,.04)" stroke-width="1"/>';
+      hh += '<text x="' + (padL-6) + '" y="' + (yy+4) + '" fill="#5a6577" font-size="10" text-anchor="end">' + yv.toFixed(2) + '</text>';
+    }
+    for(var ti = 0; ti < n; ti++){
+      var x = xp(ti);
+      var label = tracks[ti].ts;
+      if(label){
+      var parts = label.split("T");
+      if(parts.length === 2) label = parts[0].slice(5) + " " + parts[1].slice(0,5);
+      else if(label.length > 10) label = label.slice(5, 16);
+    }
+      hh += '<text x="' + x + '" y="' + (padT+ch+18) + '" fill="#5a6577" font-size="9" text-anchor="end" transform="rotate(-30,' + x + ',' + (padT+ch+18) + ')">' + label + '</text>';
+    }
+    var series = [
+      {key:'h', color:'#00e5ff', label:'\u4e3b\u80dc'},
+      {key:'d', color:'#fbbf24', label:'\u5e73\u5c40'},
+      {key:'a', color:'#ef5350', label:'\u5ba2\u80dc'}
+    ];
+    for(var si = 0; si < 3; si++){
+      var sk = series[si].key, sc = series[si].color;
+      var pts = '';
+      for(var ti = 0; ti < n; ti++){
+        var val = tracks[ti][sk];
+        if(val === undefined) continue;
+        pts += (pts ? ' ' : '') + xp(ti) + ',' + yp(val);
+      }
+      if(pts) hh += '<polyline points="' + pts + '" fill="none" stroke="' + sc + '" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>';
+      for(var ti = 0; ti < n; ti++){
+        var val = tracks[ti][sk];
+        if(val === undefined) continue;
+        var xd = xp(ti), yd = yp(val);
+        hh += '<circle cx="' + xd + '" cy="' + yd + '" r="3" fill="' + sc + '" opacity="0.8"/>';
+        hh += '<text x="' + xd + '" y="' + (yd-7) + '" fill="' + sc + '" font-size="9" text-anchor="middle" opacity="0.75">' + val.toFixed(2) + '</text>';
+      }
+    }
+    hh += '</svg>';
+    hh += '<div class="aet-legend">';
+    for(var si = 0; si < 3; si++){
+      hh += '<span class="aet-leg-item"><span class="aet-leg-dot" style="background:' + series[si].color + '"></span>' + series[si].label + '</span>';
+    }
+    hh += '<span class="aet-leg-item" style="margin-left:auto;color:#5a6577;font-size:11px;cursor:pointer" onclick="refreshOddsTrend(this.closest(\'.ana-card\'))">\u27f3 \u5237\u65b0</span>';
+    hh += '</div>';
+    area.innerHTML = hh;
+  });
+}
+
+function refreshOddsTrend(cardEl){
+  if(!cardEl) return;
+  var area = cardEl.querySelector('.aet-chart-area');
+  if(!area) return;
+  area.innerHTML = '<div class="aet-loading">\u5237\u65b0\u4e2d...</div>';
+  __ODDS_HISTORY = null;
+  __ODDS_HISTORY_BY_NAME = null;
+  fetch('/api/odds/refresh').then(function(){
+    renderOddsTrend(cardEl);
+  }).catch(function(){
+    renderOddsTrend(cardEl);
+  });
+}
+
+// Wrap toggleAnaCard to auto-render trend on expand
+var __origToggleAnaCard = toggleAnaCard;
+toggleAnaCard = function(el){
+  if(!el.classList.contains('expanded')){
+    if(!el.classList.contains('ana-card'))el=el.closest('.ana-card')||el;__origToggleAnaCard(el);
+    setTimeout(function(){ renderOddsTrend(el); }, 300);
+  } else {
+    if(!el.classList.contains('ana-card'))el=el.closest('.ana-card')||el;__origToggleAnaCard(el);
+  }
+};
+
+function __expandTargetMatch(){
+  var tm = window.__TARGET_MATCH;
+  if(!tm) return;
+  delete window.__TARGET_MATCH;
+  var cards = document.querySelectorAll(".ana-card");
+  for(var i = 0; i < cards.length; i++){
+    var c = cards[i];
+    var home = c.querySelector(".tname.home");
+    var away = c.querySelector(".tname.away");
+    if(home && away && home.textContent === tm.h && away.textContent === tm.a){
+      toggleAnaCard(c);
+      setTimeout(function(){
+        c.scrollIntoView({behavior:"smooth",block:"center"});
+        c.classList.add("highlight");
+        setTimeout(function(){ c.classList.remove("highlight"); }, 1500);
+      }, 100);
+      break;
+    }
+  }
 }
 
 function renderCalendarView(){
@@ -2480,7 +2765,12 @@ h+='<div class="analysis-item"><div class="ai-head"><span class="ai-icon" style=
 h+='<div class="analysis-item"><div class="ai-head"><span class="ai-icon" style="color:#f59e0b">&#9888;&#65039;</span><span class="ai-label">风险提示</span></div><div class="ai-body-muted">'+(riskTxt||"模型信号正常")+'</div></div>';
 h+='</div></div></div></div>';
 return h;
-}var __todayRawData = [];
+}
+
+function toggleCard(el){
+  el.classList.toggle('expanded');
+}
+var __todayRawData = [];
 var __todaySortBy = 'id';
 var __todayFilterLevels = null;
 
@@ -2513,96 +2803,96 @@ sorted.forEach(function(m,i){var mid=m.match_id||m.id||i;h+=renderMatchCard(m,i,
 
 }
 
-
-// ====== 系统首页（倒计时 / 今日赛程） ======
+// ====== 系统首页（倒计时 / 下一场比赛）======
+function getFlagSrc(team){
+  var p = TEAM_FLAGS[team];
+  return p || '';
+}
 function renderHomePage(){
   var el = document.getElementById("homeInner");
   var now = new Date();
-  var kickoff = new Date(2026, 5, 12, 0, 0, 0);
-  if(now < kickoff){
-    el.innerHTML =
-      '<div class="hcc-container">' +
-        '<div class="hcc-bg-canvas">' +
-          '<div class="hcc-glow-orb o1"></div>' +
-          '<div class="hcc-glow-orb o2"></div>' +
-          '<div class="hcc-radar-sweep"></div>' +
-          '<div class="hcc-radar-ring"></div>' +
-          '<div class="hcc-radar-ring"></div>' +
-          '<div class="hcc-radar-ring"></div>' +
-          '<div class="hcc-grid-lines"></div>' +
-        '</div>' +
-        '<canvas id="hccParticles" class="hcc-particles"></canvas>' +
-        '<div class="hcc-corner-bracket tl"></div>' +
-        '<div class="hcc-corner-bracket tr"></div>' +
-        '<div class="hcc-corner-bracket bl"></div>' +
-        '<div class="hcc-corner-bracket br"></div>' +
-        '<div class="hcc-center">' +
-          '<div class="hcc-sysbar">' +
-            '<span class="hsb-dot"></span>' +
-            '<span class="hsb-item">SYS: <span class="hsb-val">ONLINE</span></span>' +
-            '<span class="hsb-item">TGT: <span class="hsb-val">2026-06-12</span></span>' +
-            '<span class="hsb-item">VEN: <span class="hsb-val">MEXICO CITY</span></span>' +
-          '</div>' +
-          '<div class="hcc-countdown">' +
-            '<div class="hcc-countdown-title">距离开幕 <span>2026世界杯</span> 揭幕战</div>' +
-            '<div class="hcc-clock" id="hccClock">' +
-              '<div class="hcc-clock-unit"><div class="hcc-clock-digits cyan" id="hccDays">00</div><div class="hcc-clock-label">DAYS</div></div>' +
-              '<div class="hcc-clock-sep">:</div>' +
-              '<div class="hcc-clock-unit"><div class="hcc-clock-digits" id="hccHours">00</div><div class="hcc-clock-label">HOURS</div></div>' +
-              '<div class="hcc-clock-sep">:</div>' +
-              '<div class="hcc-clock-unit"><div class="hcc-clock-digits gold" id="hccMins">00</div><div class="hcc-clock-label">MINUTES</div></div>' +
-              '<div class="hcc-clock-sep">:</div>' +
-              '<div class="hcc-clock-unit"><div class="hcc-clock-digits green" id="hccSecs">00</div><div class="hcc-clock-label">SECONDS</div></div>' +
-            '</div>' +
-          '</div>' +
-          '<div class="hcc-match-card">' +
-            '<div class="hcc-mc-label">揭幕战 · 墨西哥城</div>' +
-            '<div class="hcc-mc-teams">' +
-              '<div class="hcc-mc-team">' +
-                '<img class="hcc-mc-flag" src="/static/flags/mexico.png" loading="lazy" onerror="this.style.display=\'none\'">' +
-                '<div class="hcc-mc-team-name">墨西哥</div>' +
-              '</div>' +
-              '<div class="hcc-mc-vs">VS</div>' +
-              '<div class="hcc-mc-team">' +
-                '<img class="hcc-mc-flag" src="/static/flags/south_africa.png" loading="lazy" onerror="this.style.display=\'none\'">' +
-                '<div class="hcc-mc-team-name">南非</div>' +
-              '</div>' +
-            '</div>' +
-            '<div class="hcc-mc-info"><span class="hcc-mc-venue-icon">🌍</span> 墨西哥城 · 阿兹塔克体育场</div>' +
-          '</div>' +
-        '</div>' +
-      '</div>';
-    updateCountdownHQ();
-    if(window.__CD_INTERVAL) clearInterval(window.__CD_INTERVAL);
-    window.__CD_INTERVAL = setInterval(updateCountdownHQ, 1000);
-    initParticles();
-  } else {
-    if(window.__CD_INTERVAL) clearInterval(window.__CD_INTERVAL);
-    var todayKey = (now.getMonth()+1) + "月" + now.getDate() + "日";
-    var matches = WC_MATCHES.filter(function(m){ return m.d === todayKey; });
-    if(matches.length === 0){
-      el.innerHTML =
-        '<div class="hcc-container">' +
-          '<div class="hcc-bg-canvas"><div class="hcc-glow-orb o1"></div><div class="hcc-glow-orb o2"></div><div class="hcc-grid-lines"></div></div>' +
-          '<div class="hcc-empty"><div class="hcc-empty-icon">🏖️</div><div class="hcc-empty-text">今日休赛期，敬请期待明日赛事</div></div>' +
-        '</div>';
-      return;
+  var upcoming = null;
+  for(var i = 0; i < WC_MATCHES.length; i++){
+    var m = WC_MATCHES[i];
+    var dp = m.d.replace('月','/').replace('日','');
+    var tp = m.t.split(':');
+    var md = new Date(2026, parseInt(dp.split('/')[0])-1, parseInt(dp.split('/')[1]), parseInt(tp[0]), parseInt(tp[1]));
+    if(md > now && (!upcoming || md < upcoming.date)){
+      upcoming = {match: m, date: md};
     }
-    var h = '<div class="home-today-wrap"><div class="ht-header">📋 今日赛事焦点 · ' + todayKey + '</div><div class="ht-list">';
-    for(var i = 0; i < matches.length; i++){
-      var m = matches[i];
-      h += '<div class="ht-card"><div class="htc-top"><span class="htc-time">' + m.t.slice(0,5) + '</span><span class="htc-group">' + m.g + '组</span></div>' +
-        '<div class="htc-middle"><span class="htc-team">' + flagImg(m.h) + m.h + '</span><span class="htc-vs">VS</span><span class="htc-team">' + flagImg(m.a) + m.a + '</span></div>' +
-        '<div class="htc-bottom"><span class="htc-venue">🌍 ' + m.v + '</span></div></div>';
-    }
-    h += '</div></div>';
-    el.innerHTML = h;
   }
+  if(!upcoming){
+    el.innerHTML = 
+      '<div class="hcc-container">' +
+        '<div class="hcc-bg-canvas"><div class="hcc-glow-orb o1"></div><div class="hcc-glow-orb o2"></div><div class="hcc-grid-lines"></div></div>' +
+        '<div class="hcc-empty"><div class="hcc-empty-icon">🏆</div><div class="hcc-empty-text">2026世界杯已落幕</div></div>' +
+      '</div>';
+    return;
+  }
+  window.__NEXT_MATCH = upcoming;
+  var m = upcoming.match;
+  var fh = getFlagSrc(m.h), fa = getFlagSrc(m.a);
+  el.innerHTML =
+    '<div class="hcc-container">' +
+      '<div class="hcc-bg-canvas">' +
+        '<div class="hcc-glow-orb o1"></div>' +
+        '<div class="hcc-glow-orb o2"></div>' +
+        '<div class="hcc-radar-sweep"></div>' +
+        '<div class="hcc-radar-ring"></div>' +
+        '<div class="hcc-radar-ring"></div>' +
+        '<div class="hcc-radar-ring"></div>' +
+        '<div class="hcc-grid-lines"></div>' +
+      '</div>' +
+      '<canvas id="hccParticles" class="hcc-particles"></canvas>' +
+      '<div class="hcc-corner-bracket tl"></div>' +
+      '<div class="hcc-corner-bracket tr"></div>' +
+      '<div class="hcc-corner-bracket bl"></div>' +
+      '<div class="hcc-corner-bracket br"></div>' +
+      '<div class="hcc-center">' +
+        '<div class="hcc-sysbar">' +
+          '<span class="hsb-dot"></span>' +
+          '<span class="hsb-item">' + m.g + '组 · <span class="hsb-val">' + m.v + '</span></span>' +
+          '<span class="hsb-item">开球: <span class="hsb-val">' + m.d + ' ' + m.t.slice(0,5) + '</span></span>' +
+        '</div>' +
+        '<div class="hcc-countdown">' +
+          '<div class="hcc-countdown-title">距离下一场比赛</div>' +
+          '<div class="hcc-clock" id="hccClock">' +
+            '<div class="hcc-clock-unit" id="hccDU"><div class="hcc-clock-digits cyan" id="hccDays">00</div><div class="hcc-clock-label">DAYS</div></div>' +
+            '<div class="hcc-clock-sep" id="hccDS">:</div>' +
+            '<div class="hcc-clock-unit"><div class="hcc-clock-digits" id="hccHours">00</div><div class="hcc-clock-label">HOURS</div></div>' +
+            '<div class="hcc-clock-sep">:</div>' +
+            '<div class="hcc-clock-unit"><div class="hcc-clock-digits gold" id="hccMins">00</div><div class="hcc-clock-label">MINUTES</div></div>' +
+            '<div class="hcc-clock-sep">:</div>' +
+            '<div class="hcc-clock-unit"><div class="hcc-clock-digits green" id="hccSecs">00</div><div class="hcc-clock-label">SECONDS</div></div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="hcc-match-card" onclick="openMatchAnalysis(\'' + m.h + '\',\'' + m.a + '\')">' +
+          '<div class="hcc-mc-label">' + m.g + '组 · ' + m.v + '</div>' +
+          '<div class="hcc-mc-teams">' +
+            '<div class="hcc-mc-team">' +
+              (fh ? '<img class="hcc-mc-flag" src="' + fh + '" loading="lazy" onerror="this.style.display=\'none\'">' : '') +
+              '<div class="hcc-mc-team-name">' + m.h + '</div>' +
+            '</div>' +
+            '<div class="hcc-mc-vs">VS</div>' +
+            '<div class="hcc-mc-team">' +
+              (fa ? '<img class="hcc-mc-flag" src="' + fa + '" loading="lazy" onerror="this.style.display=\'none\'">' : '') +
+              '<div class="hcc-mc-team-name">' + m.a + '</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="hcc-mc-info"><span class="hcc-mc-venue-icon">🌍</span> ' + m.d + ' · ' + m.t.slice(0,5) + ' · ' + m.v + '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  updateNextMatchCD();
+  if(window.__CD_INTERVAL) clearInterval(window.__CD_INTERVAL);
+  window.__CD_INTERVAL = setInterval(updateNextMatchCD, 1000);
+  initParticles();
 }
-function updateCountdownHQ(){
+function updateNextMatchCD(){
+  var nm = window.__NEXT_MATCH;
+  if(!nm) return;
   var now = new Date();
-  var kickoff = new Date(2026, 5, 12, 0, 0, 0);
-  var diff = kickoff - now;
+  var diff = nm.date - now;
   if(diff <= 0){
     if(window.__CD_INTERVAL) clearInterval(window.__CD_INTERVAL);
     renderHomePage();
@@ -2618,6 +2908,14 @@ function updateCountdownHQ(){
   var elH = document.getElementById("hccHours"); if(elH) elH.textContent = pad(h);
   var elM = document.getElementById("hccMins"); if(elM) elM.textContent = pad(m);
   var elS = document.getElementById("hccSecs"); if(elS) elS.textContent = pad(s);
+  var elDU = document.getElementById("hccDU");
+  var elDS = document.getElementById("hccDS");
+  if(elDU) elDU.style.display = d > 0 ? '' : 'none';
+  if(elDS) elDS.style.display = d > 0 ? '' : 'none';
+}
+function openMatchAnalysis(home, away){
+  window.__TARGET_MATCH = {h:home, a:away};
+  switchNav("analysis");
 }
 function initParticles(){
   var c = document.getElementById("hccParticles");
@@ -2783,7 +3081,7 @@ function switchNav(nav){
   }
   function half(){
     var h='';
-    h+=round('\u7b2c\u4e00\u8f6e\u00b716\u573a',false,8);
+    h+=round('\u7b2c\u4e00\u8f6e·16\u573a',false,8);
     h+=round('1/8\u51b3\u8d5b',false,4);
     h+=round('1/4\u51b3\u8d5b',false,2);
     h+=round('\u534a\u51b3\u8d5b',false,1);
@@ -2982,6 +3280,22 @@ function renderMarkdown(md){
   s = result.join('\n');
   return s;
 }
+</script>
+
+    
+<!-- Contact modal -->
+<div class="wc-modal-overlay" id="contactModal" onclick="if(event.target===this)hideContactModal()">
+  <div class="wc-modal">
+    <div class="wc-modal-wrap">
+      <button class="close-btn" onclick="hideContactModal()">&times;</button>
+      <img src="/static/wechat_qr.jpg" alt="微信二维码" loading="lazy">
+      <p>欢迎球友们对网站提出建议，一起聊球，一起吹牛</p>
+    </div>
+  </div>
+</div>
+<script>
+function showContactModal(){document.getElementById('contactModal').classList.add('active');}
+function hideContactModal(){document.getElementById('contactModal').classList.remove('active');}
 </script>
 </body>
 </html>

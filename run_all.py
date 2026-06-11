@@ -1,6 +1,6 @@
 ﻿# run_all.py锛圧ev1.13 瀹屾暣鐗埪峰惈鏈潵鍑芥暟妫€娴嬶級
 import subprocess, sys, os, json, datetime
-from lambda_calc import calc_initial_lambda, calc_initial_lambda_alt, validate_temporal_integrity
+from lambda_calc import calc_initial_lambda, calc_initial_lambda_alt, calc_initial_lambda_wc, validate_temporal_integrity
 from monte_carlo import MonteCarloEngine
 from config import MONTE_CARLO_RUNS, SLACK_PENALTY
 
@@ -18,22 +18,65 @@ def save_json(data, filename):
 def apply_factors(lambda_h, lambda_a, factor_params):
     fp = factor_params
     diff = lambda_h - lambda_a
+    
+    # World Cup extensions
+    round_type = fp.get('round_type', 'group')
+    matchday = fp.get('matchday', 0)
+    neutral_venue = fp.get('neutral_venue', False)
+    key_player_missing_h = fp.get('key_player_missing_home', False)
+    key_player_missing_a = fp.get('key_player_missing_away', False)
+    from config import (SLACK_PENALTY, KEY_PLAYER_INJURY_BOOST,
+                        INJURY_WORLD_CUP_MAX, NEUTRAL_VENUE_HOME_ADVANTAGE,
+                        NEUTRAL_VENUE_ALTITUDE_FACTOR, GROUP_MATCHDAY_FACTOR,
+                        KNOCKOUT_LAMBDA_FACTOR)
+    
     mot_h_reverse = (fp['motivation_home'] > 0 and diff < -0.3) or (fp['motivation_home'] < 0 and diff > 0.3)
     mot_a_reverse = (fp['motivation_away'] > 0 and diff > 0.3) or (fp['motivation_away'] < 0 and diff < -0.3)
-    lh = lambda_h * (1 + fp['injury_home'])
-    la = lambda_a * (1 + fp['injury_away'])
+    
+    # Injury: use World Cup max if applicable
+    injury_max = INJURY_WORLD_CUP_MAX if round_type in ('group', 'knockout') else fp.get('injury_home_max', 0.20)
+    lh = lambda_h * (1 + min(fp['injury_home'], injury_max))
+    la = lambda_a * (1 + min(fp.get('injury_away', 0), injury_max))
+    
+    # Key player missing boost (World Cup specific)
+    if key_player_missing_h: lh *= (1 - KEY_PLAYER_INJURY_BOOST)
+    if key_player_missing_a: la *= (1 - KEY_PLAYER_INJURY_BOOST)
+    
     if fp.get('injury_home_boost', 0) != 0: lh *= (1 + fp['injury_home_boost'])
-    if fp.get('injury_away_boost', 0) != 0: la *= (1 + fp['injury_away_boost'])
+    if fp.get('injury_away_boost', 0) != 0: la *= (1 + fp.get('injury_away_boost', 0))
+    
     mot_h, mot_a = fp['motivation_home'], fp['motivation_away']
     if mot_h_reverse and abs(diff) > 0.3: mot_h /= 2
     if mot_a_reverse and abs(diff) > 0.3: mot_a /= 2
     if fp.get('pressure_home', False) and mot_h > 0: mot_h /= 2
     if fp.get('pressure_away', False) and mot_a > 0: mot_a /= 2
     lh *= (1 + mot_h); la *= (1 + mot_a)
+    
     if fp.get('slack_home', False): lh *= (1 - SLACK_PENALTY)
     if fp.get('slack_away', False): la *= (1 - SLACK_PENALTY)
-    if fp.get('altitude_home', 0) > 0: lh *= (1 + fp['altitude_home'])
-    if fp.get('altitude_away', 0) > 0: la *= (1 + fp.get('altitude_away', 0))
+    
+    # Neutral venue: cancel home advantage and altitude effects
+    if neutral_venue:
+        altitude_h = NEUTRAL_VENUE_ALTITUDE_FACTOR
+        altitude_a = NEUTRAL_VENUE_ALTITUDE_FACTOR
+    else:
+        altitude_h = fp.get('altitude_home', 0)
+        altitude_a = fp.get('altitude_away', 0)
+    
+    if altitude_h > 0: lh *= (1 + altitude_h)
+    if altitude_a > 0: la *= (1 + altitude_a)
+    
+    # Matchday adjustment (group stage only)
+    if round_type == 'group' and matchday in GROUP_MATCHDAY_FACTOR:
+        md_factor = GROUP_MATCHDAY_FACTOR[matchday]
+        lh *= md_factor
+        la *= md_factor
+    
+    # Knockout adjustment
+    if round_type == 'knockout':
+        lh *= KNOCKOUT_LAMBDA_FACTOR
+        la *= KNOCKOUT_LAMBDA_FACTOR
+    
     return round(lh, 4), round(la, 4)
 
 
@@ -61,19 +104,58 @@ def generate_monte_carlo():
         print('  [%s] %s vs %s' % (mid, home, away))
         
         try:
+            round_type = match.get('round_type', 'group')
+            neutral_venue = match.get('neutral_venue', False)
             h_xg = match.get('home_xg'); h_xga = match.get('home_xga')
             a_xg = match.get('away_xg'); a_xga = match.get('away_xga')
-            if None in [h_xg, h_xga, a_xg, a_xga]:
-                h_g = match.get('home_goals'); h_ga = match.get('home_goals_conceded')
-                a_g = match.get('away_goals'); a_ga = match.get('away_goals_conceded')
-                lh_raw, la_raw = calc_initial_lambda_alt(
-                    home_goals=h_g, home_goals_conceded=h_ga,
-                    away_goals=a_g, away_goals_conceded=a_ga,
-                    home_league=match.get('home_league', ''), away_league=match.get('away_league', ''))
+            
+            # Pre-tournament detection: if xG data is missing and teams exist in squad profiles,
+            # use FIFA rank + squad value instead of traditional lambda calculation
+            xg_missing = (h_xg is None and h_xga is None and a_xg is None and a_xga is None)
+            if xg_missing and round_type in ('group', 'knockout'):
+                from squad_power import estimate_match
+                sq_result = estimate_match(
+                    home, away,
+                    round_type=round_type,
+                    neutral_venue=neutral_venue)
+                if sq_result is not None:
+                    lh_raw = sq_result['lambda_h']
+                    la_raw = sq_result['lambda_a']
+                    pre_tournament = True
+                    print('  [SQUAD-POWER] %s vs %s: λ=(%.4f, %.4f)' % (home, away, lh_raw, la_raw))
+                else:
+                    # Fallback to stats-based calculation if squad profiles unavailable
+                    pre_tournament = False
+                    lh_raw, la_raw = calc_initial_lambda_wc(0, 0, 0, 0,
+                        match.get('home_league', ''), match.get('away_league', ''),
+                        neutral_venue, match.get('home_confed'), match.get('away_confed'))
             else:
-                lh_raw, la_raw = calc_initial_lambda(
-                    home_xg=h_xg, home_xga=h_xga, away_xg=a_xg, away_xga=a_xga,
-                    home_league=match.get('home_league', ''), away_league=match.get('away_league', ''))
+                pre_tournament = False
+                # Use WC-specific calculation for World Cup matches
+                if round_type in ('group', 'knockout'):
+                    h_g = match.get('home_goals', 0) or 0
+                    h_ga = match.get('home_goals_conceded', 0) or 0
+                    a_g = match.get('away_goals', 0) or 0
+                    a_ga = match.get('away_goals_conceded', 0) or 0
+                    lh_raw, la_raw = calc_initial_lambda_wc(
+                        home_xg=h_g, home_xga=h_ga,
+                        away_xg=a_g, away_xga=a_ga,
+                        home_league=match.get('home_league', ''),
+                        away_league=match.get('away_league', ''),
+                        neutral_venue=neutral_venue,
+                        home_confed=match.get('home_confed'),
+                        away_confed=match.get('away_confed'))
+                elif None in [h_xg, h_xga, a_xg, a_xga]:
+                    h_g = match.get('home_goals'); h_ga = match.get('home_goals_conceded')
+                    a_g = match.get('away_goals'); a_ga = match.get('away_goals_conceded')
+                    lh_raw, la_raw = calc_initial_lambda_alt(
+                        home_goals=h_g, home_goals_conceded=h_ga,
+                        away_goals=a_g, away_goals_conceded=a_ga,
+                        home_league=match.get('home_league', ''), away_league=match.get('away_league', ''))
+                else:
+                    lh_raw, la_raw = calc_initial_lambda(
+                        home_xg=h_xg, home_xga=h_xga, away_xg=a_xg, away_xga=a_xga,
+                        home_league=match.get('home_league', ''), away_league=match.get('away_league', ''))
         except ValueError as e:
             print('  data missing: %s' % e)
             continue
@@ -87,8 +169,22 @@ def generate_monte_carlo():
         if mid in info_map:
             info_map[mid]['lambda_diff'] = lambda_diff
         
-        from validate import cross_validate
+        from validate import cross_validate, validate_wc_scenario, validate_fifa_rank
         cross_validate(match, lh_final, la_final, factor_map.get(mid, {}))
+        
+        # World Cup-specific validation
+        if factor_map.get(mid, {}):
+            wc_warnings = validate_wc_scenario(match, factor_map[mid], lh_final, la_final)
+            for w in wc_warnings:
+                print('  [WC-VALIDATE] ' + w)
+        
+        # FIFA rank validation (if available)
+        fifa_h = match.get('fifa_rank_home')
+        fifa_a = match.get('fifa_rank_away')
+        if fifa_h and fifa_a:
+            rank_warnings = validate_fifa_rank(fifa_h, fifa_a, lh_final, la_final)
+            for w in rank_warnings:
+                print('  [FIFA-RANK] ' + w)
         
         jc = match.get('jc_handicap', -1)
         engine = MonteCarloEngine(lambda_h=lh_final, lambda_a=la_final, jc_handicap=jc, runs=MONTE_CARLO_RUNS)

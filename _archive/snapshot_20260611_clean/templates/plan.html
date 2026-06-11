@@ -1,0 +1,154 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{LEVEL}} 精选计划单 - V3.3.3-Core</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#1a1a20;--surface:#1e1e24;--surface-2:#25252b;--surface-h:#2d2d35;--t1:#e8e8ed;--t2:#999;--t3:#666;--green:#00e676;--red:#ef5350;--amber:#ffd54f;--blue:#42a5f5;--purple:#ce93d8;--bd:#2e2e36;--bd-h:#3a3a44;--mono:"SF Mono","Cascadia Code","Consolas",monospace;--sans:"Inter","Microsoft YaHei","PingFang SC","Noto Sans SC",sans-serif}
+body{font-family:var(--sans);background:var(--bg);color:var(--t1);min-height:100vh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased}
+.top-bar{display:flex;align-items:center;gap:12px;padding:16px 24px;background:var(--surface);border-bottom:1px solid var(--bd)}
+.top-bar a{color:var(--t2);text-decoration:none;font-size:13px;display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:4px;transition:all .15s}
+.top-bar a:hover{background:rgba(255,255,255,.06);color:var(--t1)}
+.top-bar .plan-title{font-size:20px;font-weight:700;color:var(--green);flex:1;letter-spacing:1px}
+.top-bar .plan-level{padding:3px 10px;border-radius:5px;font-size:12px;font-weight:600;background:rgba(255,215,0,.18);color:var(--amber)}
+.main{flex:1;max-width:960px;margin:0 auto;padding:24px 20px 60px;width:100%}
+.section{margin-bottom:28px}
+.section h2{font-size:15px;font-weight:700;color:var(--t1);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.section h2 .badge{font-size:10px;padding:2px 8px;border-radius:4px;font-weight:600}
+.section h2 .badge.g{background:var(--green);color:#fff}
+.section h2 .badge.b{background:var(--blue);color:#fff}
+.section h2 .badge.p{background:var(--purple);color:#1a1a20}
+.section h2 .cnt{font-size:11px;font-weight:400;color:var(--t3);margin-left:4px}
+.plan-card{background:var(--surface-2);border:1px solid var(--bd);border-radius:6px;padding:12px 14px;margin-bottom:8px;transition:border-color .2s}
+.plan-card:hover{border-color:var(--bd-h)}
+.legs-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:2px 0}
+.leg-item{background:rgba(255,255,255,.04);padding:4px 10px;border-radius:4px;font-size:12px;line-height:1.4}
+.leg-item .leg-odds{color:var(--amber);font-family:var(--mono);font-weight:600}
+.leg-item .leg-match{color:var(--t2);font-size:10px}
+.leg-plus{color:var(--t3);font-size:14px;font-weight:700}
+.leg-eq{color:var(--t3);font-size:14px;font-weight:700;margin-left:4px}
+.result-odds{display:inline-block;font-size:18px;font-weight:700;color:var(--green);font-family:var(--mono);margin-left:8px}
+.plan-meta{font-size:10px;color:var(--t3);margin-top:4px;display:flex;gap:12px}
+.plan-meta .tag{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600}
+.plan-meta .tag.goal{background:rgba(255,215,0,.15);color:var(--amber)}
+.plan-meta .tag.score{background:rgba(239,83,80,.15);color:var(--red)}
+.plan-meta .tag.hf{background:rgba(156,39,176,.15);color:var(--purple)}
+.plan-meta .tag.sp{background:rgba(0,230,118,.15);color:var(--green)}
+.plan-meta .tag.hc{background:rgba(66,165,245,.15);color:var(--blue)}
+.empty-state{text-align:center;padding:60px 20px;color:var(--t3)}
+.empty-state .empty-icon{font-size:48px;margin-bottom:12px}
+.empty-state .empty-text{font-size:14px;margin-bottom:6px}
+.loading-state{text-align:center;padding:60px;color:var(--t3);font-size:13px}
+.stats-bar{display:flex;gap:16px;padding:10px 14px;background:var(--surface);border:1px solid var(--bd);border-radius:6px;margin-bottom:14px;flex-wrap:wrap}
+.stats-bar .sb-item{font-size:11px;color:var(--t2)}
+.stats-bar .sb-item b{color:var(--t1);font-weight:600;font-family:var(--mono)}
+.stats-bar .sb-item .hl{color:var(--green)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{width:18px;height:18px;border:2px solid var(--bd);border-top-color:var(--green);border-radius:50%;animation:spin .6s linear infinite;display:inline-block;vertical-align:middle;margin-right:6px}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <a href="/">&larr; 返回首页</a>
+  <span class="plan-title">🎯 精选计划单</span>
+  <span class="plan-level">{{LEVEL}}</span>
+</div>
+<div class="main">
+  <div id="planContent">
+    <div class="loading-state"><span class="spinner"></span>正在分析今日比赛...</div>
+  </div>
+</div>
+<script>
+var LEVEL = '{{LEVEL}}';
+
+function tagClass(type) {
+  type = type || '';
+  if (type.indexOf('总进球') >= 0) return 'goal';
+  if (type.indexOf('比分') >= 0) return 'score';
+  if (type.indexOf('半全场') >= 0) return 'hf';
+  if (type.indexOf('让球') >= 0) return 'hc';
+  return 'sp';
+}
+
+function renderSingle(s, i) {
+  var pct = (s.model_prob * 100).toFixed(0);
+  return '<div class="plan-card">' +
+    '<div style="display:flex;align-items:center;gap:10px">' +
+    '<div class="plan-meta"><span class="tag ' + tagClass(s.type) + '">' + s.type + '</span></div>' +
+    '<div style="flex:1;min-width:0">' +
+    '<div style="font-size:13px;font-weight:600">' + s.match + '</div>' +
+    '<div style="font-size:11px;color:var(--t2)">' + s.option + ' | ' + s.time + '</div>' +
+    '</div>' +
+    '<div style="text-align:right;flex-shrink:0">' +
+    '<div style="font-size:18px;font-weight:700;font-family:var(--mono);color:var(--t1)">' + s.odds.toFixed(2) + '</div>' +
+    '<div style="font-size:10px;color:var(--t3)">概率 ' + pct + '%</div>' +
+    '</div></div></div>';
+}
+
+function renderCombo(m, rank) {
+  var h = '<div class="plan-card">';
+  h += '<div style="font-size:11px;color:var(--t3);margin-bottom:6px">#' + rank + '  ' + m.legs.map(function(l){return l.match}).join(' / ') + '</div>';
+  h += '<div class="legs-row">';
+  m.legs.forEach(function(l, idx) {
+    if (idx > 0) h += '<span class="leg-plus">×</span>';
+    h += '<span class="leg-item">' + l.desc + ' <span class="leg-odds">@' + l.odds.toFixed(2) + '</span></span>';
+  });
+  h += '<span class="leg-eq">=</span>';
+  h += '<span class="result-odds">' + m.combined_odds.toFixed(2) + '</span>';
+  h += '</div>';
+  h += '<div class="plan-meta">综合评分 ' + m.avg_score.toFixed(4) + '</div>';
+  h += '</div>';
+  return h;
+}
+
+function loadPlan() {
+  var el = document.getElementById('planContent');
+  fetch('/api/plan/' + LEVEL).then(function(r) { return r.json(); }).then(function(data) {
+    if (data.error) {
+      el.innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-text">分析出错</div><div class="empty-sub">' + data.error + '</div></div>';
+      return;
+    }
+    var hasAny = (data.singles && data.singles.length > 0) ||
+                 (data.combos_2 && data.combos_2.length > 0) ||
+                 (data.combos_3 && data.combos_3.length > 0);
+    if (!hasAny) {
+      el.innerHTML = '<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-text">今日暂无符合条件的推荐</div></div>';
+      return;
+    }
+    var h = '';
+    h += '<div class="stats-bar">';
+    h += '<span class="sb-item">📊 分析场次 <b>' + data.total_candidates + '</b></span>';
+    h += '<span class="sb-item">🎯 方案 <b class="hl">' + data.total_singles + '</b> 单关 / <b>' + (data.combos_2 ? data.combos_2.length : 0) + '</b> 串</span>';
+    h += '<span class="sb-item">💰 赔率 <b>' + data.min_odds + ' ~ ' + data.max_odds + '</b></span>';
+    h += '<span class="sb-item">📅 ' + new Date().toISOString().slice(0,10) + '</span>';
+    h += '</div>';
+
+    if (data.singles && data.singles.length > 0) {
+      h += '<div class="section"><h2>🏆 单关推荐 <span class="badge g">非SP</span><span class="cnt">' + data.singles.length + '</span></h2>';
+      data.singles.forEach(function(s, i) { h += renderSingle(s, i+1); });
+      h += '</div>';
+    }
+
+    if (data.combos_2 && data.combos_2.length > 0) {
+      h += '<div class="section"><h2>🔗 跨比赛2串1 <span class="badge b">推荐</span><span class="cnt">' + data.combos_2.length + '</span></h2>';
+      data.combos_2.forEach(function(m, i) { h += renderCombo(m, i+1); });
+      h += '</div>';
+    }
+
+    if (data.combos_3 && data.combos_3.length > 0) {
+      h += '<div class="section"><h2>🔗 跨比赛3串1 <span class="badge p">参考</span><span class="cnt">' + data.combos_3.length + '</span></h2>';
+      data.combos_3.forEach(function(m, i) { h += renderCombo(m, i+1); });
+      h += '</div>';
+    }
+
+    el.innerHTML = h;
+  }).catch(function(err) {
+    el.innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-text">加载失败</div><div class="empty-sub">' + (err.message || '网络错误') + '</div></div>';
+  });
+}
+document.addEventListener('DOMContentLoaded', loadPlan);
+</script>
+</body>
+</html>

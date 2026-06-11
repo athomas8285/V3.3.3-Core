@@ -1,0 +1,351 @@
+{
+  "matches": {
+    "2040162": {
+      "home": "墨西哥",
+      "away": "南非",
+      "matchNum": "??001",
+      "hhad": {
+        "change_count": 6,
+        "h_delta": -0.25,
+        "d_delta": 0.07,
+        "a_delta": 0.41,
+        "days_span": 3.1,
+        "velocity_per_day": -0.0807,
+        "away_velocity_per_day": 0.1323,
+        "direction": "favors_home",
+        "late_acceleration": false,
+        "consistency": 0.92
+      },
+      "had": null,
+      "combined": {
+        "change_count": 6,
+        "direction": "favors_home",
+        "late_acceleration": false,
+        "h_velocity": -0.0807,
+        "a_velocity": 0.1323
+      }
+    },
+    "2040163": {
+      "home": "韩国",
+      "away": "捷克",
+      "matchNum": "周四002",
+      "hhad": {
+        "change_count": 5,
+        "h_delta": 0.45,
+        "d_delta": -0.05,
+        "a_delta": -0.02,
+        "days_span": 3.45,
+        "velocity_per_day": 0.1303,
+        "away_velocity_per_day": -0.0058,
+        "direction": "stable",
+        "late_acceleration": true,
+        "consistency": 0.5
+      },
+      "had": null,
+      "combined": {
+        "change_count": 5,
+        "direction": "stable",
+        "late_acceleration": true,
+        "h_velocity": 0.1303,
+        "a_velocity": -0.0058
+      }
+    },
+    "2040164": {
+      "home": "加拿大",
+      "away": "波黑",
+      "matchNum": "周五003",
+      "hhad": null,
+      "had": null,
+      "combined": {
+        "change_count": 0,
+        "direction": "no_data",
+        "late_acceleration": false
+      }
+    },
+    "2040165": {
+      "home": "美国",
+      "away": "巴拉圭",
+      "matchNum": "周五004",
+      "hhad": null,
+      "had": null,
+      "combined": {
+        "change_count": 0,
+        "direction": "no_data",
+        "late_acceleration": false
+      }
+    },
+    "2040166": {
+      "home": "卡塔尔",
+      "away": "瑞士",
+      "matchNum": "周六005",
+      "hhad": null,
+      "had": null,
+      "combined": {
+        "change_count": 0,
+        "direction": "no_data",
+        "late_acceleration": false
+      }
+    },
+    "2040167": {
+      "home": "巴西",
+      "away": "摩洛哥",
+      "matchNum": "周六006",
+      "hhad": null,
+      "had": null,
+      "combined": {
+        "change_count": 0,
+        "direction": "no_data",
+        "late_acceleration": false
+      }
+    },
+    "2040168": {
+      "home": "海地",
+      "away": "苏格兰",
+      "matchNum": "周六007",
+      "hhad": null,
+      "had": null,
+      "combined": {
+        "change_count": 0,
+        "direction": "no_data",
+        "late_acceleration": false
+      }
+    },
+    "2040169": {
+      "home": "澳大利亚",
+      "away": "土耳其",
+      "matchNum": "周六008",
+      "hhad": null,
+      "had": null,
+      "combined": {
+        "change_count": 0,
+        "direction": "no_data",
+        "late_acceleration": false
+      }
+    },
+    "2040170": {
+      "home": "德国",
+      "away": "库拉索",
+      "matchNum": "周日009",
+      "hhad": null,
+      "had": null,
+      "combined": {
+        "change_count": 0,
+        "direction": "no_data",
+        "late_acceleration": false
+      }
+    },
+    "2040171": {
+      "home": "荷兰",
+      "away": "日本",
+      "matchNum": "周日010",
+      "hhad": null,
+      "had": null,
+      "combined": {
+        "change_count": 0,
+        "direction": "no_data",
+        "late_acceleration": false
+      }
+    },
+    "2040172": {
+      "home": "科特迪瓦",
+      "away": "厄瓜多尔",
+      "matchNum": "周日011",
+      "hhad": null,
+      "had": null,
+      "combined": {
+        "change_count": 0,
+        "direction": "no_data",
+        "late_acceleration": false
+      }
+    },
+    "2040173": {
+      "home": "瑞典",
+      "away": "突尼斯",
+      "matchNum": "周日012",
+      "hhad": null,
+      "had": null,
+      "combined": {
+        "change_count": 0,
+        "direction": "no_data",
+        "late_acceleration": false
+      }
+    },
+    "2040174": {
+      "home": "西班牙",
+      "away": "佛得角",
+      "matchNum": "周一013",
+      "hhad": null,
+      "had": null,
+      "combined": {
+        "change_count": 0,
+        "direction": "no_data",
+        "late_acceleration": false
+      }
+    },
+    "2040175": {
+      "home": "比利时",
+      "away": "埃及",
+      "matchNum": "周一014",
+      "hhad": null,
+      "had": null,
+      "combined": {
+        "change_count": 0,
+        "direction": "no_data",
+        "late_acceleration": false
+      }
+    },
+    "2040176": {
+      "home": "沙特阿拉伯",
+      "away": "乌拉圭",
+      "matchNum": "周一015",
+      "hhad": null,
+      "had": null,
+      "combined": {
+        "change_count": 0,
+        "direction": "no_data",
+        "late_acceleration": false
+      }
+    },
+    "2040177": {
+      "home": "伊朗",
+      "away": "新西兰",
+      "matchNum": "周一016",
+      "hhad": null,
+      "had": null,
+      "combined": {
+        "change_count": 0,
+        "direction": "no_data",
+        "late_acceleration": false
+      }
+    },
+    "2040178": {
+      "home": "法国",
+      "away": "塞内加尔",
+      "matchNum": "周二017",
+      "hhad": null,
+      "had": null,
+      "combined": {
+        "change_count": 0,
+        "direction": "no_data",
+        "late_acceleration": false
+      }
+    },
+    "2040179": {
+      "home": "伊拉克",
+      "away": "挪威",
+      "matchNum": "周二018",
+      "hhad": null,
+      "had": null,
+      "combined": {
+        "change_count": 0,
+        "direction": "no_data",
+        "late_acceleration": false
+      }
+    },
+    "2040180": {
+      "home": "阿根廷",
+      "away": "阿尔及利亚",
+      "matchNum": "周二019",
+      "hhad": null,
+      "had": null,
+      "combined": {
+        "change_count": 0,
+        "direction": "no_data",
+        "late_acceleration": false
+      }
+    },
+    "2040181": {
+      "home": "奥地利",
+      "away": "约旦",
+      "matchNum": "周二020",
+      "hhad": null,
+      "had": null,
+      "combined": {
+        "change_count": 0,
+        "direction": "no_data",
+        "late_acceleration": false
+      }
+    },
+    "2040182": {
+      "home": "葡萄牙",
+      "away": "刚果(金)",
+      "matchNum": "周三021",
+      "hhad": null,
+      "had": null,
+      "combined": {
+        "change_count": 0,
+        "direction": "no_data",
+        "late_acceleration": false
+      }
+    },
+    "2040183": {
+      "home": "英格兰",
+      "away": "克罗地亚",
+      "matchNum": "周三022",
+      "hhad": null,
+      "had": null,
+      "combined": {
+        "change_count": 0,
+        "direction": "no_data",
+        "late_acceleration": false
+      }
+    },
+    "2040184": {
+      "home": "加纳",
+      "away": "巴拿马",
+      "matchNum": "周三023",
+      "hhad": null,
+      "had": null,
+      "combined": {
+        "change_count": 0,
+        "direction": "no_data",
+        "late_acceleration": false
+      }
+    },
+    "2040185": {
+      "home": "乌兹别克斯坦",
+      "away": "哥伦比亚",
+      "matchNum": "周三024",
+      "hhad": null,
+      "had": null,
+      "combined": {
+        "change_count": 0,
+        "direction": "no_data",
+        "late_acceleration": false
+      }
+    }
+  },
+  "overall": {
+    "market_pressure": "mixed",
+    "pressure_strength": 0.04,
+    "divergence_warning": false,
+    "late_acceleration_count": 1,
+    "total_matches_with_trends": 24
+  },
+  "match_num_index": {
+    "??001": "2040162",
+    "周四002": "2040163",
+    "周五003": "2040164",
+    "周五004": "2040165",
+    "周六005": "2040166",
+    "周六006": "2040167",
+    "周六007": "2040168",
+    "周六008": "2040169",
+    "周日009": "2040170",
+    "周日010": "2040171",
+    "周日011": "2040172",
+    "周日012": "2040173",
+    "周一013": "2040174",
+    "周一014": "2040175",
+    "周一015": "2040176",
+    "周一016": "2040177",
+    "周二017": "2040178",
+    "周二018": "2040179",
+    "周二019": "2040180",
+    "周二020": "2040181",
+    "周三021": "2040182",
+    "周三022": "2040183",
+    "周三023": "2040184",
+    "周三024": "2040185"
+  }
+}

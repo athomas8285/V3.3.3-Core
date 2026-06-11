@@ -1,5 +1,6 @@
-﻿# app.py
-import subprocess, json, os, sys, csv, traceback
+# app.py
+import subprocess, json, os, sys, csv, traceback, threading
+import track_odds
 from flask import Flask, request, jsonify, Response
 import database as db
 from parser import main as parse_main
@@ -9,6 +10,30 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, 'data')
 os.makedirs(DATA_DIR, exist_ok=True)
 db.init_db()
+# -- Odds background updater --
+_last_odds_fetch = 0
+_ODDS_INTERVAL = 1800  # 30 min
+
+def _odds_scheduler():
+    global _last_odds_fetch
+    import time
+    while True:
+        now = time.time()
+        if now - _last_odds_fetch >= _ODDS_INTERVAL:
+            _last_odds_fetch = now
+            try:
+                n, _, u = track_odds.run()
+                print('[Odds] Auto-update: %d matches, %d changes' % (n, u))
+            except Exception as e:
+                print('[Odds] Auto-update error: %s' % e)
+        time.sleep(60)
+
+def start_odds_scheduler():
+    t = threading.Thread(target=_odds_scheduler, daemon=True)
+    t.start()
+    print('[Odds] Background updater started (30min interval)')
+
+
 
 @app.route('/')
 def index():
@@ -43,7 +68,100 @@ def index():
             'info': info_list,
             'ddi': _json.load(open(os.path.join(data_dir, 'ddi_result.json'), encoding='utf-8'))['matches'],
             'ai': _json.load(open(os.path.join(data_dir, 'ai_judgment.json'), encoding='utf-8'))['matches'],
+            'fit': _json.load(open(os.path.join(data_dir, 'fit_score_result.json'), encoding='utf-8'))['matches'],
+            'trend': list(_json.load(open(os.path.join(data_dir, 'trend_features.json'), encoding='utf-8'))['matches'].values()),
         }
+        # Build narratives
+        try:
+            _oh = _json.load(open(os.path.join(data_dir, 'odds_history', 'odds_history.json'), encoding='utf-8'))
+        except:
+            _oh = {}
+        _rating_map = {m['id']: m for m in data['rating']}
+        _mc_map = {m['id']: m for m in data['mc']}
+        _ddi_map = {m['id']: m for m in data['ddi']}
+        _ai_map = {m['id']: m for m in data['ai']}
+        _fit_map = {m['id']: m for m in data['fit']}
+        _narratives = {}
+        for _m in info_list:
+            _mid = _m.get('id', '')
+            _mc = _mc_map.get(_mid, {})
+            _ddi = _ddi_map.get(_mid, {})
+            _ai = _ai_map.get(_mid, {})
+            _fit = _fit_map.get(_mid, {})
+            _home = _m.get('home', '')
+            _away = _m.get('away', '')
+            _parts = []
+            # Direction + prob + lambda
+            _phys = _mc.get('physical', {}) if _mc else {}
+            _ph = _phys.get('home_win', 0)
+            _pa = _phys.get('away_win', 0)
+            _ld = _mc.get('lambda_diff') if _mc else None
+            if _ph > _pa + 0.03:
+                _dir = '主胜'
+            elif _pa > _ph + 0.03:
+                _dir = '客胜'
+            else:
+                _dir = '平局'
+            _pl = '模型' + _dir + ' ' + str(round(_ph * 100, 1)) + '%'
+            if _ld is not None:
+                _pl += ' / 差' + ('+' if _ld >= 0 else '') + str(round(_ld, 2))
+            _parts.append(_pl)
+            # Trend
+            _ohm = None
+            for _ohid, _ohd in _oh.items():
+                if _ohd.get('home') == _home and _ohd.get('away') == _away:
+                    _ohm = _ohd
+                    break
+            if _ohm:
+                _hhad = _ohm.get('tracks', {}).get('hhad', [])
+                if len(_hhad) >= 2:
+                    _count = len(_hhad)
+                    _lower = _hhad[-1].get('h', 0) < _hhad[0].get('h', 0)
+                    _dw = '压低主胜' if _lower else '推高主胜'
+                    _parts.append('赔率趋势自' + str(int(_hhad[0]['ts'][5:7]))+'月'+str(int(_hhad[0]['ts'][8:10]))+'日' + '起连续' + str(_count) + '次' + _dw)
+            # Market
+            _sp = _m.get('sp_home')
+            if _sp:
+                _parts.append('方向与模型一致')
+                _parts.append('市场同样看好' + ('主胜' if _ph > _pa + 0.03 else '客胜'))
+            # DDI
+            _dd = (_ddi.get('ddi', {}) if _ddi else {}).get('home_win', 0)
+            if abs(_dd) > 0.06 and _dd < 0:
+                _parts.append('不过市场预期显著高于物理模型')
+                _parts.append('DDI 偏差 ' + str(round(_dd * 100, 1)) + '%')
+                _parts.append('存在过度追捧可能')
+            # Missing data
+            _miss = []
+            if _m.get('xg_season_missing') and _m.get('xg_last3_missing'): _miss.append('xG')
+            if _m.get('h2h_missing'): _miss.append('交锋')
+            if _m.get('roster_missing'): _miss.append('阵容')
+            if _m.get('injury_home_missing') and _m.get('injury_away_missing'): _miss.append('伤停')
+            _ft = (_fit.get('fit_score', {}) if _fit else {}).get('final_total', 0)
+            if _miss or (_ft and _ft < 7):
+                if _miss: _parts.append('且数据层面大面积缺失')
+                if _ft: _parts.append('拟合分仅 ' + str(round(_ft, 1)))
+                _parts.append('容错空间有限')
+            # Verdict
+            _hcap = _m.get('jc_handicap', 0)
+            if _hcap and abs(_hcap) > 0:
+                _deep = abs(_hcap) >= 1.5
+                _med = abs(_hcap) >= 1.0
+                _v = '方向' + _dir + '可关注'
+                if _ph > _pa + 0.03:
+                    if _deep:
+                        _v += '，但让球盘穿盘难度较大，谨慎对待'
+                    elif _med:
+                        _v += '，让球盘需谨慎'
+                elif _pa > _ph + 0.03:
+                    if _deep:
+                        _v += '，但受让盘需谨慎'
+                _parts.append(_v)
+            # Build paragraph
+            if len(_parts) >= 2:
+                _narratives[_mid] = '，'.join(_parts[:-1]) + '。' + _parts[-1] + '。'
+            elif _parts:
+                _narratives[_mid] = _parts[0] + '。'
+        data['narratives'] = _narratives
         inline = '<script>var __DATA=' + _json.dumps(data) + ';</script>'
         html = html.replace('</head>', inline + '</head>')
     except:
@@ -530,7 +648,31 @@ def doc_content(doc_type):
         md_content = f.read()
     return Response(md_content, mimetype="text/plain; charset=utf-8")
 
+
+@app.route('/api/odds/history')
+def odds_history():
+    try:
+        hist_file = os.path.join(DATA_DIR, 'odds_history', 'odds_history.json')
+        if os.path.exists(hist_file):
+            with open(hist_file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            return jsonify(data)
+        return jsonify({})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/odds/refresh')
+def odds_refresh():
+    try:
+        n, new_n, upd_n = track_odds.run()
+        return jsonify({'ok': True, 'matches': n, 'new': new_n, 'updated': upd_n})
+    except Exception as e:
+        return jsonify({'ok': False, 'error': str(e)}), 500
+
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5020))
     debug = os.environ.get('FLASK_ENV', 'development') != 'production'
+    start_odds_scheduler()
     app.run(host='0.0.0.0', port=port, debug=debug)
