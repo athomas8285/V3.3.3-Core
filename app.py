@@ -547,6 +547,42 @@ def live_info():
     return jsonify({"matches": matches})
 
 
+
+@app.route('/api/wc-matches')
+def wc_matches():
+    """Return all World Cup matches with prediction data and odds from DB."""
+    conn = db.get_db()
+    cur = conn.cursor()
+    # Get latest run_id for each WC match (match_id starting with weekday)
+    cur.execute("""
+        WITH latest AS (
+            SELECT match_id, MAX(run_id) as max_run
+            FROM matches
+            WHERE match_id IN (
+                SELECT match_id FROM matches 
+                WHERE match_id GLOB '*[\u4e00-\u9fff]*[0-9]'
+            )
+            GROUP BY match_id
+        )
+        SELECT m.* FROM matches m
+        JOIN latest l ON m.match_id = l.match_id AND m.run_id = l.max_run
+        ORDER BY m.match_time
+    """)
+    cols = [d[0] for d in cur.description]
+    rows = []
+    for row in cur.fetchall():
+        d = dict(zip(cols, row))
+        # Parse JSON fields
+        for f in ('top2_total_goals', 'top2_half_full', 'top3_scores'):
+            if d.get(f):
+                try:
+                    d[f] = json.loads(d[f])
+                except:
+                    d[f] = []
+        rows.append(d)
+    conn.close()
+    return jsonify({'matches': rows})
+
 @app.route("/api/history/runs")
 def history_runs():
     conn = db.get_db()

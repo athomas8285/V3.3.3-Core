@@ -229,10 +229,10 @@ def main():
             if hit_val not in ("True", "False"):
                 continue
             # 在 DB 中找匹配的 (match_id, home, away)
-            sql = "SELECT match_id, hit FROM matches WHERE match_id=? AND home=? AND away=? AND actual_score IS NULL"
+            sql = "SELECT run_id FROM matches WHERE match_id=? AND home=? AND away=? AND actual_score IS NULL"
             db_matches = db.execute(sql, (row["id"], row["home"], row["away"])).fetchall()
             for dbm in db_matches:
-                update_result(row["id"], dbm["match_id"] is not None, score,
+                update_result(row["id"], dbm["run_id"], score,
                              hit=(hit_val == "True"), diagnosis=row.get("diagnosis", ""))
                 updated_db += 1
         db.close()

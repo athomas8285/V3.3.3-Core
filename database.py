@@ -50,6 +50,8 @@ def init_db():
         s7_score REAL, s7_reason TEXT, trap_analysis TEXT, key_risk TEXT,
         actual_score TEXT, half_time_score TEXT, half_full TEXT,
         hit INTEGER, diagnosis TEXT,
+        wc_group TEXT, jc_sp_home REAL, jc_sp_draw REAL, jc_sp_away REAL,
+        ah_home REAL, ah_draw REAL, ah_away REAL, match_date TEXT,
         created_at TEXT DEFAULT (datetime('now','localtime')),
         result_updated_at TEXT
     );
@@ -85,7 +87,9 @@ def insert_match(run_id, m):
             fit_score, rating, direction, direction_warning,
             downgrade_count, meltdown, scenario_type,
             top2_total_goals, top2_half_full, top3_scores,
-            s7_score, s7_reason, trap_analysis, key_risk
+            s7_score, s7_reason, trap_analysis, key_risk,
+            wc_group, jc_sp_home, jc_sp_draw, jc_sp_away,
+            ah_home, ah_draw, ah_away, match_date
         ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
     """, (
         run_id, m["match_id"], m["home"], m["away"],
@@ -107,7 +111,9 @@ def insert_match(run_id, m):
         json.dumps(m.get("top2_half_full", []), ensure_ascii=False),
         json.dumps(m.get("top3_scores", []), ensure_ascii=False),
         m.get("s7_score"), m.get("s7_reason"),
-        m.get("trap_analysis"), m.get("key_risk")
+        m.get("trap_analysis"), m.get("key_risk"),
+        m.get("wc_group"), m.get("jc_sp_home"), m.get("jc_sp_draw"), m.get("jc_sp_away"),
+        m.get("ah_home"), m.get("ah_draw"), m.get("ah_away"), m.get("match_date")
     ))
     conn.commit()
     conn.close()
