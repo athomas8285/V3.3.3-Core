@@ -1,0 +1,1 @@
+'var isCollapsed = (dk === "6\\u670812\\u65e5");\n    h += \'<div class="ana-date-group">\';\n    h += \'<di'

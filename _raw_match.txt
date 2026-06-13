@@ -1,0 +1,4 @@
+var isCollapsed = (dk === "6\u670812\u65e5");
+    h += '<div class="ana-date-group">';
+    h += '<div class="ana-date-label clickable" onclick="toggleDateGroup(this)">';
+    h += '<span class="ana-dat

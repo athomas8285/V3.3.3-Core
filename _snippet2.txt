@@ -1,0 +1,58 @@
+=== renderFromWC ===
+function renderFromWC(){
+  var el = document.getElementById('analysisInner');
+  if(!el) return;
+  var h = '<div class="ana-intro" style="padding:8px 4px 12px;color:var(--t2);font-size:13px;border-bottom:1px solid rgba(255,255,255,.04);margin-bottom:12px;">🏆 世界杯 ' + WC_MATCHES_DATA.length + ' 场小组赛 &mdash; 点击日期标题折叠，点击卡片展开详情</div>';
+  var groups = {};
+  for(var i = 0; i < WC_MATCHES_DATA.length; i++){
+    var m = WC_MATCHES_DATA[i];
+    if(!groups[m.d]) groups[m.d] = [];
+    groups[m.d].push(m);
+  }
+  var dateKeys = Object.keys(groups);
+  dateKeys.sort(function(a,b){
+    function toNum(s){ var mm=s.match(/(\d+)月(\d+)日/); return mm?parseInt(mm[1],10)*100+parseInt(mm[2],10):0; }
+    return toNum(a)-toNum(b);
+  });
+  for(var di = 0; di < dateKeys.length; di++){
+    var dk = dateKeys[di];
+    var ml = groups[dk];
+    var isCollapsed = (dk === "6\u670812\u65e5");
+    h += '<div class="ana-date-group">';
+    h += '<div class="ana-date-label clickable" onclick="toggleDateGroup(this)">';
+    h += '<span class="ana-date-arrow">' + (isCollapsed ? '▶' : '▼') + '</span> 📅 ' + dk + '<span class="adl-count">' + ml.length + ' 场</span></div>';
+    h += '<div class="ana-date-body"' + (isCollapsed ? ' style="display:none"' : '') + '>';
+    for(var mi = 0; mi < ml.length; mi++){
+      var m = ml[mi];
+      var glStr = m.gl !== 0 ? (m.gl > 0 ? '+' + m.gl : '' + m.gl) : '0';
+      var hasSp = (m.sh !== '-' && m.sh !== '');
+      var isCompleted = !!m.result;
+      var isPredictable = !isCompleted && (hasSp);
+      
+      h += '<div class="ana-card' + (isCompleted ? (m.hit ? ' result-card' : ' result-card miss') : '') + '" onclick="toggleAnaCard(this)" data-match="' + m.id + '">';
+      h += '<div class="ana-card-top-row">';
+      h += '<div class="ana-card-num">' + m.id + '</div>';
+      h += '<div class="ana-card-time">' + m.t + '</div>';
+      h += '<div class="ana-card-group">' + m.g + '组</div>';
+      if(isCompleted){
+        h += '<div class="ana-card-teams"><span class="tname home">' + m.h + '</span><span class="vs result-score">' + m.result + '</span><span class="tname away">' + m.a + '</span></div>';
+      } else {
+        h += '<div class="ana-card-teams"><span class="tname home">' + m.h + '</span><span class="vs">VS</span><span class="tname away">' + m.a + '</span></div>';
+      }
+      h += '<div class="ana-card-odds">';
+      if(hasSp){
+        h += '<div class="odds-group"><span class="og-label">SP</span>';
+        h += '<span class="og-item og-sp-h">' + m.sh + '</span>';
+        h += '<span class="og-item og-sp-d">' + m.sd + '</span>';
+        h += '<span class="og-item og-sp-a">' + m.sa + '</span></div>';
+      } else {
+        h += '<span class="odds-empty">⚠无SP</span>';
+      }
+      h += '</div>';
+      h += '<div class="ana-card-odds"><div class="odds-group"><span class="hcp-line">让' + glStr + '</span>';
+      h += '<span class="og-item og-sp-h">' + m.gh + '</span>';
+      h += '<span class="og-item og-sp-d">' + m.gd + '</span>';
+      h += '<span cla
+=== renderFromData at 213045 ===
+
+=== renderFromWC at 230854 ===

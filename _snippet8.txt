@@ -1,0 +1,85 @@
+function switchNav(nav){
+  window.scrollTo(0, 0);
+  // 导航高亮互斥（支持两类菜单）
+  document.querySelectorAll('.wc-sub-item, .sd-nav-item').forEach(function(el){
+    el.classList.remove('active');
+  });
+  var target = document.querySelector('.wc-sub-item[data-nav="'+nav+'"]') || document.querySelector('.sd-nav-item[data-nav="'+nav+'"]');
+  if(target) target.classList.add('active');
+
+  // 隐藏所有视图
+  document.querySelectorAll('.view-content').forEach(function(el){
+    el.style.display = 'none';
+  });
+
+  // 显示并渲染目标视图
+  // Clear dynamic content before switching
+  ['homeInner','standingsInner','bracketInner','oddsInner','topInner','analysisInner','docInner'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(el) el.innerHTML = '';
+  });
+  switch(nav){
+    case 'home':
+      document.getElementById('homeContent').style.display = 'block';
+      renderHomePage();
+      break;
+    case 'analysis':
+      document.getElementById('analysisContent').style.display = 'block';
+      renderAnalysisView();
+      break;
+    case 'schedule':
+      document.getElementById('scheduleContent').style.display = 'block';
+      renderCalendarView();
+      break;
+    case 'standings':
+      document.getElementById('standingsContent').style.display = 'block';
+      renderStandings();
+      break;
+    case 'bracket':
+      document.getElementById('bracketContent').style.display = 'block';
+      renderBracket();
+      break;
+    case 'odds':
+      document.getElementById('oddsContent').style.display = 'block';
+      break;
+    case 'top':
+      document.getElementById('topContent').style.display = 'block';
+      break;
+    default:
+      // 未知导航项，显示占位
+      document.getElementById('homeContent').style.display = 'block';
+      var el = document.getElementById('homeInner');
+      if(el) el.innerHTML = '<div class="empty-state">功能开发中...</div>';
+      break;
+  }
+}
+
+// 页面加载完成 -> 默认显示小组赛程
+﻿function renderBracket(){
+  var el = document.getElementById("bracketInner");
+  var TBD = '<div class="br-team tbd"><span>TBD</span></div>';
+  var VS = '<div class="br-vs">VS</div>';
+  function card(isFinal){
+    return '<div class="br-card'+(isFinal?' final':'')+'">'+TBD+VS+TBD+'</div>';
+  }
+  function round(lbl,gold,count){
+    var h='<div class="br-col" data-round="'+lbl+'">';
+    h+='<div class="br-round-label'+(gold?' gold':'')+'">'+lbl+'</div>';
+    for(var i=0;i<count;i++) h+=card(false);
+    h+='</div>';
+    return h;
+  }
+  function half(){
+    var h='';
+    h+=round('\u7b2c\u4e00\u8f6e·16\u573a',false,8);
+    h+=round('1/8\u51b3\u8d5b',false,4);
+    h+=round('1/4\u51b3\u8d5b',false,2);
+    h+=round('\u534a\u51b3\u8d5b',false,1);
+    return h;
+  }
+  var h='<div class="br-wrap"><div class="br-tree" id="brTree">';
+  h+='<div class="br-half left">'+half()+'</div>';
+  h+='<div class="br-col" style="flex:0 0 auto;padding:0 16px" data-round="\u51b3\u8d5b">';
+  h+='<div class="br-round-label gold">\u51b3\u8d5b</div>'+card(true)+'</div>';
+  h+='<div class="br-half right">'+half()+'</div>';
+  

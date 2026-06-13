@@ -1,0 +1,101 @@
+function renderHomePage(){
+  var el = document.getElementById("homeInner");
+  var now = new Date();
+  var upcoming = null;
+  for(var i = 0; i < WC_MATCHES.length; i++){
+    var m = WC_MATCHES[i];
+    var dp = m.d.replace('月','/').replace('日','');
+    var tp = m.t.split(':');
+    var md = new Date(2026, parseInt(dp.split('/')[0])-1, parseInt(dp.split('/')[1]), parseInt(tp[0]), parseInt(tp[1]));
+    if(md > now && (!upcoming || md < upcoming.date)){
+      upcoming = {match: m, date: md};
+    }
+  }
+  if(!upcoming){
+    el.innerHTML = 
+      '<div class="hcc-container">' +
+        '<div class="hcc-bg-canvas"><div class="hcc-glow-orb o1"></div><div class="hcc-glow-orb o2"></div><div class="hcc-grid-lines"></div></div>' +
+        '<div class="hcc-empty"><div class="hcc-empty-icon">🏆</div><div class="hcc-empty-text">2026世界杯已落幕</div></div>' +
+      '</div>';
+    return;
+  }
+  window.__NEXT_MATCH = upcoming;
+  var m = upcoming.match;
+  var fh = getFlagSrc(m.h), fa = getFlagSrc(m.a);
+  el.innerHTML =
+    '<div class="hcc-container">' +
+      '<div class="hcc-bg-canvas">' +
+        '<div class="hcc-glow-orb o1"></div>' +
+        '<div class="hcc-glow-orb o2"></div>' +
+        '<div class="hcc-radar-sweep"></div>' +
+        '<div class="hcc-radar-ring"></div>' +
+        '<div class="hcc-radar-ring"></div>' +
+        '<div class="hcc-radar-ring"></div>' +
+        '<div class="hcc-grid-lines"></div>' +
+      '</div>' +
+      '<canvas id="hccParticles" class="hcc-particles"></canvas>' +
+      '<div class="hcc-corner-bracket tl"></div>' +
+      '<div class="hcc-corner-bracket tr"></div>' +
+      '<div class="hcc-corner-bracket bl"></div>' +
+      '<div class="hcc-corner-bracket br"></div>' +
+      '<div class="hcc-center">' +
+        '<div class="hcc-sysbar">' +
+          '<span class="hsb-dot"></span>' +
+          '<span class="hsb-item">' + m.g + '组 · <span class="hsb-val">' + m.v + '</span></span>' +
+          '<span class="hsb-item">开球: <span class="hsb-val">' + m.d + ' ' + m.t.slice(0,5) + '</span></span>' +
+        '</div>' +
+        '<div class="hcc-countdown">' +
+          '<div class="hcc-countdown-title">距离下一场比赛</div>' +
+          '<div class="hcc-clock" id="hccClock">' +
+            '<div class="hcc-clock-unit" id="hccDU"><div class="hcc-clock-digits cyan" id="hccDays">00</div><div class="hcc-clock-label">DAYS</div></div>' +
+            '<div class="hcc-clock-sep" id="hccDS">:</div>' +
+            '<div class="hcc-clock-unit"><div class="hcc-clock-digits" id="hccHours">00</div><div class="hcc-clock-label">HOURS</div></div>' +
+            '<div class="hcc-clock-sep">:</div>' +
+            '<div class="hcc-clock-unit"><div class="hcc-clock-digits gold" id="hccMins">00</div><div class="hcc-clock-label">MINUTES</div></div>' +
+            '<div class="hcc-clock-sep">:</div>' +
+            '<div class="hcc-clock-unit"><div class="hcc-clock-digits green" id="hccSecs">00</div><div class="hcc-clock-label">SECONDS</div></div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="hcc-match-card" onclick="openMatchAnalysis(\'' + m.h + '\',\'' + m.a + '\')">' +
+          '<div class="hcc-mc-label">' + m.g + '组 · ' + m.v + '</div>' +
+          '<div class="hcc-mc-teams">' +
+            '<div class="hcc-mc-team">' +
+              (fh ? '<img class="hcc-mc-flag" src="' + fh + '" loading="lazy" onerror="this.style.display=\'none\'">' : '') +
+              '<div class="hcc-mc-team-name">' + m.h + '</div>' +
+            '</div>' +
+            '<div class="hcc-mc-vs">VS</div>' +
+            '<div class="hcc-mc-team">' +
+              (fa ? '<img class="hcc-mc-flag" src="' + fa + '" loading="lazy" onerror="this.style.display=\'none\'">' : '') +
+              '<div class="hcc-mc-team-name">' + m.a + '</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="hcc-mc-info"><span class="hcc-mc-venue-icon">🌍</span> ' + m.d + ' · ' + m.t.slice(0,5) + ' · ' + m.v + '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  updateNextMatchCD();
+  if(window.__CD_INTERVAL) clearInterval(window.__CD_INTERVAL);
+  window.__CD_INTERVAL = setInterval(updateNextMatchCD, 1000);
+  initParticles();
+}
+function updateNextMatchCD(){
+  var nm = window.__NEXT_MATCH;
+  if(!nm) return;
+  var now = new Date();
+  var diff = nm.date - now;
+  if(diff <= 0){
+    if(window.__CD_INTERVAL) clearInterval(window.__CD_INTERVAL);
+    renderHomePage();
+    return;
+  }
+  var totalSec = Math.floor(diff / 1000);
+  var d = Math.floor(totalSec / 86400);
+  var h = Math.floor((totalSec % 86400) / 3600);
+  var m = Math.floor((totalSec % 3600) / 60);
+  var s = totalSec % 60;
+  var pad = function(v){return v<10?"0"+v:""+v;};
+  var elD = document.getElementById("hccDays"); if(elD) elD.textContent = pad(d);
+  var elH = document.getElementById("hccHours"); if(elH) elH.textContent = pad(h);
+  var elM = document.getElementById("hccMins"); if(elM) elM.textContent = pad(m);
+  var elS = document.getElementById("hccSecs"); if(elS) elS.textContent = pad(s);
+ 

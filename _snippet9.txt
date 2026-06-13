@@ -1,0 +1,42 @@
+=== analysisContent ===
+id="analysisContent" class="view-content" style="display:none">
+    <div class="sec-header">
+      <button class="sec-back-btn" onclick="switchNav('home')">← 返回首页</button>
+      <h2>🔍 比赛分析</h2>
+      <div class="sec-bar"></div>
+    </div>
+    <div id="analysisInner"></div>
+  </div>
+  <!-- ====== View: ????? ====== -->
+  <div id="docContent" class="view-content" style="display:none">
+    <div id="docInner"></div>
+  </div>
+
+<footer class="page-footer">
+    <div class="disclaimer-box">
+      <p>
+  
+
+=== analysisInner ===
+home')">← 返回首页</button>
+      <h2>🔍 比赛分析</h2>
+      <div class="sec-bar"></div>
+    </div>
+    <div id="analysisInner"></div>
+  </div>
+  <!-- ====== View: ????? ====== -->
+  <div id="docContent" class="view-content" style="display:none">
+    <div id="docInner"></div>
+  </div>
+
+<footer class="page-footer">
+    <div class="disclaimer-box">
+      <p>
+        <span class="icon">⚠️</span>
+        <strong>免责声明：</strong>本网站所提供的所有赛事分析及预测结果，仅供体育爱好者交流参考，不构成任何投注建议或承诺。
+      </p>
+      <p>
+        <span class="icon">⚠️</span>
+        <strong>风险提示：</strong>彩票有风险，投注需谨慎。请理性购彩，量力而行。未满18岁不得购买彩票。
+      </p>
+   

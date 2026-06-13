@@ -175,15 +175,12 @@
       "event": "世界杯",
       "time": "2026-06-13 03:00",
       "direction": "让负",
-      "fit_score": 5.140000000000001,
+      "fit_score": 5.14,
       "rating": "B",
       "downgrade_count": 0,
       "meltdown": false,
       "scenario_type": "低返还率赛事",
-      "direction_warning": false,
-      "actual_score": "1-1",
-      "half_full": "负平",
-      "hit": true
+      "direction_warning": false
     },
     {
       "id": "周五004",
@@ -192,15 +189,12 @@
       "event": "世界杯",
       "time": "2026-06-13 09:00",
       "direction": "胜",
-      "fit_score": 5.21,
+      "fit_score": 5.4,
       "rating": "B",
       "downgrade_count": 0,
       "meltdown": false,
       "scenario_type": "低返还率赛事",
-      "direction_warning": false,
-      "actual_score": "4-1",
-      "half_full": "胜胜",
-      "hit": true
+      "direction_warning": false
     },
     {
       "id": "周六005",
@@ -282,8 +276,8 @@
       "event": "世界杯",
       "time": "2026-06-12 10:00",
       "direction": "让胜",
-      "fit_score": 4.01,
-      "rating": "B",
+      "fit_score": 7.2,
+      "rating": "A",
       "downgrade_count": 1,
       "meltdown": false,
       "scenario_type": "低返还率赛事",

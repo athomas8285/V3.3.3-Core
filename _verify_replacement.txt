@@ -1,0 +1,4 @@
+var allDoneWC = ml.every(function(m){ return !!m.result; });
+    h += '<div class="ana-date-group">';
+    h += '<div class="ana-date-label clickable" onclick="toggleDateGroup(this)">';
+    h += '<span class="ana-date-arrow">' + (allDoneWC ? '\u25b6' : '\u25bc') + '</span> \ud83d\udcc5 ' + dk + '<span class="adl-count">' + ml.length + ' \u573a</span

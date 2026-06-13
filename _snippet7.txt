@@ -1,0 +1,33 @@
+=== onload at 210170 ===
+  xhr.open("GET", "/api/wc-matches", true);
+  xhr.onload = function(){
+    if(xhr.status === 200){
+      try{
+        var resp = JSON.parse(xhr.responseText);
+        var raw = resp.matches || [];
+        WC_MATCHES_DATA = raw.map(function(m){
+      
+
+=== DOMContentLoaded at 284021 ===
+ svg.appendChild(p);
+}
+document.addEventListener('DOMContentLoaded', function(){
+  switchNav("home");
+  setTimeout(loadDocSections, 100);
+});
+
+// ====== Documentation sidebar + modal ======
+function loadDocSections(){
+  var c = document.getElementByI
+
+=== addEventListener at 253023 ===
+istener("keydown", escHandler); }
+  };
+  document.addEventListener("keydown", escHandler);
+}
+
+// Close modal on ESC (global)
+document.addEventListener("keydown", function(e){
+  if(e.key === "Escape"){
+    var o = document.querySelector(".modal-overla
+

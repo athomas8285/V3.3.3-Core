@@ -1,0 +1,7 @@
+var dk = dateKeys[di];
+    var ml = groups[dk];
+    var allDone = ml.every(function(item){ var r = ratingIdx[item.id]; return r && r.actual_score; });
+    h += '<div class="ana-date-group">';
+    h += '<div class="ana-date-label clickable" onclick="toggleDateGroup(this)">';
+    h += '<span class="ana-date-arrow">' + (allDone ? '▶' : '▼') + '</span> 📅 ' + dk + '<span class="adl-count">' + ml.length + ' 场</span></div>';
+    h += '<div class="ana-date-body"' + (allDone ? ' style="display:none"' : '

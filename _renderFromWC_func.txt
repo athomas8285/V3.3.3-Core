@@ -1,0 +1,124 @@
+function renderFromWC(){
+  var el = document.getElementById('analysisInner');
+  if(!el) return;
+  var h = '<div class="ana-intro" style="padding:8px 4px 12px;color:var(--t2);font-size:13px;border-bottom:1px solid rgba(255,255,255,.04);margin-bottom:12px;">🏆 世界杯 ' + WC_MATCHES_DATA.length + ' 场小组赛 &mdash; 点击日期标题折叠，点击卡片展开详情</div>';
+  var groups = {};
+  for(var i = 0; i < WC_MATCHES_DATA.length; i++){
+    var m = WC_MATCHES_DATA[i];
+    if(!groups[m.d]) groups[m.d] = [];
+    groups[m.d].push(m);
+  }
+  var dateKeys = Object.keys(groups);
+  dateKeys.sort(function(a,b){
+    function toNum(s){ var mm=s.match(/(\d+)月(\d+)日/); return mm?parseInt(mm[1],10)*100+parseInt(mm[2],10):0; }
+    return toNum(a)-toNum(b);
+  });
+  for(var di = 0; di < dateKeys.length; di++){
+    var dk = dateKeys[di];
+    var ml = groups[dk];
+        var allDoneWC = ml.every(function(m){ return !!m.result; });
+    h += '<div class="ana-date-group">';
+    h += '<div class="ana-date-label clickable" onclick="toggleDateGroup(this)">';
+    h += '<span class="ana-date-arrow">' + (allDoneWC ? '\u25b6' : '\u25bc') + '</span> \ud83d\udcc5 ' + dk + '<span class="adl-count">' + ml.length + ' \u573a</span></div>';
+    h += '<div class="ana-date-body"' + (allDoneWC ? ' style="display:none"' : '') + '>';
+    for(var mi = 0; mi < ml.length; mi++){
+      var m = ml[mi];
+      var glStr = m.gl !== 0 ? (m.gl > 0 ? '+' + m.gl : '' + m.gl) : '0';
+      var hasSp = (m.sh !== '-' && m.sh !== '');
+      var isCompleted = !!m.result;
+      var isPredictable = !isCompleted && (hasSp);
+      
+      h += '<div class="ana-card' + (isCompleted ? (m.hit ? ' result-card' : ' result-card miss') : '') + '" onclick="toggleAnaCard(this)" data-match="' + m.id + '">';
+      h += '<div class="ana-card-top-row">';
+      h += '<div class="ana-card-num">' + m.id + '</div>';
+      h += '<div class="ana-card-time">' + m.t + '</div>';
+      h += '<div class="ana-card-group">' + m.g + '组</div>';
+      if(isCompleted){
+        h += '<div class="ana-card-teams"><span class="tname home">' + m.h + '</span><span class="vs result-score">' + m.result + '</span><span class="tname away">' + m.a + '</span></div>';
+      } else {
+        h += '<div class="ana-card-teams"><span class="tname home">' + m.h + '</span><span class="vs">VS</span><span class="tname away">' + m.a + '</span></div>';
+      }
+      h += '<div class="ana-card-odds">';
+      if(hasSp){
+        h += '<div class="odds-group"><span class="og-label">SP</span>';
+        h += '<span class="og-item og-sp-h">' + m.sh + '</span>';
+        h += '<span class="og-item og-sp-d">' + m.sd + '</span>';
+        h += '<span class="og-item og-sp-a">' + m.sa + '</span></div>';
+      } else {
+        h += '<span class="odds-empty">⚠无SP</span>';
+      }
+      h += '</div>';
+      h += '<div class="ana-card-odds"><div class="odds-group"><span class="hcp-line">让' + glStr + '</span>';
+      h += '<span class="og-item og-sp-h">' + m.gh + '</span>';
+      h += '<span class="og-item og-sp-d">' + m.gd + '</span>';
+      h += '<span class="og-item og-sp-a">' + m.ga + '</span></div></div>';
+
+      // ③ 方向/评级列
+      if(isCompleted){
+        var hitStr = m.hit ? '✅命中' : '❌未中';
+        var hitColor = m.hit ? '#00e676' : '#ef5350';
+        h += '<div class="ana-card-result"><span class="result-badge" style="background:' + hitColor + '22;border:1px solid ' + hitColor + '44;color:' + hitColor + ';">' + m.result + '</span><span class="hit-badge" style="color:' + hitColor + ';">' + hitStr + '</span></div>';
+        h += '<div class="ana-card-odds"><div class="odds-group"><span class="og-item" style="color:var(--t3);font-size:11px;">已完赛</span></div></div>';
+      } else if(isPredictable){
+        var shV = parseFloat(m.sh)||3, sdV = parseFloat(m.sd)||3, saV = parseFloat(m.sa)||3;
+        var minSp = Math.min(shV, sdV, saV);
+        var dir = shV === minSp ? '胜' : (saV === minSp ? '负' : '平');
+        var dirColor = dir === '胜' ? '#4ade80' : (dir === '负' ? '#ef4444' : '#fbbf24');
+        h += '<div class="ana-card-odds"><div class="odds-group" style="background:' + dirColor + '22;border:1px solid ' + dirColor + '44;">';
+        h += '<span class="og-item" style="color:' + dirColor + ';font-size:13px;font-weight:700;">' + dir + '</span></div></div>';
+        h += '<div class="ana-card-odds"><div class="odds-group"><span class="og-item" style="color:var(--t3);font-size:11px;">待分析</span></div></div>';
+      } else {
+        h += '<div class="ana-card-waiting">等待预测数据</div>';
+      }
+      h += '<div class="ana-card-expand">▼</div>';
+      h += '</div>';
+
+      // 展开内容
+      if(isCompleted){
+        h += '<div class="ana-expanded">';
+        h += '<div class="ana-exp-odds-detail">';
+        h += '<table class="ana-exp-odds-table">';
+        h += '<tr><th></th><th>主</th><th>平</th><th>客</th></tr>';
+        if(hasSp){
+          h += '<tr><td><strong>竞彩SP</strong></td><td class="val-h">' + m.sh + '</td><td class="val-d">' + m.sd + '</td><td class="val-a">' + m.sa + '</td></tr>';
+        }
+        h += '<tr><td><strong>让球SP</strong></td><td class="val-h">' + m.gh + '</td><td class="val-d">' + m.gd + '</td><td class="val-a">' + m.ga + '</td></tr>';
+        h += '</table>';
+        h += '<div class="exp-result-review" style="text-align:center;padding:12px;margin-top:8px;background:rgba(255,255,255,.03);border-radius:6px;">';
+        var hitIcon = m.hit ? '✅' : '❌';
+        h += '<div style="font-size:20px;font-weight:700;color:var(--t1);margin-bottom:4px;">' + m.h + ' ' + m.result + ' ' + m.a + '</div>';
+        h += '<div style="font-size:14px;color:' + (m.hit ? 'var(--green)' : 'var(--red)') + ';">' + hitIcon + ' 预测方向：' + m.dir + ' → ' + (m.hit ? '命中' : '未中') + '</div>';
+        h += '</div>';
+        h += '</div></div>';
+      } else if(isPredictable){
+        h += '<div class="ana-expanded">';
+        h += '<div class="ana-exp-odds-detail">';
+        h += '<table class="ana-exp-odds-table">';
+        h += '<tr><th></th><th>主</th><th>平</th><th>客</th></tr>';
+        if(hasSp){
+          h += '<tr><td><strong>竞彩SP</strong></td><td class="val-h">' + m.sh + '</td><td class="val-d">' + m.sd + '</td><td class="val-a">' + m.sa + '</td></tr>';
+        } else {
+          h += '<tr><td><strong>竞彩SP</strong></td><td colspan="3" style="color:#64748b;">无数据</td></tr>';
+        }
+        h += '<tr><td><strong>让球SP</strong></td><td class="val-h">' + m.gh + '</td><td class="val-d">' + m.gd + '</td><td class="val-a">' + m.ga + '</td></tr>';
+        h += '</table><div class="ana-exp-detail-grid">';
+        h += '<div class="ana-exp-detail-cell"><div class="dc-label">📅 比赛信息</div><div class="dc-desc">' + m.id + ' | ' + m.d + ' ' + m.t + ' | ' + m.g + '组</div><div class="dc-value" style="margin-top:4px;">' + m.h + ' vs ' + m.a + '</div></div>';
+        h += '<div class="ana-exp-detail-cell"><div class="dc-label">🎰 让球分析</div><div class="dc-desc">让' + glStr + ' | 竞彩让球SP小幅偏向</div></div>';
+        h += '<div class="ana-exp-detail-cell"><div class="dc-label">🎯 胜负分析</div>';
+        if(hasSp){
+          var shV2 = parseFloat(m.sh)||0, sdV2 = parseFloat(m.sd)||0, saV2 = parseFloat(m.sa)||0;
+          var minSp2 = Math.min(shV2, sdV2, saV2);
+          var spHint2 = shV2 === minSp2 ? '主胜SP ' + m.sh : (saV2 === minSp2 ? '客胜SP ' + m.sa : '平局SP ' + m.sd);
+          h += '<div class="dc-desc">' + spHint2 + ' 最低，市场偏向明显</div>';
+        } else { h += '<div class="dc-desc" style="color:#64748b;">无竞彩SP数据</div>'; }
+        h += '</div><div class="ana-exp-detail-cell risk"><div class="dc-label">⚠ 风控</div><div class="dc-desc">赛前分析仅供参考</div></div>';
+        h += '</div></div></div>';
+      } else {
+        h += '<div class="ana-expanded" style="padding:20px;text-align:center;color:var(--t3);font-size:13px;">等待预测数据</div>';
+      }
+      h += '</div>';
+    }
+    h += '</div>';
+  }
+  el.innerHTML = h;
+}

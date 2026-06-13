@@ -1,0 +1,49 @@
+function renderFromData(){
+  var el = document.getElementById('analysisInner');
+  if(!el) return;
+  var infoList = __DATA.info || [];
+  var ratingIdx = {}, mcIdx = {}, ddiIdx = {}, aiIdx = {}, fitIdx = {}, trendIdx = {};
+  (__DATA.rating || []).forEach(function(m){ if(m.id) ratingIdx[m.id]=m; });
+  (__DATA.mc || []).forEach(function(m){ if(m.id) mcIdx[m.id]=m; });
+  (__DATA.ddi || []).forEach(function(m){ if(m.id) ddiIdx[m.id]=m; });
+  (__DATA.fit || []).forEach(function(m){ if(m.id && m.fit_score) fitIdx[m.id]=m.fit_score; });
+  (__DATA.trend || []).forEach(function(m){ if(m.id) trendIdx[m.id]=m; });
+  (__DATA.ai || []).forEach(function(m){ if(m.id) aiIdx[m.id]=m; });
+
+  var h = '<div class="ana-intro" style="padding:8px 4px 12px;color:var(--t2);font-size:13px;border-bottom:1px solid rgba(255,255,255,.04);margin-bottom:12px;">📊 ' + infoList.length + ' 场分析结果 &mdash; 点击卡片展开详情</div>';
+
+  var groups = {};
+  for(var i = 0; i < infoList.length; i++){
+    var info = infoList[i];
+    var timeStr = info.time || '';
+    var datePart = timeStr.length >= 10 ? timeStr.slice(0,10) : '';
+    var parts = datePart.split('-');
+    var dateLabel = parts.length === 3 ? parseInt(parts[1],10) + '月' + parseInt(parts[2],10) + '日' : datePart;
+    if(!groups[dateLabel]) groups[dateLabel] = [];
+    groups[dateLabel].push(info);
+  }
+  var dateKeys = Object.keys(groups);
+  dateKeys.sort(function(a,b){
+    function toNum(s){ var m=s.match(/(\d+)月(\d+)日/); return m?parseInt(m[1],10)*100+parseInt(m[2],10):0; }
+    return toNum(a)-toNum(b);
+  });
+
+  for(var di = 0; di < dateKeys.length; di++){
+    var dk = dateKeys[di];
+    var ml = groups[dk];
+    var allDone = ml.every(function(item){ var r = ratingIdx[item.id]; return r && r.actual_score; });
+    h += '<div class="ana-date-group">';
+    h += '<div class="ana-date-label clickable" onclick="toggleDateGroup(this)">';
+    h += '<span class="ana-date-arrow">' + (allDone ? '▶' : '▼') + '</span> 📅 ' + dk + '<span class="adl-count">' + ml.length + ' 场</span></div>';
+    h += '<div class="ana-date-body"' + (allDone ? ' style="display:none"' : '') + '>';
+    for(var mi = 0; mi < ml.length; mi++){
+      var info = ml[mi];
+      var infoDatePart = (info.time||'').length >= 10 ? (info.time||'').slice(0,10) : '';
+
+      var mid = info.id || mi;
+      var rat = ratingIdx[mid] || {};
+      var mc = mcIdx[mid] || {};
+      var ddi = ddiIdx[mid] || {};
+      var ai = aiIdx[mid] || {};
+      var fit = fitIdx[mid] || {};
+      var trend = trendIdx[mid] |

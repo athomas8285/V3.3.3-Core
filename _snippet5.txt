@@ -1,0 +1,42 @@
+function __expandTargetMatch(){
+  var tm = window.__TARGET_MATCH;
+  if(!tm) return;
+  delete window.__TARGET_MATCH;
+  var cards = document.querySelectorAll(".ana-card");
+  for(var i = 0; i < cards.length; i++){
+    var c = cards[i];
+    var home = c.querySelector(".tname.home");
+    var away = c.querySelector(".tname.away");
+    if(home && away && home.textContent === tm.h && away.textContent === tm.a){
+      toggleAnaCard(c);
+      setTimeout(function(){
+        c.scrollIntoView({behavior:"smooth",block:"center"});
+        c.classList.add("highlight");
+        setTimeout(function(){ c.classList.remove("highlight"); }, 1500);
+      }, 100);
+      break;
+    }
+  }
+}
+
+function renderCalendarView(){
+  var main = document.querySelector(".main");
+  main.scrollTop = 0;
+  document.querySelector(".sec-header h2").textContent = "🏆 2026世界杯赛程";
+  var gs={};for(var xi=0;xi<WC_MATCHES.length;xi++)gs[WC_MATCHES[xi].g]=1;var gk=Object.keys(gs);document.getElementById("todaySub").textContent = WC_MATCHES.length+"场比赛 · "+gk.length+"个小组";
+  document.getElementById("todayMatches").style.display = "block";
+
+  // Build match lookup by date
+  var matchByDate = {};
+  for(var i = 0; i < WC_MATCHES.length; i++){
+    var m = WC_MATCHES[i];
+    if(!matchByDate[m.d]) matchByDate[m.d] = [];
+    matchByDate[m.d].push(m);
+  }
+
+  var now = new Date();
+  var y = now.getFullYear();
+  var m = now.getMonth();
+  var d = now.getDate();
+  // Find first date with unfinished matches (no s field)
+  var firstUnfinishe

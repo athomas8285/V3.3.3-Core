@@ -1837,8 +1837,8 @@ var WC_MATCHES = [
   {d:"6月12日",t:"03:00",g:"A",h:"墨西哥",a:"南非",v:"墨西哥城",s:"2-0"},
   {d:"6月12日",t:"10:00",g:"A",h:"韩国",a:"捷克",v:"瓜达拉哈拉",s:"2-1"},
   // 6月13日
-  {d:"6月13日",t:"03:00",g:"B",h:"加拿大",a:"波黑",v:"多伦多"},
-  {d:"6月13日",t:"09:00",g:"D",h:"美国",a:"巴拉圭",v:"洛杉矶"},
+  {d:"6月13日",t:"03:00",g:"B",h:"加拿大",a:"波黑",v:"多伦多",s:"1-1"},
+  {d:"6月13日",t:"09:00",g:"D",h:"美国",a:"巴拉圭",v:"洛杉矶",s:"4-1"},
   // 6月14日
   {d:"6月14日",t:"03:00",g:"B",h:"卡塔尔",a:"瑞士",v:"旧金山湾区"},
   {d:"6月14日",t:"06:00",g:"C",h:"巴西",a:"摩洛哥",v:"纽约/新泽西"},
@@ -1961,6 +1961,20 @@ var WC_MATCHES_DATA = [];
             hit: m.hit === 1 || m.hit === true
           };
         });
+                // Merge rating results into WC_MATCHES_DATA
+        if(typeof __DATA !== 'undefined' && __DATA && __DATA.rating){
+          var ratingById = {};
+          __DATA.rating.forEach(function(r){ if(r.id) ratingById[r.id]=r; });
+          WC_MATCHES_DATA.forEach(function(wm){
+            var r = ratingById[wm.id];
+            if(r && r.actual_score){
+              wm.result = r.actual_score;
+              wm.half_full = r.half_full || '';
+              wm.hit = r.hit === true;
+              wm.dir = r.direction || wm.dir;
+            }
+          });
+        }
         renderFromWC();
       } catch(e){ console.error("WC data parse error", e); }
     }
@@ -2045,10 +2059,11 @@ function renderFromData(){
   for(var di = 0; di < dateKeys.length; di++){
     var dk = dateKeys[di];
     var ml = groups[dk];
+    var allDone = ml.every(function(item){ var r = ratingIdx[item.id]; return r && r.actual_score; });
     h += '<div class="ana-date-group">';
     h += '<div class="ana-date-label clickable" onclick="toggleDateGroup(this)">';
-    h += '<span class="ana-date-arrow">' + (dk === '6月12日' ? '▶' : '▼') + '</span> 📅 ' + dk + '<span class="adl-count">' + ml.length + ' 场</span></div>';
-    h += '<div class="ana-date-body"' + (dk === '6月12日' ? ' style="display:none"' : '') + '>';
+    h += '<span class="ana-date-arrow">' + (allDone ? '▶' : '▼') + '</span> 📅 ' + dk + '<span class="adl-count">' + ml.length + ' 场</span></div>';
+    h += '<div class="ana-date-body"' + (allDone ? ' style="display:none"' : '') + '>';
     for(var mi = 0; mi < ml.length; mi++){
       var info = ml[mi];
       var infoDatePart = (info.time||'').length >= 10 ? (info.time||'').slice(0,10) : '';
@@ -2068,8 +2083,9 @@ function renderFromData(){
       var timeDisplay = tm.length >= 16 ? tm.slice(5,16) : (tm.length >= 5 ? tm : tm);
       var datePart = tm.length >= 10 ? tm.slice(0,10) : '';
       var isCompleted = rat.actual_score ? true : false;
-      var isFutureDate = datePart >= "2026-06-14";
-      var isPredictable = !isCompleted && (hasSp) && !isFutureDate;
+      var isFutureDate = datePart > "2026-06-14";
+      var hasRating = rat.rating ? true : false;
+      var isPredictable = !isCompleted && (hasSp || hasRating) && !isFutureDate;
       var dir = rat.direction || '';
       var fit = rat.fit_score;
       var rting = rat.rating || '';
@@ -2099,7 +2115,9 @@ function renderFromData(){
       var hcpStr = hcp !== null && hcp !== undefined ? (hcp > 0 ? '+' + hcp : '' + hcp) : '0';
 
       var dirColor = '#60a5fa';
-      if(dir.indexOf('让') >= 0) dirColor = '#ef5350';
+      if(displayDir === '让胜') dirColor = '#4ade80';
+      else if(displayDir === '让负') dirColor = '#ef4444';
+      else if(displayDir === '让平') dirColor = '#fbbf24';
       else if(dir === '胜') dirColor = '#4ade80';
       else if(dir === '负') dirColor = '#ef4444';
 
@@ -2108,7 +2126,14 @@ function renderFromData(){
       else if(rting === 'B') rtColor = '#fbbf24';
       else if(rting === 'C') rtColor = '#ef4444';
 
-      h += '<div class="ana-card' + (isCompleted ? (rat.hit ? ' result-card' : ' result-card miss') : '') + '" onclick="toggleAnaCard(this)" data-mid="' + mid + '">';
+      
+      // Convert to handicap direction if only handicap market available
+      var displayDir = dir;
+      var _hasHH = info.jc_hhad_win ? true : false;
+      if(!hasSp && _hasHH && dir){
+        displayDir = '让' + dir;
+      }
+h += '<div class="ana-card' + (isCompleted ? (rat.hit ? ' result-card' : ' result-card miss') : '') + '" onclick="toggleAnaCard(this)" data-mid="' + mid + '">';
       h += '<div class="ana-card-top-row">';
       h += '<div class="ana-card-num">' + mid + '</div>';
       h += '<div class="ana-card-time" style="font-size:12px;">' + timeDisplay + '</div>';
@@ -2134,7 +2159,7 @@ function renderFromData(){
         h += '<div class="ana-card-odds">';
         if(dir){
           h += '<div class="odds-group" style="background:' + dirColor + '22;border:1px solid ' + dirColor + '44;">';
-          h += '<span class="og-item" style="color:' + dirColor + ';font-size:13px;font-weight:700;">' + dir + '</span></div>';
+          h += '<span class="og-item" style="color:' + dirColor + ';font-size:13px;font-weight:700;">' + displayDir + '</span></div>';
         }
         h += '</div>';
         h += '<div class="ana-card-odds"><div class="odds-group">';
@@ -2148,40 +2173,39 @@ function renderFromData(){
         }
         h += '</div></div>';
       } else if(isCompleted) {
-        h += '<div class="ana-card-odds" style="gap:6px;">';
-        h += '<div class="odds-group" style="background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.25);">';
-        h += '<span class="og-item" style="color:#fbbf24;font-size:16px;font-weight:800;">'+rat.actual_score+'</span></div>';
-        h += '<div class="odds-group">';
+        h += '<div class="ana-card-odds" style="gap:16px;">';
+        if(dir){
+          h += '<div class="odds-group" style="background:'+dirColor+'22;border:1px solid '+dirColor+'44;">';
+          h += '<span class="og-item" style="color:'+dirColor+';font-size:13px;font-weight:700;">'+displayDir+'</span></div>';
+        }
         var _rhlf = rat.half_full || '--';
-        h += '<span class="og-item" style="font-size:12px;color:var(--t2);">'+_rhlf+'</span>';
+        h += '<div class="odds-group" style="background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.25);gap:8px;padding:3px 12px;">';
+        h += '<span class="og-item" style="color:#fbbf24;font-size:16px;font-weight:800;">'+rat.actual_score+'</span>';
+        h += '<span class="og-item" style="color:var(--t2);font-size:12px;font-weight:600;">'+_rhlf+'</span></div>';
         var _rhit = rat.hit === true;
         var _rhc = _rhit ? '#22c55e' : '#ef4444';
         var _rhtxt = _rhit ? '命中' : '偏离';
-        h += '<span class="og-item" style="color:'+_rhc+';font-weight:700;font-size:13px;background:'+_rhc+'22;border:1px solid '+_rhc+'44;border-radius:4px;padding:0 8px;margin-left:4px;">'+_rhtxt+'</span>';
-        h += '</div></div>';
+        h += '<span style="display:flex;align-items:center;gap:4px;margin-left:8px;">';
+        h += '<span class="og-item" style="color:'+_rhc+';font-weight:700;font-size:13px;background:'+_rhc+'22;border:1px solid '+_rhc+'44;border-radius:4px;padding:0 8px;">'+_rhtxt+'</span>';
+        h += '<span style="font-size:12px;color:#64748b;">▼</span></span></div>';
       } else {
         h += '<div class="ana-card-waiting">等待预测数据</div>';
+        h += '<div class="ana-card-expand">▼</div>';
       }
-      h += '<div class="ana-card-expand">▼</div>';
       h += '</div>';
 
 
 
-            if(isPredictable){
+            if(isPredictable || isCompleted){
       h += '<div class="ana-expanded">';
       // Pill row
-      h += '<div class="exp-pill-row">';
-      if(isCompleted){
-        h += '<div class="exp-pill"><span class="pill-icon">&#127919;</span><span class="pill-label">赛果:</span><span class="pill-value" style="font-weight:700;color:var(--cyan)">'+rat.actual_score+'</span></div>';
-        h += '<div class="exp-pill"><span class="pill-icon">&#128260;</span><span class="pill-label">半全场:</span><span class="pill-value">'+(rat.half_full||'--')+'</span></div>';
-        h += '<div class="exp-pill"><span class="pill-icon">&#128200;</span><span class="pill-label">预测方向:</span><span class="pill-value">'+dir+'</span></div>';
-      } else {
-        h += '<div class="exp-pill"><span class="pill-icon">&#9917;</span><span class="pill-label">总进球:</span><span class="pill-value">'+tgText+'</span></div>';
-        h += '<div class="exp-pill"><span class="pill-icon">&#128260;</span><span class="pill-label">半全场:</span><span class="pill-value">'+hfText+'</span></div>';
-        h += '<div class="exp-pill"><span class="pill-icon">&#127919;</span><span class="pill-label">比分:</span><span class="pill-value">'+scText+'</span></div>';
-      }
+                  h += '<div class="exp-pill-row">';
+      h += '<div class="exp-pill"><span class="pill-icon">&#9917;</span><span class="pill-label">总进球:</span><span class="pill-value">'+tgText+'</span></div>';
+      h += '<div class="exp-pill"><span class="pill-icon">&#128260;</span><span class="pill-label">半全场:</span><span class="pill-value">'+hfText+'</span></div>';
+      h += '<div class="exp-pill"><span class="pill-icon">&#127919;</span><span class="pill-label">比分:</span><span class="pill-value">'+scText+'</span></div>';
       h += '</div>';
       // Three-column grid
+      if(!isCompleted){
       h += '<div class="exp-grid">';
       // A: Lambda chart
       var doi = (ddi.doi !== undefined ? ddi.doi : 0);
@@ -2262,6 +2286,7 @@ function renderFromData(){
       h += '</div>';
       h += '<div class="aet-chart-area"><div class="aet-loading">加载中...</div></div>';
     h += '</div>';
+      }
       h += '</div>';
 h+='</div></div>';} else {
       h += '<div class="ana-expanded" style="padding:20px;text-align:center;color:var(--t3);font-size:13px;">等待预测数据</div></div>';
@@ -2303,11 +2328,11 @@ function renderFromWC(){
   for(var di = 0; di < dateKeys.length; di++){
     var dk = dateKeys[di];
     var ml = groups[dk];
-    var isCollapsed = (dk === "6\u670812\u65e5");
+        var allDoneWC = ml.every(function(m){ return !!m.result; });
     h += '<div class="ana-date-group">';
     h += '<div class="ana-date-label clickable" onclick="toggleDateGroup(this)">';
-    h += '<span class="ana-date-arrow">' + (isCollapsed ? '▶' : '▼') + '</span> 📅 ' + dk + '<span class="adl-count">' + ml.length + ' 场</span></div>';
-    h += '<div class="ana-date-body"' + (isCollapsed ? ' style="display:none"' : '') + '>';
+    h += '<span class="ana-date-arrow">' + (allDoneWC ? '\u25b6' : '\u25bc') + '</span> \ud83d\udcc5 ' + dk + '<span class="adl-count">' + ml.length + ' \u573a</span></div>';
+    h += '<div class="ana-date-body"' + (allDoneWC ? ' style="display:none"' : '') + '>';
     for(var mi = 0; mi < ml.length; mi++){
       var m = ml[mi];
       var glStr = m.gl !== 0 ? (m.gl > 0 ? '+' + m.gl : '' + m.gl) : '0';
@@ -2342,10 +2367,23 @@ function renderFromWC(){
 
       // ③ 方向/评级列
       if(isCompleted){
-        var hitStr = m.hit ? '✅命中' : '❌未中';
-        var hitColor = m.hit ? '#00e676' : '#ef5350';
-        h += '<div class="ana-card-result"><span class="result-badge" style="background:' + hitColor + '22;border:1px solid ' + hitColor + '44;color:' + hitColor + ';">' + m.result + '</span><span class="hit-badge" style="color:' + hitColor + ';">' + hitStr + '</span></div>';
-        h += '<div class="ana-card-odds"><div class="odds-group"><span class="og-item" style="color:var(--t3);font-size:11px;">已完赛</span></div></div>';
+        var _dirWC = m.dir || '';
+        var _dirColorWC = _dirWC.indexOf('胜') >= 0 ? '#4ade80' : (_dirWC.indexOf('负') >= 0 ? '#ef4444' : '#fbbf24');
+        var _rhfWC = m.half_full || '--';
+        var _rhitWC = m.hit === true;
+        var _rhcWC = _rhitWC ? '#22c55e' : '#ef4444';
+        var _rhtxtWC = _rhitWC ? '命中' : '偏离';
+        h += '<div class="ana-card-odds" style="gap:16px;">';
+        if(_dirWC){
+          h += '<div class="odds-group" style="background:'+_dirColorWC+'22;border:1px solid '+_dirColorWC+'44;">';
+          h += '<span class="og-item" style="color:'+_dirColorWC+';font-size:13px;font-weight:700;">'+_dirWC+'</span></div>';
+        }
+        h += '<div class="odds-group" style="background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.25);gap:8px;padding:3px 12px;">';
+        h += '<span class="og-item" style="color:#fbbf24;font-size:16px;font-weight:800;">'+m.result+'</span>';
+        h += '<span class="og-item" style="color:var(--t2);font-size:12px;font-weight:600;">'+_rhfWC+'</span></div>';
+        h += '<span style="display:flex;align-items:center;gap:4px;margin-left:8px;">';
+        h += '<span class="og-item" style="color:'+_rhcWC+';font-weight:700;font-size:13px;background:'+_rhcWC+'22;border:1px solid '+_rhcWC+'44;border-radius:4px;padding:0 8px;">'+_rhtxtWC+'</span>';
+        h += '<span style="font-size:12px;color:#64748b;">▼</span></span></div>';
       } else if(isPredictable){
         var shV = parseFloat(m.sh)||3, sdV = parseFloat(m.sd)||3, saV = parseFloat(m.sa)||3;
         var minSp = Math.min(shV, sdV, saV);
@@ -2850,7 +2888,7 @@ h+='<div class="grid-col-league"><span class="league-tag">'+(l||'')+'</span></di
 h+='<div class="grid-col-time">'+timeDisplay+'</div>';
 h+='<div class="grid-col-match"><div class="matchup-container"><span class="tname home">'+ho+'</span><span class="vs-badge">VS</span><span class="tname away">'+aw+'</span></div></div>';
 h+='<div class="grid-col-dir">';
-if(hasResult){h+='<span class="dir-badge result-score-badge">'+m.actual_score+'</span>';}else if(dir){h+='<span class="dir-badge '+dirCls+'">'+dir+'</span>';}
+if(dir){h+='<span class="dir-badge '+dirCls+'">'+dir+'</span>';}
 h+='</div>';
 h+='<div class="grid-col-score">';
 if(hasResult){
@@ -2882,6 +2920,7 @@ if(hasResult){
   h+='<div class="exp-pill"><span class="pill-icon">&#127919;</span><span class="pill-label">比分:</span><span class="pill-value">'+scText+'</span></div>';
 }
 h+='</div>';
+if(!hasResult){
 // Row 2: Three-column grid
 h+='<div class="exp-grid">';
 // A: Lambda chart
@@ -2935,7 +2974,9 @@ h+='<div class="analysis-item"><div class="ai-head"><span class="ai-icon">⌕</s
 h+='<div class="analysis-item"><div class="ai-head"><span class="ai-icon" style="color:var(--cyan)">ℹ️</span><span class="ai-label">S7说明</span></div><div class="ai-body-muted">'+(s7Reason||(s7Score>0?"S7评分: "+s7Score.toFixed(2):"无特殊场景"))+'</div></div>';
 h+='<div class="analysis-item"><div class="ai-head"><span class="ai-icon" style="color:#fbbf24">&#128161;</span><span class="ai-label">诱盘分析</span></div><div class="ai-body-muted">'+(trapTxt||"无异常信号")+'</div></div>';
 h+='<div class="analysis-item"><div class="ai-head"><span class="ai-icon" style="color:#f59e0b">&#9888;&#65039;</span><span class="ai-label">风险提示</span></div><div class="ai-body-muted">'+(riskTxt||"模型信号正常")+'</div></div>';
-h+='</div></div></div></div>';
+  h+='</div></div>';
+}
+h+='</div></div>';
 return h;
 }
 

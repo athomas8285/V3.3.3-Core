@@ -1,0 +1,3 @@
+
+function toggleAnaCard(el){
+  if(!el.classList.contains("ana-card")) el = el.closest('.ana-card');

@@ -1,0 +1,28 @@
+function openMatchAnalysis(home, away){
+  window.__TARGET_MATCH = {h:home, a:away};
+  switchNav("analysis");
+}
+function initParticles(){
+  var c = document.getElementById("hccParticles");
+  if(!c) return;
+  var ctx = c.getContext("2d");
+  var W, H;
+  function resize(){W=c.width=c.offsetWidth;H=c.height=c.offsetHeight;}
+  resize();
+  window.addEventListener("resize", resize);
+  var pts = [];
+  var count = 80;
+  for(var i=0;i<count;i++){
+    pts.push({
+      x:Math.random()*W, y:Math.random()*H,
+      vx:(Math.random()-0.5)*0.3, vy:-(0.2+Math.random()*0.4),
+      r:Math.random()*2+0.5,
+      a:0.2+Math.random()*0.5,
+      hue:Math.random()<0.3?190:Math.random()<0.5?45:255
+    });
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    for(var i=0;i<pts.length;i++){
+      var p=pts[i];
+      p

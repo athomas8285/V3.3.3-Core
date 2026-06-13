@@ -1,0 +1,55 @@
+xhr.open("GET", "/api/wc-matches", true);
+  xhr.onload = function(){
+    if(xhr.status === 200){
+      try{
+        var resp = JSON.parse(xhr.responseText);
+        var raw = resp.matches || [];
+        WC_MATCHES_DATA = raw.map(function(m){
+          var mt = m.match_time || "";
+          var parts = mt.split(" ");
+          var d = m.match_date || parts[0] || "";
+          var t = (parts[1] || mt.slice(11,16) || "").slice(0,5);
+          // Extract competition round from group
+          var g = m.wc_group || "";
+          return {
+            id: m.match_id || "",
+            d: d,
+            t: t,
+            g: g,
+            h: m.home || "",
+            a: m.away || "",
+            sh: m.jc_sp_home != null ? String(m.jc_sp_home) : "-",
+            sd: m.jc_sp_draw != null ? String(m.jc_sp_draw) : "-",
+            sa: m.jc_sp_away != null ? String(m.jc_sp_away) : "-",
+            gh: m.ah_home != null ? String(m.ah_home) : "-",
+            gd: m.ah_draw != null ? String(m.ah_draw) : "-",
+            ga: m.ah_away != null ? String(m.ah_away) : "-",
+            gl: m.jc_handicap || 0,
+            result: m.actual_score,
+            dir: m.direction || "",
+            hit: m.hit === 1 || m.hit === true
+          };
+        });
+        renderFromWC();
+      } catch(e){ console.error("WC data parse error", e); }
+    }
+  };
+  xhr.onerror = function(){ console.error("WC data fetch failed"); };
+  xhr.send();
+})();
+
+// ====== Populate history sidebar with 06-12 completed matches ======
+function renderCompletedHistory(){
+  var container = document.getElementById('historyCompletedMatches');
+  if(!container) return;
+  var h = '<div class="hist-date-nav" onclick="goToHistoryDate()">';
+  h += '<span class="hist-date-label">6月12日 周四</span>';
+  h += '<span class="hist-date-arrow">→</span>';
+  h += '</div>';
+  container.innerHTML = h;
+  var msg = document.getElementById('historyRestMessage');
+  if(msg) msg.style.display = 'none';
+}
+
+function goToHistoryDate(){
+  switchNav('anal
