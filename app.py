@@ -1,4 +1,4 @@
-# app.py
+﻿# app.py
 import subprocess, json, os, sys, csv, traceback, threading
 import track_odds
 from flask import Flask, request, jsonify, Response
@@ -503,6 +503,21 @@ def v4_edit():
     with open(os.path.join(BASE_DIR, 'templates', 'v4.html'), 'r', encoding='utf-8') as f:
         return f.read()
 
+
+@app.route('/wc21')
+def wc21_page():
+    with open(os.path.join(BASE_DIR, 'templates', 'wc21.html'), 'r', encoding='utf-8') as f:
+        return f.read()
+
+@app.route('/wc22')
+def wc22_page():
+    with open(os.path.join(BASE_DIR, 'templates', 'wc22.html'), 'r', encoding='utf-8') as f:
+        return f.read()
+
+@app.route('/wc23')
+def wc23_page():
+    with open(os.path.join(BASE_DIR, 'templates', 'wc23.html'), 'r', encoding='utf-8') as f:
+        return f.read()
 @app.route('/api/live/recalibrate', methods=['POST'])
 def live_recalibrate():
     import sys
