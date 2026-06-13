@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>V3.3.3-Core 分析系统</title></head>
+<title>V3.3.3-Core 分析系统</title>
+<link rel="manifest" href="/static/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"></head>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -3422,6 +3425,7 @@ function renderMarkdown(md){
 function showContactModal(){document.getElementById('contactModal').classList.add('active');}
 function hideContactModal(){document.getElementById('contactModal').classList.remove('active');}
 </script>
+<script>if("serviceWorker"in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("/static/sw.js",{scope:"/"})})}</script>
 </body>
 </html>
 

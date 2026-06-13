@@ -1,4 +1,4 @@
-﻿# app.py
+# app.py
 import subprocess, json, os, sys, csv, traceback, threading
 import track_odds
 from flask import Flask, request, jsonify, Response
@@ -467,6 +467,12 @@ def live_js():
     with open(os.path.join(BASE_DIR, 'templates', 'live.js'), 'r', encoding='utf-8') as f:
         return Response(f.read(), mimetype='application/javascript')
 
+@app.route('/sw.js')
+def sw_js():
+    from flask import Response
+    with open(os.path.join(BASE_DIR, 'static', 'sw.js'), 'r', encoding='utf-8') as f:
+        return Response(f.read(), mimetype='application/javascript')
+
 
 
 
@@ -518,7 +524,16 @@ def wc22_page():
 def wc23_page():
     with open(os.path.join(BASE_DIR, 'templates', 'wc23.html'), 'r', encoding='utf-8') as f:
         return f.read()
+
+@app.route('/wc24')
+def wc24_page():
+    with open(os.path.join(BASE_DIR, 'templates', 'wc24.html'), 'r', encoding='utf-8') as f:
+        return f.read()
+
 @app.route('/api/live/recalibrate', methods=['POST'])
+
+
+
 def live_recalibrate():
     import sys
     sys.path.insert(0, BASE_DIR)
@@ -727,3 +742,5 @@ if __name__ == '__main__':
     debug = os.environ.get('FLASK_ENV', 'development') != 'production'
     start_odds_scheduler()
     app.run(host='0.0.0.0', port=port, debug=debug)
+
+
