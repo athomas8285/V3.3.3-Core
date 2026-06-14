@@ -214,7 +214,10 @@
       "downgrade_count": 0,
       "meltdown": true,
       "scenario_type": "稳定型",
-      "direction_warning": false
+      "direction_warning": false,
+      "actual_score": "1-1",
+      "half_full": "负平",
+      "hit": false
     },
     {
       "id": "周六006",
@@ -228,7 +231,10 @@
       "downgrade_count": 0,
       "meltdown": false,
       "scenario_type": "低返还率赛事",
-      "direction_warning": false
+      "direction_warning": false,
+      "actual_score": "1-1",
+      "half_full": "平平",
+      "hit": false
     },
     {
       "id": "周六007",
@@ -242,7 +248,10 @@
       "downgrade_count": 0,
       "meltdown": false,
       "scenario_type": "低返还率赛事",
-      "direction_warning": false
+      "direction_warning": false,
+      "actual_score": "0-1",
+      "half_full": "负负",
+      "hit": true
     },
     {
       "id": "周六008",
@@ -256,7 +265,10 @@
       "downgrade_count": 0,
       "meltdown": false,
       "scenario_type": "低返还率赛事",
-      "direction_warning": false
+      "direction_warning": false,
+      "actual_score": "2-0",
+      "half_full": "胜胜",
+      "hit": false
     },
     {
       "id": "周四001",
@@ -298,12 +310,12 @@
       "away": "库拉索",
       "event": "世界杯",
       "time": "2026-06-15 01:00",
-      "direction": "胜",
-      "fit_score": 3.1900000000000004,
-      "rating": "C",
+      "direction": "让负",
+      "fit_score": 4.640000000000001,
+      "rating": "B",
       "downgrade_count": 0,
-      "meltdown": true,
-      "scenario_type": "稳定型",
+      "meltdown": false,
+      "scenario_type": "数据薄弱型",
       "direction_warning": false
     },
     {
@@ -312,8 +324,8 @@
       "away": "日本",
       "event": "世界杯",
       "time": "2026-06-15 04:00",
-      "direction": "胜",
-      "fit_score": 4.99,
+      "direction": "让负",
+      "fit_score": 5.55,
       "rating": "B",
       "downgrade_count": 0,
       "meltdown": false,
@@ -326,8 +338,8 @@
       "away": "厄瓜多尔",
       "event": "世界杯",
       "time": "2026-06-15 07:00",
-      "direction": "负",
-      "fit_score": 4.99,
+      "direction": "平",
+      "fit_score": 5.65,
       "rating": "B",
       "downgrade_count": 0,
       "meltdown": false,
@@ -340,11 +352,11 @@
       "away": "突尼斯",
       "event": "世界杯",
       "time": "2026-06-15 10:00",
-      "direction": "胜",
-      "fit_score": 3.9000000000000004,
-      "rating": "C",
+      "direction": "让负",
+      "fit_score": 5.55,
+      "rating": "B",
       "downgrade_count": 0,
-      "meltdown": true,
+      "meltdown": false,
       "scenario_type": "低返还率赛事",
       "direction_warning": false
     }

@@ -1953,10 +1953,10 @@ var WC_MATCHES = [
   {d:"6月13日",t:"03:00",g:"B",h:"加拿大",a:"波黑",v:"多伦多",s:"1-1"},
   {d:"6月13日",t:"09:00",g:"D",h:"美国",a:"巴拉圭",v:"洛杉矶",s:"4-1"},
   // 6月14日
-  {d:"6月14日",t:"03:00",g:"B",h:"卡塔尔",a:"瑞士",v:"旧金山湾区"},
-  {d:"6月14日",t:"06:00",g:"C",h:"巴西",a:"摩洛哥",v:"纽约/新泽西"},
-  {d:"6月14日",t:"09:00",g:"C",h:"海地",a:"苏格兰",v:"波士顿"},
-  {d:"6月14日",t:"12:00",g:"D",h:"奥大利亚",a:"土耳其",v:"温哥华"},
+  {d:"6月14日",t:"03:00",g:"B",h:"卡塔尔",a:"瑞士",v:"旧金山湾区",s:"1-1"},
+  {d:"6月14日",t:"06:00",g:"C",h:"巴西",a:"摩洛哥",v:"纽约/新泽西",s:"1-1"},
+  {d:"6月14日",t:"09:00",g:"C",h:"海地",a:"苏格兰",v:"波士顿",s:"0-1"},
+  {d:"6月14日",t:"12:00",g:"D",h:"奥大利亚",a:"土耳其",v:"温哥华",s:"2-0"},
   // 6月15日
   {d:"6月15日",t:"01:00",g:"E",h:"德国",a:"库拉索",v:"休斯敦"},
   {d:"6月15日",t:"04:00",g:"F",h:"荷兰",a:"日本",v:"达拉斯"},
@@ -2214,7 +2214,7 @@ function renderFromData(){
       var timeDisplay = tm.length >= 16 ? tm.slice(5,16) : (tm.length >= 5 ? tm : tm);
       var datePart = tm.length >= 10 ? tm.slice(0,10) : '';
       var isCompleted = rat.actual_score ? true : false;
-      var isFutureDate = datePart > "2026-06-14";
+      var isFutureDate = datePart > "2026-06-15";
       var hasRating = rat.rating ? true : false;
       var isPredictable = !isCompleted && (hasSp || hasRating) && !isFutureDate;
       var dir = rat.direction || '';
@@ -2261,7 +2261,7 @@ function renderFromData(){
       // Convert to handicap direction if only handicap market available
       var displayDir = dir;
       var _hasHH = info.jc_hhad_win ? true : false;
-      if(!hasSp && _hasHH && dir){
+      if(!hasSp && _hasHH && dir && dir.indexOf('让') !== 0){
         displayDir = '让' + dir;
       }
 h += '<div class="ana-card' + (isCompleted ? (rat.hit ? ' result-card' : ' result-card miss') : '') + '" onclick="toggleAnaCard(this)" data-mid="' + mid + '">';
@@ -3249,7 +3249,7 @@ function renderTopPicks(){
   h += '<tbody>';
   h += '<tr><td>6月11日</td><td class="tp-td-plan">001胜+002让胜</td><td class="tp-sp">3.52</td><td>1000</td><td class="tp-profit">3520</td><td class="tp-td-hit">✔ 中</td></tr>';
   h += '<tr><td>6月12日</td><td class="tp-td-plan">003让负+004胜胜/平胜</td><td class="tp-sp">2.84</td><td>1000</td><td class="tp-profit">2845</td><td class="tp-td-hit">✔ 中</td></tr>';
-  h += '<tr><td>6月13日</td><td class="tp-td-plan" style="color:var(--cyan)!important;font-weight:700">联系作者获取</td><td class="tp-sp">3.55</td><td>1000</td><td class="tp-td-wait">-</td><td class="tp-td-wait">⏳ 等待</td></tr>';  h += '<tr><td>6月14日</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">⏳ 等待</td></tr>';
+  h += '<tr><td>6月13日</td><td class="tp-td-plan" style="color:var(--cyan)!important;font-weight:700">联系作者获取</td><td class="tp-sp">3.55</td><td>1000</td><td class="tp-td-wait">-</td><td class="tp-td-wait">⏳ 等待</td></tr>';  h += '<tr><td>6月14日</td><td class="tp-td-plan" style="color:var(--t2)">1/4 命中</td><td class="tp-sp">-</td><td>-</td><td class="tp-td-wait">-</td><td class="tp-td-hit">✅ 007命中</td></tr>';
   h += '<tr><td>6月15日</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">⏳ 等待</td></tr>';
   h += '<tr><td>6月16日</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">⏳ 等待</td></tr>';
   h += '<tr><td>6月17日</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">⏳ 等待</td></tr>';
@@ -3597,6 +3597,7 @@ document.getElementById('sdOverlay').addEventListener('click',toggleMobileSideba
 
 </body>
 </html>
+
 
 
 
