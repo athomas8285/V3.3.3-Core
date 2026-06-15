@@ -89,8 +89,9 @@ def insert_match(run_id, m):
             top2_total_goals, top2_half_full, top3_scores,
             s7_score, s7_reason, trap_analysis, key_risk,
             wc_group, jc_sp_home, jc_sp_draw, jc_sp_away,
-            ah_home, ah_draw, ah_away, match_date
-        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+            ah_home, ah_draw, ah_away, match_date,
+            actual_score, half_time_score, half_full, hit, diagnosis, created_at, result_updated_at
+        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
     """, (
         run_id, m["match_id"], m["home"], m["away"],
         m.get("event"), m.get("match_time"),
@@ -113,7 +114,10 @@ def insert_match(run_id, m):
         m.get("s7_score"), m.get("s7_reason"),
         m.get("trap_analysis"), m.get("key_risk"),
         m.get("wc_group"), m.get("jc_sp_home"), m.get("jc_sp_draw"), m.get("jc_sp_away"),
-        m.get("ah_home"), m.get("ah_draw"), m.get("ah_away"), m.get("match_date")
+        m.get("ah_home"), m.get("ah_draw"), m.get("ah_away"), m.get("match_date"),
+        m.get("actual_score"), m.get("half_time_score"),
+        m.get("half_full"), m.get("hit"), m.get("diagnosis"),
+        None, None
     ))
     conn.commit()
     conn.close()
@@ -160,3 +164,5 @@ def get_latest_run():
 if __name__ == "__main__":
     init_db()
     print("DB OK:", DB)
+
+

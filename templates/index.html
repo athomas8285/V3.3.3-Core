@@ -1958,10 +1958,10 @@ var WC_MATCHES = [
   {d:"6月14日",t:"09:00",g:"C",h:"海地",a:"苏格兰",v:"波士顿",s:"0-1"},
   {d:"6月14日",t:"12:00",g:"D",h:"奥大利亚",a:"土耳其",v:"温哥华",s:"2-0"},
   // 6月15日
-  {d:"6月15日",t:"01:00",g:"E",h:"德国",a:"库拉索",v:"休斯敦"},
-  {d:"6月15日",t:"04:00",g:"F",h:"荷兰",a:"日本",v:"达拉斯"},
-  {d:"6月15日",t:"07:00",g:"E",h:"科特迪瓦",a:"厄瓜多尔",v:"费城"},
-  {d:"6月15日",t:"10:00",g:"F",h:"瑞典",a:"突尼斯",v:"蒙特雷"},
+  {d:"6月15日",t:"01:00",g:"E",h:"德国",a:"库拉索",v:"休斯敦",s:"7-1"},
+  {d:"6月15日",t:"04:00",g:"F",h:"荷兰",a:"日本",v:"达拉斯",s:"2-2"},
+  {d:"6月15日",t:"07:00",g:"E",h:"科特迪瓦",a:"厄瓜多尔",v:"费城",s:"1-0"},
+  {d:"6月15日",t:"10:00",g:"F",h:"瑞典",a:"突尼斯",v:"蒙特雷",s:"5-1"},
   // 6月16日
   {d:"6月16日",t:"00:00",g:"H",h:"西班牙",a:"佛得角",v:"亚特兰大"},
   {d:"6月16日",t:"03:00",g:"G",h:"比利时",a:"埃及",v:"西雅图"},
@@ -2137,20 +2137,12 @@ function renderAnalysisView(){
     renderFromWC();
   }
   __expandTargetMatch();
-  // 滚动到第一个有未完成比赛的日期组
+  // 滚动到6月16日的预测比赛
   setTimeout(function(){
-    var groups = document.querySelectorAll('.ana-date-group');
-    for(var gi = 0; gi < groups.length; gi++){
-      var cards = groups[gi].querySelectorAll('.ana-card');
-      var hasUnfinished = false;
-      for(var ci = 0; ci < cards.length; ci++){
-        if(!cards[ci].classList.contains('result-card')){
-          hasUnfinished = true;
-          break;
-        }
-      }
-      if(hasUnfinished){
-        groups[gi].scrollIntoView({behavior:'smooth', block:'start'});
+    var labels = document.querySelectorAll('.ana-date-label');
+    for(var li = 0; li < labels.length; li++){
+      if(labels[li].textContent.indexOf('6月16日') >= 0){
+        labels[li].scrollIntoView({behavior:'smooth', block:'start'});
         break;
       }
     }
@@ -2214,7 +2206,7 @@ function renderFromData(){
       var timeDisplay = tm.length >= 16 ? tm.slice(5,16) : (tm.length >= 5 ? tm : tm);
       var datePart = tm.length >= 10 ? tm.slice(0,10) : '';
       var isCompleted = rat.actual_score ? true : false;
-      var isFutureDate = datePart > "2026-06-15";
+      var isFutureDate = datePart > "2026-06-16";
       var hasRating = rat.rating ? true : false;
       var isPredictable = !isCompleted && (hasSp || hasRating) && !isFutureDate;
       var dir = rat.direction || '';
@@ -3597,6 +3589,7 @@ document.getElementById('sdOverlay').addEventListener('click',toggleMobileSideba
 
 </body>
 </html>
+
 
 
 
