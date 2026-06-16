@@ -1963,10 +1963,10 @@ var WC_MATCHES = [
   {d:"6月15日",t:"07:00",g:"E",h:"科特迪瓦",a:"厄瓜多尔",v:"费城",s:"1-0"},
   {d:"6月15日",t:"10:00",g:"F",h:"瑞典",a:"突尼斯",v:"蒙特雷",s:"5-1"},
   // 6月16日
-  {d:"6月16日",t:"00:00",g:"H",h:"西班牙",a:"佛得角",v:"亚特兰大"},
-  {d:"6月16日",t:"03:00",g:"G",h:"比利时",a:"埃及",v:"西雅图"},
-  {d:"6月16日",t:"06:00",g:"H",h:"沙特",a:"乌拉圭",v:"迈阿密"},
-  {d:"6月16日",t:"09:00",g:"G",h:"伊朗",a:"新西兰",v:"洛杉矶"},
+  {d:"6月16日",t:"00:00",g:"H",h:"西班牙",a:"佛得角",v:"亚特兰大",s:"0-0"},
+  {d:"6月16日",t:"03:00",g:"G",h:"比利时",a:"埃及",v:"西雅图",s:"1-1"},
+  {d:"6月16日",t:"06:00",g:"H",h:"沙特",a:"乌拉圭",v:"迈阿密",s:"1-1"},
+  {d:"6月16日",t:"09:00",g:"G",h:"伊朗",a:"新西兰",v:"洛杉矶",s:"2-2"},
   // 6月17日
   {d:"6月17日",t:"03:00",g:"I",h:"法国",a:"塞内加尔",v:"纽约/新泽西"},
   {d:"6月17日",t:"06:00",g:"I",h:"伊拉克",a:"挪威",v:"波士顿"},
@@ -2141,7 +2141,7 @@ function renderAnalysisView(){
   setTimeout(function(){
     var labels = document.querySelectorAll('.ana-date-label');
     for(var li = 0; li < labels.length; li++){
-      if(labels[li].textContent.indexOf('6月16日') >= 0){
+      if(labels[li].textContent.indexOf('6月17日') >= 0){
         labels[li].scrollIntoView({behavior:'smooth', block:'start'});
         break;
       }
@@ -2206,7 +2206,7 @@ function renderFromData(){
       var timeDisplay = tm.length >= 16 ? tm.slice(5,16) : (tm.length >= 5 ? tm : tm);
       var datePart = tm.length >= 10 ? tm.slice(0,10) : '';
       var isCompleted = rat.actual_score ? true : false;
-      var isFutureDate = datePart > "2026-06-16";
+      var isFutureDate = datePart > "2026-06-17";
       var hasRating = rat.rating ? true : false;
       var isPredictable = !isCompleted && (hasSp || hasRating) && !isFutureDate;
       var dir = rat.direction || '';
