@@ -37,6 +37,7 @@ def start_odds_scheduler():
 
 @app.route('/')
 def index():
+    import sqlite3
     import json as _json
     base = os.path.dirname(os.path.abspath(__file__))
     data_dir = os.path.join(base, 'data')
@@ -71,7 +72,26 @@ def index():
             'fit': _json.load(open(os.path.join(data_dir, 'fit_score_result.json'), encoding='utf-8'))['matches'],
             'trend': list(_json.load(open(os.path.join(data_dir, 'trend_features.json'), encoding='utf-8'))['matches'].values()),
         }
+
+        # Merge DB results into rating data
+        try:
+            _conn = sqlite3.connect(os.path.join(base, "framework.db"))
+            _cur = _conn.cursor()
+            sql = "WITH latest AS (SELECT match_id, MAX(run_id) as max_run FROM matches WHERE actual_score IS NOT NULL GROUP BY match_id) SELECT m.match_id, m.actual_score, m.hit, m.half_full FROM matches m JOIN latest l ON m.match_id = l.match_id AND m.run_id = l.max_run"
+            _cur.execute(sql)
+            _db_rows = {r[0]: {"actual_score": r[1], "hit": bool(r[2]), "half_full": r[3] or ""} for r in _cur.fetchall()}
+            _conn.close()
+            for _rm in data["rating"]:
+                _mid = _rm.get("id", "")
+                if _mid in _db_rows:
+                    _rm["actual_score"] = _db_rows[_mid]["actual_score"]
+                    _rm["hit"] = _db_rows[_mid]["hit"]
+                    _rm["half_full"] = _db_rows[_mid]["half_full"]
+        except Exception as _e:
+            pass
+
         # Build narratives
+
         try:
             _oh = _json.load(open(os.path.join(data_dir, 'odds_history', 'odds_history.json'), encoding='utf-8'))
         except:
