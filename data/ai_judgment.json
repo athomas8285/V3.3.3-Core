@@ -287,6 +287,114 @@
       "opponent_reason": "",
       "trap_analysis": "无显著诱盘信号",
       "key_risk": "基础数据采集，风险控制中"
+    },
+    {
+      "id": "周六033",
+      "s7_score": 0,
+      "s7_reason": "自动生成，基础数据模式",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "无显著诱盘信号",
+      "key_risk": "基础数据采集，风险控制中"
+    },
+    {
+      "id": "周六034",
+      "s7_score": 0,
+      "s7_reason": "自动生成，基础数据模式",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "无显著诱盘信号",
+      "key_risk": "基础数据采集，风险控制中"
+    },
+    {
+      "id": "周六035",
+      "s7_score": 0,
+      "s7_reason": "自动生成，基础数据模式",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "无显著诱盘信号",
+      "key_risk": "基础数据采集，风险控制中"
+    },
+    {
+      "id": "周六036",
+      "s7_score": 0,
+      "s7_reason": "自动生成，基础数据模式",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "无显著诱盘信号",
+      "key_risk": "基础数据采集，风险控制中"
+    },
+    {
+      "id": "周日037",
+      "s7_score": 0,
+      "s7_reason": "自动生成，基础数据模式",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "无显著诱盘信号",
+      "key_risk": "基础数据采集，风险控制中"
+    },
+    {
+      "id": "周日038",
+      "s7_score": 0,
+      "s7_reason": "自动生成，基础数据模式",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "无显著诱盘信号",
+      "key_risk": "基础数据采集，风险控制中"
+    },
+    {
+      "id": "周日039",
+      "s7_score": 0,
+      "s7_reason": "自动生成，基础数据模式",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "无显著诱盘信号",
+      "key_risk": "基础数据采集，风险控制中"
+    },
+    {
+      "id": "周日040",
+      "s7_score": 0,
+      "s7_reason": "自动生成，基础数据模式",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "无显著诱盘信号",
+      "key_risk": "基础数据采集，风险控制中"
+    },
+    {
+      "id": "周一041",
+      "s7_score": 0,
+      "s7_reason": "自动生成，基础数据模式",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "无显著诱盘信号",
+      "key_risk": "基础数据采集，风险控制中"
+    },
+    {
+      "id": "周一042",
+      "s7_score": 0,
+      "s7_reason": "自动生成，基础数据模式",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "无显著诱盘信号",
+      "key_risk": "基础数据采集，风险控制中"
+    },
+    {
+      "id": "周一043",
+      "s7_score": 0,
+      "s7_reason": "自动生成，基础数据模式",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "无显著诱盘信号",
+      "key_risk": "基础数据采集，风险控制中"
+    },
+    {
+      "id": "周一044",
+      "s7_score": 0,
+      "s7_reason": "自动生成，基础数据模式",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "无显著诱盘信号",
+      "key_risk": "基础数据采集，风险控制中"
     }
   ]
 }
