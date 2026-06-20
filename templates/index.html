@@ -2137,11 +2137,11 @@ function renderAnalysisView(){
     renderFromWC();
   }
   __expandTargetMatch();
-  // 滚动到6月18日的预测比赛
+  // 滚动到6月21日的预测比赛
   setTimeout(function(){
     var labels = document.querySelectorAll('.ana-date-label');
     for(var li = 0; li < labels.length; li++){
-      if(labels[li].textContent.indexOf('6月18日') >= 0){
+      if(labels[li].textContent.indexOf('6月21日') >= 0){
         labels[li].scrollIntoView({behavior:'smooth', block:'start'});
         break;
       }
@@ -3245,7 +3245,7 @@ function renderTopPicks(){
   h += '<tr><td>6月15日</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">⏳ 等待</td></tr>';
   h += '<tr><td>6月16日</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">⏳ 等待</td></tr>';
   h += '<tr><td>6月17日</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">⏳ 等待</td></tr>';
-  h += '<tr><td>6月18日</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">⏳ 等待</td></tr>';
+  h += '<tr><td>6月21日</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">⏳ 等待</td></tr>';
   h += '</tbody></table>';
   h += '<div class="tp-note">💬 今日方案已出，点击左下角「<span style="cursor:pointer;color:var(--cyan);text-decoration:underline" onclick="showContactModal()">联系作者</span>」获取</div>';
   h += '</div>';
@@ -3589,6 +3589,8 @@ document.getElementById('sdOverlay').addEventListener('click',toggleMobileSideba
 
 </body>
 </html>
+
+
 
 
 
