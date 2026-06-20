@@ -215,6 +215,78 @@
       "opponent_reason": "主队视角：哥伦比亚：系数=0.90，对手伤停未知，阵容不确定，战意不明；客队视角：乌兹别克斯坦：系数=0.90，对手伤停未知，阵容不确定，战意不明",
       "trap_analysis": "无明显诱盘特征，盘口与实力匹配",
       "key_risk": "近期+赛季xG均缺失，物理面判断误差大；历史交锋数据缺失；双方伤停信息均缺失；伤停数据源不可靠；战意判断存在不确定性；缺少主帅赛前表态参考"
+    },
+    {
+      "id": "周四025",
+      "s7_score": 0,
+      "s7_reason": "自动生成，基础数据模式",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "无显著诱盘信号",
+      "key_risk": "基础数据采集，风险控制中"
+    },
+    {
+      "id": "周四026",
+      "s7_score": 0,
+      "s7_reason": "自动生成，基础数据模式",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "无显著诱盘信号",
+      "key_risk": "基础数据采集，风险控制中"
+    },
+    {
+      "id": "周四027",
+      "s7_score": 0,
+      "s7_reason": "自动生成，基础数据模式",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "无显著诱盘信号",
+      "key_risk": "基础数据采集，风险控制中"
+    },
+    {
+      "id": "周四028",
+      "s7_score": 0,
+      "s7_reason": "自动生成，基础数据模式",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "无显著诱盘信号",
+      "key_risk": "基础数据采集，风险控制中"
+    },
+    {
+      "id": "周五029",
+      "s7_score": 0,
+      "s7_reason": "自动生成，基础数据模式",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "无显著诱盘信号",
+      "key_risk": "基础数据采集，风险控制中"
+    },
+    {
+      "id": "周五030",
+      "s7_score": 0,
+      "s7_reason": "自动生成，基础数据模式",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "无显著诱盘信号",
+      "key_risk": "基础数据采集，风险控制中"
+    },
+    {
+      "id": "周五031",
+      "s7_score": 0,
+      "s7_reason": "自动生成，基础数据模式",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "无显著诱盘信号",
+      "key_risk": "基础数据采集，风险控制中"
+    },
+    {
+      "id": "周五032",
+      "s7_score": 0,
+      "s7_reason": "自动生成，基础数据模式",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "无显著诱盘信号",
+      "key_risk": "基础数据采集，风险控制中"
     }
   ]
 }

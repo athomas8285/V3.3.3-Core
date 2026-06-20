@@ -1012,11 +1012,11 @@
       "initial_sp_home": null,
       "initial_sp_draw": null,
       "initial_sp_away": null,
-      "asian_handicap": 0.0,
+      "asian_handicap": -1.0,
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0,
+      "lambda_diff": 2.2299,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -1040,7 +1040,7 @@
       "jc_hhad_win": 3.36,
       "jc_hhad_draw": 3.4,
       "jc_hhad_lose": 1.86,
-      "jc_handicap": 0
+      "jc_handicap": -1
     },
     {
       "id": "周四026",
@@ -1054,11 +1054,11 @@
       "initial_sp_home": null,
       "initial_sp_draw": null,
       "initial_sp_away": null,
-      "asian_handicap": 0.0,
+      "asian_handicap": -1.0,
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0,
+      "lambda_diff": 1.0998,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -1082,7 +1082,7 @@
       "jc_hhad_win": 2.23,
       "jc_hhad_draw": 3.35,
       "jc_hhad_lose": 2.62,
-      "jc_handicap": 0
+      "jc_handicap": -1
     },
     {
       "id": "周四027",
@@ -1096,11 +1096,11 @@
       "initial_sp_home": null,
       "initial_sp_draw": null,
       "initial_sp_away": null,
-      "asian_handicap": 0.0,
+      "asian_handicap": -1.0,
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0,
+      "lambda_diff": 1.36,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -1124,7 +1124,7 @@
       "jc_hhad_win": 1.87,
       "jc_hhad_draw": 3.45,
       "jc_hhad_lose": 3.28,
-      "jc_handicap": 0
+      "jc_handicap": -1
     },
     {
       "id": "周四028",
@@ -1138,11 +1138,11 @@
       "initial_sp_home": null,
       "initial_sp_draw": null,
       "initial_sp_away": null,
-      "asian_handicap": 0.0,
+      "asian_handicap": -1.0,
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0,
+      "lambda_diff": 0.4906,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -1166,7 +1166,7 @@
       "jc_hhad_win": 3.78,
       "jc_hhad_draw": 3.45,
       "jc_hhad_lose": 1.74,
-      "jc_handicap": 0
+      "jc_handicap": -1
     },
     {
       "id": "周五029",
@@ -1180,11 +1180,11 @@
       "initial_sp_home": null,
       "initial_sp_draw": null,
       "initial_sp_away": null,
-      "asian_handicap": 0.0,
+      "asian_handicap": -1.0,
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0,
+      "lambda_diff": 0.8806,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -1208,7 +1208,7 @@
       "jc_hhad_win": 2.56,
       "jc_hhad_draw": 3.3,
       "jc_hhad_lose": 2.3,
-      "jc_handicap": 0
+      "jc_handicap": -1
     },
     {
       "id": "周五030",
@@ -1222,11 +1222,11 @@
       "initial_sp_home": null,
       "initial_sp_draw": null,
       "initial_sp_away": null,
-      "asian_handicap": 0.0,
+      "asian_handicap": 1.0,
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0,
+      "lambda_diff": -0.1556,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -1250,7 +1250,7 @@
       "jc_hhad_win": 2.0,
       "jc_hhad_draw": 3.25,
       "jc_hhad_lose": 3.12,
-      "jc_handicap": 0
+      "jc_handicap": 1
     },
     {
       "id": "周五031",
@@ -1264,11 +1264,11 @@
       "initial_sp_home": null,
       "initial_sp_draw": null,
       "initial_sp_away": null,
-      "asian_handicap": 0.0,
+      "asian_handicap": -2.0,
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0,
+      "lambda_diff": 2.336,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -1292,7 +1292,7 @@
       "jc_hhad_win": 1.8,
       "jc_hhad_draw": 4.0,
       "jc_hhad_lose": 3.1,
-      "jc_handicap": 0
+      "jc_handicap": -2
     },
     {
       "id": "周五032",
@@ -1306,11 +1306,11 @@
       "initial_sp_home": null,
       "initial_sp_draw": null,
       "initial_sp_away": null,
-      "asian_handicap": 0.0,
+      "asian_handicap": -1.0,
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0,
+      "lambda_diff": 0.1964,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -1334,7 +1334,7 @@
       "jc_hhad_win": 4.35,
       "jc_hhad_draw": 3.5,
       "jc_hhad_lose": 1.63,
-      "jc_handicap": 0
+      "jc_handicap": -1
     }
   ]
 }

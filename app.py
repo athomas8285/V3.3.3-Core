@@ -56,11 +56,13 @@ def index():
                     "jc_handicap": lm.get("jc_handicap"),
                 }
             for info_item in info_list:
-                hcap = hcap_map.get(info_item.get("id",""), {})
-                info_item["jc_hhad_win"] = hcap.get("jc_hhad_win")
-                info_item["jc_hhad_draw"] = hcap.get("jc_hhad_draw")
-                info_item["jc_hhad_lose"] = hcap.get("jc_hhad_lose")
-                info_item["jc_handicap"] = hcap.get("jc_handicap")
+                mid = info_item.get("id", "")
+                if mid in hcap_map:
+                    hcap = hcap_map[mid]
+                    info_item["jc_hhad_win"] = hcap.get("jc_hhad_win")
+                    info_item["jc_hhad_draw"] = hcap.get("jc_hhad_draw")
+                    info_item["jc_hhad_lose"] = hcap.get("jc_hhad_lose")
+                    info_item["jc_handicap"] = hcap.get("jc_handicap")
         except:
             pass
         data = {
