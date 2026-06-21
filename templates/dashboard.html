@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>管理后台 | V3.3.3-Core</title>
+<script>
+const BASE = "";
+let allMatches = [];
+
+function fmt(v, d) { return (v === null || v === undefined || v === "") ? (d || "-") : v; }
+
+function hitIcon(v) {
+  if (v === 1 || v === true || v === "True") return "&#9989;";
+  if (v === 0 || v === false || v === "False") return "&#10060;";
+  return "-";
+}
+
+async function loadStats() {
+  const r = await fetch(BASE + "/api/dashboard/stats").then(d => d.json());
+  document.getElementById("stat-total").textContent = r.total;
+  document.getElementById("stat-scored").textContent = r.scored;
+  document.getElementById("stat-predicted").textContent = r.predicted;
+  document.getElementById("stat-hit").textContent = r.hit;
+  document.getElementById("stat-miss").textContent = r.miss;
+  document.getElementById("stat-today").textContent = r.today_need_predict;
+  const pct = (r.hit + r.miss) > 0 ? ((r.hit / (r.hit + r.miss)) * 100).toFixed(1) : "-";
+  document.getElementById("stat-hitrate").textContent = (r.hit + r.miss) > 0 ? pct + "%" : "-";
+}
+
+async function loadMatches() {
+  allMatches = await fetch(BASE + "/api/dashboard/matches").then(d => d.json());
+  renderTable(allMatches);
+}
+
+function renderTable(matches) {
+  const tbody = document.querySelector("#match-table tbody");
+  tbody.innerHTML = "";
+  if (matches.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:40px;color:#888;">&#26242;&#26080;&#25968;&#25454;</td></tr>';
+    return;
+  }
+  for (const m of matches) {
+    const tr = document.createElement("tr");
+    const cls = m.actual_score ? "status-done" : (m.direction ? "status-pred" : "status-wait");
+    tr.className = cls;
+    tr.innerHTML = '<td>' + fmt(m.id) + '</td>' +
+      '<td>' + fmt(m.home) + '</td>' +
+      '<td>' + fmt(m.away) + '</td>' +
+      '<td>' + fmt(m.time) + '</td>' +
+      '<td>' + (m.actual_score ? '<strong>' + m.actual_score + '</strong>' : '<span class="no-score">-</span>') + '</td>' +
+      '<td>' + fmt(m.direction) + '</td>' +
+      '<td>' + fmt(m.rating) + '</td>' +
+      '<td>' + fmt(m.fit_score, "-") + '</td>' +
+      '<td>' + hitIcon(m.hit) + '</td>';
+    tbody.appendChild(tr);
+  }
+}
+
+function filterTable() {
+  const q = document.getElementById("search-input").value.toLowerCase();
+  if (!q) { renderTable(allMatches); return; }
+  const filtered = allMatches.filter(m =>
+    (m.id && m.id.toLowerCase().includes(q)) ||
+    (m.home && m.home.includes(q)) ||
+    (m.away && m.away.includes(q))
+  );
+  renderTable(filtered);
+}
+
+function filterByStatus(status) {
+  let filtered = allMatches;
+  if (status === "done") filtered = allMatches.filter(m => m.actual_score);
+  else if (status === "pred") filtered = allMatches.filter(m => m.direction && !m.actual_score);
+  else if (status === "wait") filtered = allMatches.filter(m => !m.direction);
+  renderTable(filtered);
+}
+
+async function loadAnalysis() {
+  const r = await fetch(BASE + "/api/dashboard/analysis").then(d => d.json());
+  if (r.error) { document.getElementById("analysis-info").textContent = r.error; return; }
+  document.getElementById("analysis-info").innerHTML = '' +
+    '总 ' + r.total_ratings + ' 条' +
+    ' · 已完成 ' + r.completed +
+    ' · 预测中 ' + r.predicted +
+    ' · 待预测 ' + r.waiting +
+    '<br>销售日期：' + (r.al_keys || []).join(" → ");
+}
+
+window.onload = async () => {
+  await Promise.all([loadStats(), loadMatches(), loadAnalysis()]);
+};
+</script>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background:#0d1117; color:#e6edf3; min-height:100vh; }
+.header { background:#161b22; border-bottom:1px solid #30363d; padding:16px 24px; display:flex; align-items:center; gap:16px; }
+.header h1 { font-size:20px; font-weight:600; }
+.header span { color:#8b949e; font-size:14px; }
+.stats { display:grid; grid-template-columns:repeat(auto-fit, minmax(130px,1fr)); gap:12px; padding:20px 24px; }
+.stat-card { background:#161b22; border:1px solid #30363d; border-radius:8px; padding:16px; text-align:center; }
+.stat-card .num { font-size:28px; font-weight:700; color:#58a6ff; }
+.stat-card .label { font-size:12px; color:#8b949e; margin-top:4px; }
+.controls { display:flex; gap:10px; padding:0 24px 16px; flex-wrap:wrap; align-items:center; }
+.controls input { background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:8px 12px; color:#e6edf3; font-size:14px; flex:1; min-width:200px; }
+.controls input:focus { outline:none; border-color:#58a6ff; }
+.controls button { background:#21262d; border:1px solid #30363d; border-radius:6px; padding:8px 16px; color:#e6edf3; cursor:pointer; font-size:13px; transition:.15s; }
+.controls button:hover { background:#30363d; border-color:#8b949e; }
+.section { padding:0 24px 24px; }
+.section-title { font-size:15px; font-weight:600; margin-bottom:12px; color:#8b949e; }
+.table-wrap { overflow-x:auto; border:1px solid #30363d; border-radius:8px; }
+table { width:100%; border-collapse:collapse; font-size:13px; }
+thead { background:#161b22; }
+th { padding:10px 12px; text-align:left; font-weight:600; color:#8b949e; border-bottom:1px solid #30363d; white-space:nowrap; }
+td { padding:8px 12px; border-bottom:1px solid #21262d; }
+tr:last-child td { border-bottom:none; }
+tr:hover { background:#161b22; }
+.status-done td:first-child { border-left:3px solid #3fb950; }
+.status-pred td:first-child { border-left:3px solid #d29922; }
+.status-wait td:first-child { border-left:3px solid #8b949e; }
+.no-score { color:#484f58; }
+.analysis-box { background:#161b22; border:1px solid #30363d; border-radius:8px; padding:16px; font-size:14px; line-height:1.6; }
+@media(max-width:640px) {
+  .stats { grid-template-columns:repeat(3,1fr); gap:8px; padding:12px; }
+  .stat-card { padding:12px; }
+  .stat-card .num { font-size:22px; }
+  .section { padding:0 12px 16px; }
+  .controls { padding:0 12px 12px; }
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>&#31649;&#29702;&#21518;&#21488;</h1>
+  <span>V3.3.3-Core &#183; &#21482;&#35835;&#38754;&#26495;</span>
+</div>
+<div class="stats">
+  <div class="stat-card"><div class="num" id="stat-total">-</div><div class="label">&#24635;&#27604;&#36187;</div></div>
+  <div class="stat-card"><div class="num" id="stat-scored">-</div><div class="label">&#24050;&#26377;&#36187;&#26524;</div></div>
+  <div class="stat-card"><div class="num" id="stat-predicted">-</div><div class="label">&#24050;&#39044;&#27979;</div></div>
+  <div class="stat-card"><div class="num" id="stat-hit">-</div><div class="label">&#21629;&#20013;</div></div>
+  <div class="stat-card"><div class="num" id="stat-miss">-</div><div class="label">&#26410;&#21629;&#20013;</div></div>
+  <div class="stat-card"><div class="num" id="stat-hitrate">-</div><div class="label">&#21629;&#20013;&#29575;</div></div>
+  <div class="stat-card"><div class="num" id="stat-today">-</div><div class="label">&#24453;&#39044;&#27979;</div></div>
+</div>
+<div class="controls">
+  <input id="search-input" placeholder="&#25628;&#32034;&#32534;&#21495;&#12289;&#29699;&#38431;..." oninput="filterTable()">
+  <button onclick="filterByStatus('all')">&#20840;&#37096;</button>
+  <button onclick="filterByStatus('done')">&#24050;&#23436;&#25104;</button>
+  <button onclick="filterByStatus('pred')">&#39044;&#27979;&#20013;</button>
+  <button onclick="filterByStatus('wait')">&#24453;&#39044;&#27979;</button>
+</div>
+<div class="section">
+  <div class="section-title">&#25152;&#26377;&#27604;&#36187;</div>
+  <div class="table-wrap">
+    <table id="match-table">
+      <thead><tr>
+        <th>&#32534;&#21495;</th><th>&#20027;&#38431;</th><th>&#23458;&#38431;</th><th>&#26102;&#38388;</th><th>&#27604;&#20998;</th><th>&#26041;&#21521;</th><th>&#35780;&#32423;</th><th>&#36148;&#21512;&#24230;</th><th>&#21629;&#20013;</th>
+      </tr></thead>
+      <tbody><tr><td colspan="10" style="text-align:center;padding:40px;color:#888;">&#21152;&#36733;&#20013;...</td></tr></tbody>
+    </table>
+  </div>
+</div>
+<div class="section">
+  <div class="section-title">APP &#25968;&#25454;&#29366;&#24577;</div>
+  <div class="analysis-box" id="analysis-info">&#21152;&#36733;&#20013;...</div>
+</div>
+</body>
+</html>

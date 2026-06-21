@@ -3,15 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>V3.3.3-Core 分析系统</title>
-<link rel="manifest" href="/static/manifest.json">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"></head>
+<title>V3.3.3-Core 分析系统</title></head>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#080b14;--surface:#0c1021;--surface-2:#111629;--surface-h:#171d35;--t1:#e8edf5;--t2:#8b95a9;--t3:#5a6577;--green:#00e676;--red:#ef5350;--gold:#fbbf24;--amber:#fbbf24;--blue:#60a5fa;--cyan:#00e5ff;--purple:#7c3aed;--bd:rgba(0,229,255,.06);--bd-h:rgba(0,229,255,.14);--glow-cyan:0 0 12px rgba(0,229,255,.12);--glow-green:0 0 12px rgba(0,230,118,.12);--glow-amber:0 0 12px rgba(251,191,36,.12);--glow-gold:0 0 12px rgba(251,191,36,.15);--glow-purple:0 0 12px rgba(124,58,237,.12);--mono:"SF Mono","Cascadia Code","JetBrains Mono","Consolas",monospace;--sans:"Inter","SF Pro","Microsoft YaHei","PingFang SC","Noto Sans SC",sans-serif}
-body{font-family:var(--sans);background:linear-gradient(rgba(26,26,32,0.12),rgba(26,26,32,0.12)),url('../static/bg1.webp') center/cover no-repeat fixed;color:var(--t1);height:100vh;width:100vw;overflow:hidden;overflow-x:hidden;display:flex;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{font-family:var(--sans);background:linear-gradient(rgba(26,26,32,0.12),rgba(26,26,32,0.12)),url('../static/bg1.png') center/cover no-repeat fixed;color:var(--t1);height:100vh;width:100vw;overflow:hidden;overflow-x:hidden;display:flex;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 ::-webkit-scrollbar{width:3px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:rgba(0,229,255,.08);border-radius:2px}
@@ -175,7 +172,7 @@ body{font-family:var(--sans);background:linear-gradient(rgba(26,26,32,0.12),rgba
 .doc-entry .de-value{color:var(--t2)}
 .sd-loading{color:var(--t3);font-size:12px;padding:12px;text-align:center}
 .sd-error{color:var(--red);font-size:12px;padding:12px;text-align:center}
-.main{flex:1;min-width:0;padding:0 24px 60px;overflow-y:auto;overflow-x:hidden}
+.main{flex:1;min-width:0;padding:0 24px 60px;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column}
 .sec-header{display:flex;align-items:baseline;gap:12px;padding:18px 0 10px}
 .sec-header h2{font-size:16px;font-weight:700;color:var(--t1)}
 .sec-header .sec-sub{font-size:12px;color:var(--t2);font-weight:500}
@@ -672,21 +669,6 @@ td.c-rating .r-lvl.b{background:var(--t3);color:#fff}
 .gs-td-gd{font-family:var(--mono);font-size:12px;font-weight:600;color:rgba(148,163,184,.3)}
 .gs-td-pts{font-weight:800;font-size:17px;font-family:var(--mono);color:var(--gold);text-shadow:0 0 10px rgba(251,191,36,.12)}
 
-
-/* ====== 精选推荐表格 ====== */
-.tp-wrap{max-width:600px;margin:0 auto;padding:20px}
-.tp-table{width:100%;border-collapse:collapse;background:rgba(12,16,33,.5);border:1px solid rgba(0,229,255,.06);border-radius:10px;overflow:hidden}
-.tp-table thead th{font-size:15px;color:#64748b;font-weight:600;padding:14px 12px;text-align:center;border-bottom:1px solid rgba(255,255,255,.06);background:rgba(0,0,0,.15);letter-spacing:.5px}
-.tp-table tbody td{font-size:16px;color:var(--t1);padding:14px 12px;text-align:center;border-bottom:1px solid rgba(255,255,255,.03)}
-.tp-table tbody tr:last-child td{border-bottom:none}
-.tp-table tbody tr:hover td{background:rgba(0,229,255,.025)}
-.tp-td-hit{color:#4ade80!important;font-weight:700}
-.tp-td-miss{color:#ef4444!important;font-weight:700}
-.tp-td-wait{color:var(--gold)!important;font-weight:700}
-.tp-td-plan{font-family:var(--mono);font-size:15px!important;letter-spacing:.3px}
-.tp-sp{font-family:var(--mono);font-weight:700;color:var(--cyan);font-size:16px!important}
-.tp-profit{font-family:var(--mono);font-weight:700;color:#4ade80;font-size:16px!important}
-.tp-note{text-align:center;padding:18px;color:var(--t3);font-size:14px;line-height:1.8}
 /* ========= KNOCKOUT BRACKET ========= */
 .br-wrap{position:relative;padding:24px 0;overflow-x:auto;min-height:700px;width:100%}
 .br-tree{display:flex;flex-direction:row;justify-content:center;align-items:stretch;position:relative;min-width:1100px;padding:0 20px}
@@ -1097,7 +1079,7 @@ td.c-rating .r-lvl.b{background:var(--t3);color:#fff}
 /* ====== Footer / Disclaimer ====== */
 .page-footer {
     width: 100%;
-    margin-top: 50px;
+    margin-top: auto;
     padding: 20px;
     text-align: center;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -1142,130 +1124,22 @@ td.c-rating .r-lvl.b{background:var(--t3);color:#fff}
 }
 
 
-
-
-.hamburger-btn {
-  display: none;
-  position: fixed;
-  top: 10px;
-  left: 10px;
-  z-index: 200;
-  width: 38px;
-  height: 38px;
-  border-radius: 10px;
-  background: rgba(12,16,33,.88);
-  border: 1px solid rgba(0,229,255,.12);
-  color: var(--cyan);
-  font-size: 20px;
-  cursor: pointer;
-  align-items: center;
-  justify-content: center;
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 2px 12px rgba(0,0,0,.3);
-  transition: background .15s;
-}
-.hamburger-btn:hover { background: rgba(20,28,50,.95); }
-.sd-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.55);
-  z-index: 98;
-  -webkit-backdrop-filter: blur(2px);
-  backdrop-filter: blur(2px);
-}
-.mobile-bottom-nav {
-  display: none;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 56px;
-  background: rgba(10,14,28,.95);
-  border-top: 1px solid rgba(0,229,255,.08);
-  z-index: 50;
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
-  justify-content: space-around;
-  align-items: center;
-  padding: 0 2px;
-  padding-bottom: env(safe-area-inset-bottom, 0);
-}
-.mb-nav-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1px;
-  padding: 5px 6px;
-  border-radius: 6px;
-  cursor: pointer;
-  color: var(--t3);
-  font-size: 9px;
-  transition: color .15s;
-  min-width: 44px;
-  -webkit-tap-highlight-color: transparent;
-}
-.mb-nav-item .mb-icon { font-size: 20px; line-height: 1.2; }
-.mb-nav-item .mb-label { font-size: 9px; line-height: 1.2; }
-.mb-nav-item.active { color: var(--cyan); }
-.mb-nav-item:active { opacity: .6; }
-@media(max-width: 767px) {
-  .hamburger-btn { display: flex; }
-  .sd-overlay.active { display: block; }
-  .mobile-bottom-nav { display: flex; }
-  .sd-wrap {
-    position: fixed; top: 0; left: 0; bottom: 0;
-    width: 280px; max-width: 85vw; z-index: 100;
-    transform: translateX(-100%);
-    transition: transform .3s cubic-bezier(.4,0,.2,1);
-    border-right: 1px solid rgba(0,229,255,.1);
-  }
-  .sd-wrap.open { transform: translateX(0); }
-  body { overflow-x: hidden; }
-  .main { padding: 50px 12px 70px !important; }
-  .sec-header { padding: 12px 0 8px !important; flex-wrap: wrap; }
-  .sec-header h2 { font-size: 14px !important; }
-  .exp-grid { grid-template-columns: 1fr !important; gap: 8px !important; }
-  .ana-expanded { padding: 10px 8px !important; }
-  .ana-card { margin: 4px 0 !important; }
-  .chart-svg-wrap svg { max-width: 100% !important; }
-  .ana-card-num { font-size: 10px !important; min-width: 24px !important; }
-  .ana-card-time { font-size: 10px !important; }
-  .ana-card-teams { font-size: 12px !important; }
-  .og-item { font-size: 11px !important; }
-  .odds-group { gap: 4px !important; padding: 2px 6px !important; }
-  .analysis-item { padding: 6px 8px !important; }
-  .exp-pill-row { gap: 4px !important; }
-  .exp-pill { padding: 3px 8px !important; font-size: 11px !important; }
-  .wc-match-card { font-size: 12px !important; padding: 7px 10px !important; }
-  .wc-m-time { width: 36px !important; font-size: 10px !important; }
-  .wc-m-venue { display: none !important; }
-  .gs-card { border-radius: 8px !important; }
-  .br-wrap { padding: 8px 0 !important; }
-  .br-tree { min-width: auto !important; padding: 0 6px !important; overflow-x: auto !important; }
-  .hcc-clock-digits { font-size: 36px !important; }
-  .hcc-clock-unit { min-width: 40px !important; }
-  .tp-table-wrap { overflow-x: auto !important; }
-  .tp-table { font-size: 12px !important; }
-  .tp-table th, .tp-table td { padding: 6px 4px !important; }
-}
-@media(max-width: 767px) {
-  .sd-title, .sd-sub, .sd-status, .plan-item,
-  .acc .acc-label, .acc .acc-badge, .acc .acc-count,
-  .hist-date-item .hd-date, .hist-date-item .hd-stats,
-  .today-stat-row, .bt-item .bt-title, .bt-item .bt-meta,
-  .doc-item .doc-title, .sd-contact, .sd-footer {
-    display: revert !important;
-  }
-  .sd-wrap .acc-body { max-height: none !important; }
-}
+/* Odds trend chart */
+.ana-exp-trend-wrap{margin:10px 14px 8px;background:rgba(0,229,255,.03);border:1px solid rgba(0,229,255,.08);border-radius:6px;padding:10px 12px;}
+.aet-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.aet-title{font-size:13px;color:var(--gold);font-weight:600;}
+.aet-refresh{background:none;border:1px solid rgba(0,229,255,.12);color:var(--cyan);border-radius:4px;cursor:pointer;font-size:14px;padding:2px 8px;transition:.15s;}
+.aet-refresh:hover{background:rgba(0,229,255,.1);border-color:var(--cyan);}
+.aet-chart-area{min-height:80px;}
+.aet-loading,.aet-empty{text-align:center;color:var(--t3);font-size:12px;padding:20px 0;}
+.aet-svg{width:100%;max-width:640px;height:auto;display:block;margin:0 auto;background:rgba(0,0,0,.15);border-radius:4px;}
+.aet-chart-title{text-align:center;font-size:11px;color:var(--t2);margin-bottom:6px;}
+.aet-legend{display:flex;gap:14px;justify-content:center;margin-top:6px;font-size:11px;color:var(--t2);flex-wrap:wrap;}
+.aet-leg-item{display:inline-flex;align-items:center;gap:4px;cursor:default;}
+.aet-leg-dot{width:14px;height:2px;border-radius:1.5px;display:inline-block;}
 
 </style>
 <body>
-<div class="hamburger-btn" id="hamburgerBtn">☰</div>
-<div class="sd-overlay" id="sdOverlay"></div>
-
 <div class="sd-wrap">
     <div class="sd-top">
     <div class="sd-logo-row">
@@ -1301,10 +1175,6 @@ td.c-rating .r-lvl.b{background:var(--t3);color:#fff}
             <span class="wsi-icon">🔍</span>
             <span class="wsi-label">比赛分析</span>
           </div>
-          <div class="wc-sub-item" onclick="switchNav('top')" data-nav="top">
-            <span class="wsi-icon">⭐</span>
-            <span class="wsi-label">精选推荐</span>
-          </div>
           <div class="wc-sub-item" onclick="switchNav('standings')" data-nav="standings">
             <span class="wsi-icon">📊</span>
             <span class="wsi-label">小组积分榜</span>
@@ -1312,6 +1182,14 @@ td.c-rating .r-lvl.b{background:var(--t3);color:#fff}
           <div class="wc-sub-item" onclick="switchNav('bracket')" data-nav="bracket">
             <span class="wsi-icon">🏟️</span>
             <span class="wsi-label">淘汰赛对阵图</span>
+          </div>
+          <div class="wc-sub-item" onclick="switchNav('odds')" data-nav="odds">
+            <span class="wsi-icon">💰</span>
+            <span class="wsi-label">冠军赔率追踪</span>
+          </div>
+          <div class="wc-sub-item" onclick="switchNav('top')" data-nav="top">
+            <span class="wsi-icon">⭐</span>
+            <span class="wsi-label">今日精选推荐</span>
           </div>
         </div>
       </div>
@@ -1438,25 +1316,6 @@ td.c-rating .r-lvl.b{background:var(--t3);color:#fff}
     </div>
     <div id="todayMatches"></div>
   </div>
-  <!-- ====== View: 比赛分析 ====== -->
-  <div id="analysisContent" class="view-content" style="display:none">
-    <div class="sec-header">
-      <button class="sec-back-btn" onclick="switchNav('home')">← 返回首页</button>
-      <h2>🔍 比赛分析</h2>
-      <div class="sec-bar"></div>
-    </div>
-    <div id="analysisInner"></div>
-  </div>
-  <!-- ====== View: 精选推荐 ====== -->
-  <div id="topContent" class="view-content" style="display:none">
-    <div class="sec-header">
-      <button class="sec-back-btn" onclick="switchNav('home')">← 返回首页</button>
-      <h2>⭐ 精选推荐</h2>
-      <div class="sec-bar"></div>
-    </div>
-    <div id="topInner" style="padding:16px;color:var(--t3);text-align:center;font-size:14px">数据加载中...</div>
-  </div>
-
   <!-- ====== View: Group Standings ====== -->
   <div id="standingsContent" class="view-content" style="display:none">
     <div id="standingsInner"></div>
@@ -1469,6 +1328,34 @@ td.c-rating .r-lvl.b{background:var(--t3);color:#fff}
       <div class="sec-bar"></div>
     </div>
     <div id="bracketInner" style="padding:16px;color:var(--t3);text-align:center;font-size:14px">数据加载中...</div>
+  </div>
+  <!-- ====== View: 冠军赔率追踪 ====== -->
+  <div id="oddsContent" class="view-content" style="display:none">
+    <div class="sec-header">
+      <button class="sec-back-btn" onclick="switchNav('home')">← 返回首页</button>
+      <h2>💰 冠军赔率追踪</h2>
+      <div class="sec-bar"></div>
+    </div>
+    <div id="oddsInner" style="padding:16px;color:var(--t3);text-align:center;font-size:14px">数据加载中...</div>
+  </div>
+  <!-- ====== View: 今日精选推荐 ====== -->
+  <div id="topContent" class="view-content" style="display:none">
+    <div class="sec-header">
+      <button class="sec-back-btn" onclick="switchNav('home')">← 返回首页</button>
+      <h2>⭐ 今日精选推荐</h2>
+      <div class="sec-bar"></div>
+    </div>
+    <div id="topInner" style="padding:16px;color:var(--t3);text-align:center;font-size:14px">数据加载中...</div>
+  </div>
+
+  <!-- ====== View: 比赛分析 ====== -->
+  <div id="analysisContent" class="view-content" style="display:none">
+    <div class="sec-header">
+      <button class="sec-back-btn" onclick="switchNav('home')">← 返回首页</button>
+      <h2>🔍 比赛分析</h2>
+      <div class="sec-bar"></div>
+    </div>
+    <div id="analysisInner"></div>
   </div>
   <!-- ====== View: ????? ====== -->
   <div id="docContent" class="view-content" style="display:none">
@@ -1494,14 +1381,14 @@ var TEAM_FLAGS = {
   "墨西哥":"/static/flags/mexico.png","南非":"/static/flags/south_africa.png","韩国":"/static/flags/korea.png","捷克":"/static/flags/czech.png",
   "加拿大":"/static/flags/canada.png","波黑":"/static/flags/bosnia.png","美国":"/static/flags/usa.png","巴拉圭":"/static/flags/paraguay.png",
   "卡塔尔":"/static/flags/qatar.png","瑞士":"/static/flags/switzerland.png","巴西":"/static/flags/brazil.png","摩洛哥":"/static/flags/morocco.png",
-  "海地":"/static/flags/haiti.png","苏格兰":"/static/flags/scotland.png","澳大利亚":"/static/flags/australia.png","土耳其":"/static/flags/turkey.png",
+  "海地":"/static/flags/haiti.png","苏格兰":"/static/flags/scotland.png","奥大利亚":"/static/flags/australia.png","土耳其":"/static/flags/turkey.png",
   "德国":"/static/flags/germany.png","库拉索":"/static/flags/curacao.png","荷兰":"/static/flags/netherlands.png","日本":"/static/flags/japan.png",
   "科特迪瓦":"/static/flags/ivory_coast.png","厄瓜多尔":"/static/flags/ecuador.png","瑞典":"/static/flags/sweden.png","突尼斯":"/static/flags/tunisia.png",
   "西班牙":"/static/flags/spain.png","佛得角":"/static/flags/cape_verde.png","比利时":"/static/flags/belgium.png","埃及":"/static/flags/egypt.png",
   "沙特":"/static/flags/saudi.png","乌拉圭":"/static/flags/uruguay.png","伊朗":"/static/flags/iran.png","新西兰":"/static/flags/new_zealand.png",
   "法国":"/static/flags/france.png","塞内加尔":"/static/flags/senegal.png","伊拉克":"/static/flags/iraq.png","挪威":"/static/flags/norway.png",
   "阿根廷":"/static/flags/argentina.png","阿尔及利亚":"/static/flags/algeria.png","奥地利":"/static/flags/austria.png","约旦":"/static/flags/jordan.png",
-  "葡萄牙":"/static/flags/portugal.png","刚果(金)":"/static/flags/dr_congo.png","英格兰":"/static/flags/england.png","克罗地亚":"/static/flags/croatia.png",
+  "葡萄牙":"/static/flags/portugal.png","民主刚果":"/static/flags/dr_congo.png","英格兰":"/static/flags/england.png","克罗地亚":"/static/flags/croatia.png",
   "加纳":"/static/flags/ghana.png","巴拿马":"/static/flags/panama.png","乌兹别克斯坦":"/static/flags/uzbekistan.png","哥伦比亚":"/static/flags/colombia.png"
 };
 
@@ -1953,45 +1840,45 @@ var WC_MATCHES = [
   {d:"6月13日",t:"03:00",g:"B",h:"加拿大",a:"波黑",v:"多伦多",s:"1-1"},
   {d:"6月13日",t:"09:00",g:"D",h:"美国",a:"巴拉圭",v:"洛杉矶",s:"4-1"},
   // 6月14日
-  {d:"6月14日",t:"03:00",g:"B",h:"卡塔尔",a:"瑞士",v:"旧金山湾区",s:"1-1"},
-  {d:"6月14日",t:"06:00",g:"C",h:"巴西",a:"摩洛哥",v:"纽约/新泽西",s:"1-1"},
-  {d:"6月14日",t:"09:00",g:"C",h:"海地",a:"苏格兰",v:"波士顿",s:"0-1"},
-  {d:"6月14日",t:"12:00",g:"D",h:"澳大利亚",a:"土耳其",v:"温哥华",s:"2-0"},
+  {d:"6月14日",t:"03:00",g:"B",h:"卡塔尔",a:"瑞士",v:"旧金山湾区"},
+  {d:"6月14日",t:"06:00",g:"C",h:"巴西",a:"摩洛哥",v:"纽约/新泽西"},
+  {d:"6月14日",t:"09:00",g:"C",h:"海地",a:"苏格兰",v:"波士顿"},
+  {d:"6月14日",t:"12:00",g:"D",h:"奥大利亚",a:"土耳其",v:"温哥华"},
   // 6月15日
-  {d:"6月15日",t:"01:00",g:"E",h:"德国",a:"库拉索",v:"休斯敦",s:"7-1"},
-  {d:"6月15日",t:"04:00",g:"F",h:"荷兰",a:"日本",v:"达拉斯",s:"2-2"},
-  {d:"6月15日",t:"07:00",g:"E",h:"科特迪瓦",a:"厄瓜多尔",v:"费城",s:"1-0"},
-  {d:"6月15日",t:"10:00",g:"F",h:"瑞典",a:"突尼斯",v:"蒙特雷",s:"5-1"},
+  {d:"6月15日",t:"01:00",g:"E",h:"德国",a:"库拉索",v:"休斯敦"},
+  {d:"6月15日",t:"04:00",g:"F",h:"荷兰",a:"日本",v:"达拉斯"},
+  {d:"6月15日",t:"07:00",g:"E",h:"科特迪瓦",a:"厄瓜多尔",v:"费城"},
+  {d:"6月15日",t:"10:00",g:"F",h:"瑞典",a:"突尼斯",v:"蒙特雷"},
   // 6月16日
-  {d:"6月16日",t:"00:00",g:"H",h:"西班牙",a:"佛得角",v:"亚特兰大",s:"0-0"},
-  {d:"6月16日",t:"03:00",g:"G",h:"比利时",a:"埃及",v:"西雅图",s:"1-1"},
-  {d:"6月16日",t:"06:00",g:"H",h:"沙特",a:"乌拉圭",v:"迈阿密",s:"1-1"},
-  {d:"6月16日",t:"09:00",g:"G",h:"伊朗",a:"新西兰",v:"洛杉矶",s:"2-2"},
+  {d:"6月16日",t:"00:00",g:"H",h:"西班牙",a:"佛得角",v:"亚特兰大"},
+  {d:"6月16日",t:"03:00",g:"G",h:"比利时",a:"埃及",v:"西雅图"},
+  {d:"6月16日",t:"06:00",g:"H",h:"沙特",a:"乌拉圭",v:"迈阿密"},
+  {d:"6月16日",t:"09:00",g:"G",h:"伊朗",a:"新西兰",v:"洛杉矶"},
   // 6月17日
-  {d:"6月17日",t:"03:00",g:"I",h:"法国",a:"塞内加尔",v:"纽约/新泽西",s:"3-1"},
-  {d:"6月17日",t:"06:00",g:"I",h:"伊拉克",a:"挪威",v:"波士顿",s:"1-4"},
-  {d:"6月17日",t:"09:00",g:"J",h:"阿根廷",a:"阿尔及利亚",v:"堪萨斯城",s:"3-0"},
-  {d:"6月17日",t:"12:00",g:"J",h:"奥地利",a:"约旦",v:"旧金山湾区",s:"3-1"},
+  {d:"6月17日",t:"03:00",g:"I",h:"法国",a:"塞内加尔",v:"纽约/新泽西"},
+  {d:"6月17日",t:"06:00",g:"I",h:"伊拉克",a:"挪威",v:"波士顿"},
+  {d:"6月17日",t:"09:00",g:"J",h:"阿根廷",a:"阿尔及利亚",v:"堪萨斯城"},
+  {d:"6月17日",t:"12:00",g:"J",h:"奥地利",a:"约旦",v:"旧金山湾区"},
   // 6月18日
-  {d:"6月18日",t:"01:00",g:"K",h:"葡萄牙",a:"刚果(金)",v:"休斯敦",s:"1-1"},
-  {d:"6月18日",t:"04:00",g:"L",h:"英格兰",a:"克罗地亚",v:"达拉斯",s:"4-2"},
-  {d:"6月18日",t:"07:00",g:"L",h:"加纳",a:"巴拿马",v:"多伦多",s:"1-0"},
-  {d:"6月18日",t:"10:00",g:"K",h:"乌兹别克斯坦",a:"哥伦比亚",v:"墨西哥城",s:"1-3"},
+  {d:"6月18日",t:"01:00",g:"K",h:"葡萄牙",a:"民主刚果",v:"休斯敦"},
+  {d:"6月18日",t:"04:00",g:"L",h:"英格兰",a:"克罗地亚",v:"达拉斯"},
+  {d:"6月18日",t:"07:00",g:"L",h:"加纳",a:"巴拿马",v:"多伦多"},
+  {d:"6月18日",t:"10:00",g:"K",h:"乌兹别克斯坦",a:"哥伦比亚",v:"墨西哥城"},
   // 6月19日
-  {d:"6月19日",t:"00:00",g:"A",h:"捷克",a:"南非",v:"亚特兰大",s:"1-1"},
-  {d:"6月19日",t:"03:00",g:"B",h:"瑞士",a:"波黑",v:"洛杉矶",s:"4-1"},
-  {d:"6月19日",t:"06:00",g:"B",h:"加拿大",a:"卡塔尔",v:"温哥华",s:"6-0"},
-  {d:"6月19日",t:"09:00",g:"A",h:"墨西哥",a:"韩国",v:"瓜达拉哈拉",s:"1-0"},
+  {d:"6月19日",t:"00:00",g:"A",h:"捷克",a:"南非",v:"亚特兰大"},
+  {d:"6月19日",t:"03:00",g:"B",h:"瑞士",a:"波黑",v:"洛杉矶"},
+  {d:"6月19日",t:"06:00",g:"B",h:"加拿大",a:"卡塔尔",v:"温哥华"},
+  {d:"6月19日",t:"09:00",g:"A",h:"墨西哥",a:"韩国",v:"瓜达拉哈拉"},
   // 6月20日
-  {d:"6月20日",t:"03:00",g:"D",h:"美国",a:"澳大利亚",v:"西雅图",s:"2-0"},
-  {d:"6月20日",t:"06:00",g:"C",h:"苏格兰",a:"摩洛哥",v:"波士顿",s:"0-1"},
-  {d:"6月20日",t:"09:00",g:"C",h:"巴西",a:"海地",v:"费城",s:"3-0"},
-  {d:"6月20日",t:"12:00",g:"D",h:"土耳其",a:"巴拉圭",v:"蒙特雷",s:"0-1"},
+  {d:"6月20日",t:"03:00",g:"D",h:"美国",a:"奥大利亚",v:"西雅图"},
+  {d:"6月20日",t:"06:00",g:"C",h:"苏格兰",a:"摩洛哥",v:"波士顿"},
+  {d:"6月20日",t:"09:00",g:"C",h:"巴西",a:"海地",v:"费城"},
+  {d:"6月20日",t:"12:00",g:"D",h:"土耳其",a:"巴拉圭",v:"蒙特雷"},
   // 6月21日
-  {d:"6月21日",t:"01:00",g:"F",h:"荷兰",a:"瑞典",v:"休斯敦",s:"5-1"},
-  {d:"6月21日",t:"04:00",g:"E",h:"德国",a:"科特迪瓦",v:"多伦多",s:"2-1"},
-  {d:"6月21日",t:"08:00",g:"E",h:"厄瓜多尔",a:"库拉索",v:"堪萨斯城",s:"0-0"},
-  {d:"6月21日",t:"12:00",g:"F",h:"突尼斯",a:"日本",v:"蒙特雷",s:"0-4"},
+  {d:"6月21日",t:"01:00",g:"F",h:"荷兰",a:"瑞典",v:"休斯敦"},
+  {d:"6月21日",t:"04:00",g:"E",h:"德国",a:"科特迪瓦",v:"多伦多"},
+  {d:"6月21日",t:"08:00",g:"E",h:"厄瓜多尔",a:"库拉索",v:"堪萨斯城"},
+  {d:"6月21日",t:"12:00",g:"F",h:"突尼斯",a:"日本",v:"蒙特雷"},
   // 6月22日
   {d:"6月22日",t:"00:00",g:"H",h:"西班牙",a:"沙特",v:"亚特兰大"},
   {d:"6月22日",t:"03:00",g:"G",h:"比利时",a:"伊朗",v:"洛杉矶"},
@@ -2006,7 +1893,7 @@ var WC_MATCHES = [
   {d:"6月24日",t:"01:00",g:"K",h:"葡萄牙",a:"乌兹别克斯坦",v:"休斯敦"},
   {d:"6月24日",t:"04:00",g:"L",h:"英格兰",a:"加纳",v:"波士顿"},
   {d:"6月24日",t:"07:00",g:"L",h:"巴拿马",a:"克罗地亚",v:"多伦多"},
-  {d:"6月24日",t:"10:00",g:"K",h:"哥伦比亚",a:"刚果(金)",v:"墨西哥城"},
+  {d:"6月24日",t:"10:00",g:"K",h:"哥伦比亚",a:"民主刚果",v:"墨西哥城"},
   // 6月25日
   {d:"6月25日",t:"03:00",g:"B",h:"瑞士",a:"加拿大",v:"温哥华"},
   {d:"6月25日",t:"03:00",g:"B",h:"波黑",a:"卡塔尔",v:"西雅图"},
@@ -2020,7 +1907,7 @@ var WC_MATCHES = [
   {d:"6月26日",t:"07:00",g:"F",h:"日本",a:"瑞典",v:"达拉斯"},
   {d:"6月26日",t:"07:00",g:"F",h:"突尼斯",a:"荷兰",v:"堪萨斯城"},
   {d:"6月26日",t:"10:00",g:"D",h:"土耳其",a:"美国",v:"洛杉矶"},
-  {d:"6月26日",t:"10:00",g:"D",h:"巴拉圭",a:"澳大利亚",v:"旧金山湾区"},
+  {d:"6月26日",t:"10:00",g:"D",h:"巴拉圭",a:"奥大利亚",v:"旧金山湾区"},
   // 6月27日
   {d:"6月27日",t:"03:00",g:"I",h:"挪威",a:"法国",v:"波士顿"},
   {d:"6月27日",t:"03:00",g:"I",h:"塞内加尔",a:"伊拉克",v:"费城"},
@@ -2032,7 +1919,7 @@ var WC_MATCHES = [
   {d:"6月28日",t:"03:00",g:"L",h:"巴拿马",a:"英格兰",v:"纽约/新泽西"},
   {d:"6月28日",t:"03:00",g:"L",h:"克罗地亚",a:"加纳",v:"费城"},
   {d:"6月28日",t:"07:30",g:"K",h:"哥伦比亚",a:"葡萄牙",v:"迈阿密"},
-  {d:"6月28日",t:"07:30",g:"K",h:"刚果(金)",a:"乌兹别克斯坦",v:"亚特兰大"},
+  {d:"6月28日",t:"07:30",g:"K",h:"民主刚果",a:"乌兹别克斯坦",v:"亚特兰大"},
   {d:"6月28日",t:"10:00",g:"J",h:"阿尔及利亚",a:"奥地利",v:"堪萨斯城"},
   {d:"6月28日",t:"10:00",g:"J",h:"约旦",a:"阿根廷",v:"旧金山湾区"},
 ];
@@ -2137,16 +2024,6 @@ function renderAnalysisView(){
     renderFromWC();
   }
   __expandTargetMatch();
-  // 滚动到6月21日的预测比赛
-  setTimeout(function(){
-    var labels = document.querySelectorAll('.ana-date-label');
-    for(var li = 0; li < labels.length; li++){
-      if(labels[li].textContent.indexOf('6月22日') >= 0){
-        labels[li].scrollIntoView({behavior:'smooth', block:'start'});
-        break;
-      }
-    }
-  }, 350);
 }
 
 function renderFromData(){
@@ -2185,8 +2062,8 @@ function renderFromData(){
     var allDone = ml.every(function(item){ var r = ratingIdx[item.id]; return r && r.actual_score; });
     h += '<div class="ana-date-group">';
     h += '<div class="ana-date-label clickable" onclick="toggleDateGroup(this)">';
-    h += '<span class="ana-date-arrow">' + (false ? '▶' : '▼') + '</span> 📅 ' + dk + '<span class="adl-count">' + ml.length + ' 场</span></div>';
-    h += '<div class="ana-date-body">';
+    h += '<span class="ana-date-arrow">' + (allDone ? '▶' : '▼') + '</span> 📅 ' + dk + '<span class="adl-count">' + ml.length + ' 场</span></div>';
+    h += '<div class="ana-date-body"' + (allDone ? ' style="display:none"' : '') + '>';
     for(var mi = 0; mi < ml.length; mi++){
       var info = ml[mi];
       var infoDatePart = (info.time||'').length >= 10 ? (info.time||'').slice(0,10) : '';
@@ -2206,9 +2083,9 @@ function renderFromData(){
       var timeDisplay = tm.length >= 16 ? tm.slice(5,16) : (tm.length >= 5 ? tm : tm);
       var datePart = tm.length >= 10 ? tm.slice(0,10) : '';
       var isCompleted = rat.actual_score ? true : false;
-      var isFutureDate = datePart > "2026-06-21";
+      var isFutureDate = datePart > "2026-06-14";
       var hasRating = rat.rating ? true : false;
-      var isPredictable = !isCompleted && (hasSp || hasRating) && (dir ? true : !isFutureDate);
+      var isPredictable = !isCompleted && (hasSp || hasRating) && !isFutureDate;
       var dir = rat.direction || '';
       var fit = rat.fit_score;
       var rting = rat.rating || '';
@@ -2253,7 +2130,7 @@ function renderFromData(){
       // Convert to handicap direction if only handicap market available
       var displayDir = dir;
       var _hasHH = info.jc_hhad_win ? true : false;
-      if(!hasSp && _hasHH && dir && dir.indexOf('让') !== 0){
+      if(!hasSp && _hasHH && dir){
         displayDir = '让' + dir;
       }
 h += '<div class="ana-card' + (isCompleted ? (rat.hit ? ' result-card' : ' result-card miss') : '') + '" onclick="toggleAnaCard(this)" data-mid="' + mid + '">';
@@ -2400,7 +2277,15 @@ h += '<div class="ana-card' + (isCompleted ? (rat.hit ? ' result-card' : ' resul
       } else {
         h += '<p>暂无分析数据</p>';
       }
-    h += '</div></div>';
+      h += '</div></div>';
+            // Odds trend chart            // Odds trend chart            // Odds trend chart
+      h += '<div class="ana-exp-trend-wrap" data-home="' + home.replace(/"/g,"&quot;") + '" data-away="' + away.replace(/"/g,"&quot;") + '">';
+      h += '<div class="aet-header">';
+      h += '<span class="aet-title">📈 赔率走势</span>';
+      h += '<button class="aet-refresh" onclick="renderOddsTrend(this.closest(\'.ana-card\'))">⟳</button>';
+      h += '</div>';
+      h += '<div class="aet-chart-area"><div class="aet-loading">加载中...</div></div>';
+    h += '</div>';
       }
       h += '</div>';
 h+='</div></div>';} else {
@@ -2446,8 +2331,8 @@ function renderFromWC(){
         var allDoneWC = ml.every(function(m){ return !!m.result; });
     h += '<div class="ana-date-group">';
     h += '<div class="ana-date-label clickable" onclick="toggleDateGroup(this)">';
-    h += '<span class="ana-date-arrow">' + (false ? '\u25b6' : '\u25bc') + '</span> \ud83d\udcc5 ' + dk + '<span class="adl-count">' + ml.length + ' \u573a</span></div>';
-    h += '<div class="ana-date-body">';
+    h += '<span class="ana-date-arrow">' + (allDoneWC ? '\u25b6' : '\u25bc') + '</span> \ud83d\udcc5 ' + dk + '<span class="adl-count">' + ml.length + ' \u573a</span></div>';
+    h += '<div class="ana-date-body"' + (allDoneWC ? ' style="display:none"' : '') + '>';
     for(var mi = 0; mi < ml.length; mi++){
       var m = ml[mi];
       var glStr = m.gl !== 0 ? (m.gl > 0 ? '+' + m.gl : '' + m.gl) : '0';
@@ -2572,6 +2457,139 @@ function toggleAnaCard(el){
   if(wasExpanded) el.classList.remove("expanded");
   else el.classList.add("expanded");
 }
+
+// ====== Odds trend chart ======
+var __ODDS_HISTORY = null;
+var __ODDS_HISTORY_BY_NAME = null;
+
+function loadOddsHistory(cb){
+  if(__ODDS_HISTORY){ if(cb) cb(__ODDS_HISTORY); return; }
+  fetch('/api/odds/history').then(function(r){ return r.json(); }).then(function(d){
+    __ODDS_HISTORY = d;
+    __ODDS_HISTORY_BY_NAME = {};
+    for(var k in d){
+      var m = d[k];
+      if(m.home && m.away) __ODDS_HISTORY_BY_NAME[m.home + '|' + m.away] = k;
+    }
+    if(cb) cb(d);
+  }).catch(function(){});
+}
+
+function findMatchId(home, away){
+  if(!__ODDS_HISTORY_BY_NAME) return null;
+  return __ODDS_HISTORY_BY_NAME[home + '|' + away] || null;
+}
+
+function renderOddsTrend(cardEl){
+  if(!cardEl || !cardEl.classList.contains('expanded')) return;
+  var wrap = cardEl.querySelector('.ana-exp-trend-wrap');
+  if(!wrap) return;
+  var area = wrap.querySelector('.aet-chart-area');
+  if(!area) return;
+  var home = wrap.getAttribute('data-home') || '';
+  var away = wrap.getAttribute('data-away') || '';
+  loadOddsHistory(function(data){
+    var mid = findMatchId(home, away);
+    if(!mid || !data[mid]){
+      area.innerHTML = '<div class="aet-empty">\u6682\u65e0\u8d54\u7387\u5386\u53f2\u6570\u636e</div>';
+      return;
+    }
+    var md = data[mid];
+    var tracks = md.tracks && md.tracks.hhad;
+    if(!tracks || tracks.length < 2){
+      area.innerHTML = '<div class="aet-empty">\u8d54\u7387\u5386\u53f2\u4e0d\u8db3\u4e24\u6761</div>';
+      return;
+    }
+    var W = 640, H = 200, padL = 70, padR = 40, padT = 20, padB = 40;
+    var cw = W - padL - padR, ch = H - padT - padB;
+    var n = tracks.length;
+    var allVals = [];
+    for(var ti = 0; ti < n; ti++){
+      allVals.push(tracks[ti].h); allVals.push(tracks[ti].d); allVals.push(tracks[ti].a);
+    }
+    var yMin = Math.min.apply(null, allVals) * 0.97;
+    var yMax = Math.max.apply(null, allVals) * 1.03;
+    var yRng = yMax - yMin;
+    function xp(i){ return padL + cw * i / (n - 1); }
+    function yp(v){ return padT + ch - ch * (v - yMin) / yRng; }
+    var gl = md.goalLine || 0;
+    var glStr = gl >= 0 ? '+' + gl : '' + gl;
+    var hh = '';
+    hh += '<div class="aet-chart-title">\u8ba9\u7403(' + glStr + ')\u8d54\u7387\u8d70\u52bf (' + n + '\u6b21\u53d8\u5316)</div>';
+    hh += '<svg viewBox="0 0 ' + W + ' ' + H + '" class="aet-svg">';
+    for(var gi = 0; gi < 5; gi++){
+      var yv = yMin + yRng * gi / 4;
+      var yy = yp(yv);
+      hh += '<line x1="' + padL + '" y1="' + yy + '" x2="' + (padL+cw) + '" y2="' + yy + '" stroke="rgba(255,255,255,.04)" stroke-width="1"/>';
+      hh += '<text x="' + (padL-6) + '" y="' + (yy+4) + '" fill="#5a6577" font-size="10" text-anchor="end">' + yv.toFixed(2) + '</text>';
+    }
+    for(var ti = 0; ti < n; ti++){
+      var x = xp(ti);
+      var label = tracks[ti].ts;
+      if(label){
+      var parts = label.split("T");
+      if(parts.length === 2) label = parts[0].slice(5) + " " + parts[1].slice(0,5);
+      else if(label.length > 10) label = label.slice(5, 16);
+    }
+      hh += '<text x="' + x + '" y="' + (padT+ch+18) + '" fill="#5a6577" font-size="9" text-anchor="end" transform="rotate(-30,' + x + ',' + (padT+ch+18) + ')">' + label + '</text>';
+    }
+    var series = [
+      {key:'h', color:'#00e5ff', label:'\u4e3b\u80dc'},
+      {key:'d', color:'#fbbf24', label:'\u5e73\u5c40'},
+      {key:'a', color:'#ef5350', label:'\u5ba2\u80dc'}
+    ];
+    for(var si = 0; si < 3; si++){
+      var sk = series[si].key, sc = series[si].color;
+      var pts = '';
+      for(var ti = 0; ti < n; ti++){
+        var val = tracks[ti][sk];
+        if(val === undefined) continue;
+        pts += (pts ? ' ' : '') + xp(ti) + ',' + yp(val);
+      }
+      if(pts) hh += '<polyline points="' + pts + '" fill="none" stroke="' + sc + '" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>';
+      for(var ti = 0; ti < n; ti++){
+        var val = tracks[ti][sk];
+        if(val === undefined) continue;
+        var xd = xp(ti), yd = yp(val);
+        hh += '<circle cx="' + xd + '" cy="' + yd + '" r="3" fill="' + sc + '" opacity="0.8"/>';
+        hh += '<text x="' + xd + '" y="' + (yd-7) + '" fill="' + sc + '" font-size="9" text-anchor="middle" opacity="0.75">' + val.toFixed(2) + '</text>';
+      }
+    }
+    hh += '</svg>';
+    hh += '<div class="aet-legend">';
+    for(var si = 0; si < 3; si++){
+      hh += '<span class="aet-leg-item"><span class="aet-leg-dot" style="background:' + series[si].color + '"></span>' + series[si].label + '</span>';
+    }
+    hh += '<span class="aet-leg-item" style="margin-left:auto;color:#5a6577;font-size:11px;cursor:pointer" onclick="refreshOddsTrend(this.closest(\'.ana-card\'))">\u27f3 \u5237\u65b0</span>';
+    hh += '</div>';
+    area.innerHTML = hh;
+  });
+}
+
+function refreshOddsTrend(cardEl){
+  if(!cardEl) return;
+  var area = cardEl.querySelector('.aet-chart-area');
+  if(!area) return;
+  area.innerHTML = '<div class="aet-loading">\u5237\u65b0\u4e2d...</div>';
+  __ODDS_HISTORY = null;
+  __ODDS_HISTORY_BY_NAME = null;
+  fetch('/api/odds/refresh').then(function(){
+    renderOddsTrend(cardEl);
+  }).catch(function(){
+    renderOddsTrend(cardEl);
+  });
+}
+
+// Wrap toggleAnaCard to auto-render trend on expand
+var __origToggleAnaCard = toggleAnaCard;
+toggleAnaCard = function(el){
+  if(!el.classList.contains('expanded')){
+    if(!el.classList.contains('ana-card'))el=el.closest('.ana-card')||el;__origToggleAnaCard(el);
+    setTimeout(function(){ renderOddsTrend(el); }, 300);
+  } else {
+    if(!el.classList.contains('ana-card'))el=el.closest('.ana-card')||el;__origToggleAnaCard(el);
+  }
+};
 
 function __expandTargetMatch(){
   var tm = window.__TARGET_MATCH;
@@ -3167,7 +3185,7 @@ function renderStandings(){
   NM['E']=['德国','科特迪瓦','厄瓜多尔','库拉索']; FL['E']=['germany','cote_d_ivoire','ecuador','curacao'];
   NM['F']=['荷兰','瑞典','日本','突尼斯']; FL['F']=['netherlands','sweden','japan','tunisia'];
   NM['G']=['比利时','伊朗','新西兰','埃及']; FL['G']=['belgium','iran','new_zealand','egypt'];
-  NM['H']=['西班牙','乌拉圭','沙特','佛得角']; FL['H']=['spain','uruguay','saudi_arabia','cape_verde'];
+  NM['H']=['西班牙','乌拉圭','沙特','佛德角']; FL['H']=['spain','uruguay','saudi_arabia','cape_verde'];
   NM['I']=['法国','塞内加尔','挪威','伊拉克']; FL['I']=['france','senegal','norway','iraq'];
   NM['J']=['阿根廷','阿尔及利亚','奥地利','约旦']; FL['J']=['argentina','algeria','austria','jordan'];
   NM['K']=['葡萄牙','哥伦比亚','乌兹别克斯坦','刚果(金)']; FL['K']=['portugal','colombia','uzbekistan','congo_dr'];
@@ -3231,28 +3249,8 @@ function renderStandings(){
   h+='</div></div>';
   el.innerHTML=h;
 }
-
-function renderTopPicks(){
-  var el = document.getElementById('topInner');
-  if(!el) return;
-  var h = '<div class="tp-wrap">';
-  h += '<table class="tp-table">';
-  h += '<thead><tr><th>日期</th><th>方案</th><th>SP值</th><th>投入</th><th>收益</th><th>中否</th></tr></thead>';
-  h += '<tbody>';
-  h += '<tr><td>6月11日</td><td class="tp-td-plan">001胜+002让胜</td><td class="tp-sp">3.52</td><td>1000</td><td class="tp-profit">3520</td><td class="tp-td-hit">✔ 中</td></tr>';
-  h += '<tr><td>6月12日</td><td class="tp-td-plan">003让负+004胜胜/平胜</td><td class="tp-sp">2.84</td><td>1000</td><td class="tp-profit">2845</td><td class="tp-td-hit">✔ 中</td></tr>';
-  h += '<tr><td>6月13日</td><td class="tp-td-plan" style="color:var(--cyan)!important;font-weight:700">联系作者获取</td><td class="tp-sp">3.55</td><td>1000</td><td class="tp-td-wait">-</td><td class="tp-td-wait">⏳ 等待</td></tr>';  h += '<tr><td>6月14日</td><td class="tp-td-plan" style="color:var(--t2)">1/4 命中</td><td class="tp-sp">-</td><td>-</td><td class="tp-td-wait">-</td><td class="tp-td-hit">✅ 007命中</td></tr>';
-  h += '<tr><td>6月15日</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">⏳ 等待</td></tr>';
-  h += '<tr><td>6月16日</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">⏳ 等待</td></tr>';
-  h += '<tr><td>6月17日</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">⏳ 等待</td></tr>';
-  h += '<tr><td>6月21日</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">-</td><td class="tp-td-wait">⏳ 等待</td></tr>';
-  h += '</tbody></table>';
-  h += '<div class="tp-note">💬 今日方案已出，点击左下角「<span style="cursor:pointer;color:var(--cyan);text-decoration:underline" onclick="showContactModal()">联系作者</span>」获取</div>';
-  h += '</div>';
-  el.innerHTML = h;
-}
 function switchNav(nav){
-  var main = document.querySelector(".main"); if(main) main.scrollTop = 0;
+  window.scrollTo(0, 0);
   // 导航高亮互斥（支持两类菜单）
   document.querySelectorAll('.wc-sub-item, .sd-nav-item').forEach(function(el){
     el.classList.remove('active');
@@ -3267,7 +3265,7 @@ function switchNav(nav){
 
   // 显示并渲染目标视图
   // Clear dynamic content before switching
-  ['homeInner','standingsInner','bracketInner','topInner','analysisInner','docInner'].forEach(function(id){
+  ['homeInner','standingsInner','bracketInner','oddsInner','topInner','analysisInner','docInner'].forEach(function(id){
     var el = document.getElementById(id);
     if(el) el.innerHTML = '';
   });
@@ -3292,9 +3290,11 @@ function switchNav(nav){
       document.getElementById('bracketContent').style.display = 'block';
       renderBracket();
       break;
+    case 'odds':
+      document.getElementById('oddsContent').style.display = 'block';
+      break;
     case 'top':
       document.getElementById('topContent').style.display = 'block';
-      renderTopPicks();
       break;
     default:
       // 未知导航项，显示占位
@@ -3538,62 +3538,6 @@ function renderMarkdown(md){
 function showContactModal(){document.getElementById('contactModal').classList.add('active');}
 function hideContactModal(){document.getElementById('contactModal').classList.remove('active');}
 </script>
-<script>if("serviceWorker"in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("/static/sw.js",{scope:"/"})})}</script>
-
-<div class="mobile-bottom-nav" id="mobileBottomNav">
-  <div class="mb-nav-item" onclick="switchNav('home')" data-nav="home">
-    <span class="mb-icon">🏠</span>
-    <span class="mb-label">首页</span>
-  </div>
-  <div class="mb-nav-item" onclick="switchNav('schedule')" data-nav="schedule">
-    <span class="mb-icon">📅</span>
-    <span class="mb-label">赛程</span>
-  </div>
-  <div class="mb-nav-item" onclick="switchNav('analysis')" data-nav="analysis">
-    <span class="mb-icon">🔍</span>
-    <span class="mb-label">分析</span>
-  </div>
-  <div class="mb-nav-item" onclick="switchNav('top')" data-nav="top">
-    <span class="mb-icon">⭐</span>
-    <span class="mb-label">推荐</span>
-  </div>
-  <div class="mb-nav-item" onclick="switchNav('standings')" data-nav="standings">
-    <span class="mb-icon">📊</span>
-    <span class="mb-label">积分</span>
-  </div>
-</div>
-<script>
-function toggleMobileSidebar(){
-  var o=document.getElementById('sdOverlay');
-  var w=document.querySelector('.sd-wrap');
-  var b=document.getElementById('hamburgerBtn');
-  o.classList.toggle('active');
-  w.classList.toggle('open');
-  b.textContent=w.classList.contains('open')?'\u2715':'\u2630';
-}
-var __origSN=window.switchNav;
-window.switchNav=function(nav){
-  __origSN(nav);
-  if(window.innerWidth<=767){
-    var w=document.querySelector('.sd-wrap');if(w)w.classList.remove('open');
-    var o=document.getElementById('sdOverlay');if(o)o.classList.remove('active');
-    var b=document.getElementById('hamburgerBtn');if(b)b.textContent='\u2630';
-  }
-  document.querySelectorAll('.mb-nav-item').forEach(function(e){
-    e.classList.toggle('active',e.getAttribute('data-nav')===nav);
-  });
-};
-document.getElementById('hamburgerBtn').addEventListener('click',toggleMobileSidebar);
-document.getElementById('sdOverlay').addEventListener('click',toggleMobileSidebar);
-</script>
-
 </body>
 </html>
-
-
-
-
-
-
-
 

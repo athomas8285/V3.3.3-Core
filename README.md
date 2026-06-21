@@ -1,39 +1,44 @@
-﻿# V3.3.3-Core 足球量化分析系统
-
-足球赛事量化分析 Web 应用，采用 Flask + 纯前端单页架构。
+﻿# V3.3.3-Core 世界杯竞彩预测系统
 
 ## 快速启动
-
-```bash
-python app.py
-# 浏览器打开 http://localhost:5000
+```
+cd D:\V3.3.3-Core
+python app.py          # Flask 网页版（端口 5020）
 ```
 
-## 核心功能
+## 系统架构
+详见 `技术白皮书.md`
 
-- 赛事评分表格（含评级、λ值、DDI、S7分数）
-- 点击展开详情行（λ差值、S7说明、诱盘分析、风险提示）
-- SVG 图表：λ 对比柱状图 + 物理概率 vs 市场概率对比图
-
-## 数据流
+## 完整工作流程
 
 ```
-数据文件 (data/*.json) → Flask API (/api/latest) → 前端渲染
+竞彩网 11:00 开盘
+    ↓
+[A-数据采集.md] → 抓取当天数据 → 写入 DB
+    ↓
+[B-分析预测.md] → 跑预测管道 → 复盘昨天
+    ↓
+[C-APP同步.md]  → 生成 analysis.json
+    ↓
+[D-部署上传.md]  → git push 两个仓库
 ```
 
-## 模板
+## Agent 文档（新 agent 第一件事读这些）
+- `A-数据采集.md` — 每天抓取竞彩网数据、补赛果
+- `B-分析预测.md` — 跑预测管道、复盘
+- `C-APP同步.md` — 同步数据到 APP 版
+- `D-部署上传.md` — 推送到 GitHub
 
-独立可复用的模板位于 `_template/` 目录，详见 `_template/README.md`。
+## 项目目录
+- `app.py` — Flask 服务器入口
+- `framework.db` — SQLite 数据库（所有数据的唯一源头）
+- `data/` — 数据文件（match_info, rating_result 等）
+- `templates/` — 前端模板（index.html, charts.js, live.js）
+- `static/` — 静态资源（队旗、背景图等）
+- `work/` — 临时脚本
+- `_archive/` — 历史归档
 
-## 目录结构
-
-```
-├── app.py              # Flask 服务器
-├── templates/          # 前端模板
-│   ├── index.html      # HTML 壳
-│   └── charts.js       # 所有 JS 逻辑
-├── data/               # JSON 数据
-├── _template/          # 可复用的 Web 模板
-├── *.py                # 数据处理脚本
-└── *.html              # 其他测试/调试页面
-```
+## 数据流向
+竞彩网 → fetch_jczq.py → framework.db → run_all.py → rating_result.json → [Flask 页面]
+                                                                     ↓
+                                                              analysis.json → [APP 页面]
