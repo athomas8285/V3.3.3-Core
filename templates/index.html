@@ -2137,11 +2137,15 @@ function renderAnalysisView(){
     renderFromWC();
   }
   __expandTargetMatch();
-  // 滚动到6月21日的预测比赛
+  // 自动滚动到今天的比赛（或下一天）
   setTimeout(function(){
+    var now = new Date();
+    var todayStr = (now.getMonth()+1)+'月'+now.getDate()+'日';
+    var nextStr = (now.getMonth()+1)+'月'+(now.getDate()+1)+'日';
     var labels = document.querySelectorAll('.ana-date-label');
     for(var li = 0; li < labels.length; li++){
-      if(labels[li].textContent.indexOf('6月22日') >= 0){
+      var txt = labels[li].textContent;
+      if(txt.indexOf(todayStr) >= 0 || txt.indexOf(nextStr) >= 0){
         labels[li].scrollIntoView({behavior:'smooth', block:'start'});
         break;
       }

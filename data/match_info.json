@@ -89,7 +89,7 @@
       "jc_handicap": -1,
       "actual_score": "2-1",
       "half_full": "平胜",
-      "direction": "让负",
+      "direction": "胜",
       "rating": "B"
     },
     {
@@ -181,7 +181,7 @@
       "jc_handicap": -1,
       "actual_score": "4-1",
       "half_full": "胜胜",
-      "direction": "让负",
+      "direction": "胜",
       "rating": "B"
     },
     {
@@ -224,7 +224,7 @@
       "jc_handicap": 2,
       "actual_score": "1-1",
       "half_full": "负平",
-      "direction": "负",
+      "direction": "让胜",
       "rating": "C"
     },
     {
@@ -362,7 +362,7 @@
       "jc_handicap": 1,
       "actual_score": "2-0",
       "half_full": "胜胜",
-      "direction": "负",
+      "direction": "让胜",
       "rating": "B"
     },
     {
@@ -451,7 +451,7 @@
       "jc_handicap": -1,
       "actual_score": "2-2",
       "half_full": "平平",
-      "direction": "胜",
+      "direction": "让负",
       "rating": "A"
     },
     {
@@ -497,7 +497,7 @@
       "jc_handicap": 1,
       "actual_score": "1-0",
       "half_full": "平胜",
-      "direction": "负",
+      "direction": "让胜",
       "rating": "A"
     },
     {
@@ -1273,7 +1273,7 @@
       "jc_handicap": -1,
       "actual_score": "1-0",
       "half_full": "平胜",
-      "direction": "让负",
+      "direction": "胜",
       "rating": "B"
     },
     {
@@ -1501,7 +1501,7 @@
       "jc_hhad_draw": 3.23,
       "jc_hhad_lose": 2.19,
       "jc_handicap": -1,
-      "actual_score": "5:1",
+      "actual_score": "5-1",
       "half_full": "胜胜",
       "direction": "胜",
       "rating": "A",
@@ -1548,7 +1548,7 @@
       "jc_hhad_draw": 3.93,
       "jc_hhad_lose": 2.7,
       "jc_handicap": -1,
-      "actual_score": "2:1",
+      "actual_score": "2-1",
       "half_full": "负胜",
       "direction": "胜",
       "rating": "B",
@@ -1595,7 +1595,7 @@
       "jc_hhad_draw": 4.0,
       "jc_hhad_lose": 2.95,
       "jc_handicap": -2,
-      "actual_score": "0:0",
+      "actual_score": "0-0",
       "half_full": "平平",
       "direction": "胜",
       "rating": "B",
@@ -1642,7 +1642,7 @@
       "jc_hhad_draw": 3.58,
       "jc_hhad_lose": 2.12,
       "jc_handicap": 1,
-      "actual_score": "0:4",
+      "actual_score": "0-4",
       "half_full": "负负",
       "direction": "负",
       "rating": "A",
@@ -2349,7 +2349,7 @@
         "hd": 14.0,
         "hh": 3.25
       },
-      "direction": "让负",
+      "direction": "胜",
       "rating": "A",
       "actual_score": "3-2",
       "half_full": "胜胜",

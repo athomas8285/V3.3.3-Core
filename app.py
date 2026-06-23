@@ -1,4 +1,4 @@
-# app.py
+﻿# app.py
 import subprocess, json, os, sys, csv, traceback, threading
 import track_odds
 from flask import Flask, request, jsonify, Response
@@ -85,7 +85,13 @@ def index():
                 _rm["actual_score"] = _ascore
                 _rm["half_full"] = _info.get("half_full", "") or ""
                 # Calculate hit dynamically from direction + actual_score
-                _rm["hit"] = _check_hit(_rm.get("direction", ""), _ascore, _info.get("jc_handicap", 0))
+                # For handicap-only matches, treat direction as handicap direction
+                _hit_dir = _rm.get("direction", "")
+                _jc_sp = _info.get("jc_sp_win")
+                _jc_hh = _info.get("jc_hhad_win")
+                if not _jc_sp and _jc_hh and _hit_dir and not _hit_dir.startswith("让"):
+                    _hit_dir = "让" + _hit_dir
+                _rm["hit"] = _check_hit(_hit_dir, _ascore, _info.get("jc_handicap", 0))
 
         # Build narratives
 
@@ -268,7 +274,12 @@ def get_latest():
         _ascore = _info.get("actual_score", "") or ""
         if _ascore:
             _m["actual_score"] = _ascore
-            _m["hit"] = _check_hit(_m.get("direction", ""), _ascore, _info.get("jc_handicap", 0))
+            _hit_dir = _m.get("direction", "")
+            _jc_sp = _info.get("jc_sp_win")
+            _jc_hh = _info.get("jc_hhad_win")
+            if not _jc_sp and _jc_hh and _hit_dir and not _hit_dir.startswith("让"):
+                _hit_dir = "让" + _hit_dir
+            _m["hit"] = _check_hit(_hit_dir, _ascore, _info.get("jc_handicap", 0))
             _m["half_full"] = _info.get("half_full", "") or ""
         else:
             _m["actual_score"] = ""
@@ -328,7 +339,7 @@ def _check_hit(direction, actual_score, jc_handicap=0):
     if not direction or not actual_score:
         return False
     try:
-        parts = actual_score.split("-")
+        parts = actual_score.replace(":", "-").split("-")
         h, a = int(parts[0]), int(parts[1])
     except (ValueError, IndexError):
         return False
