@@ -2349,7 +2349,7 @@
         "hd": 14.0,
         "hh": 3.25
       },
-      "direction": "胜",
+      "direction": "让负",
       "rating": "A",
       "actual_score": "3-2",
       "half_full": "胜胜",
@@ -2533,7 +2533,8 @@
       "lambda_diff": 2.1851,
       "jc_sp_win": null,
       "jc_sp_draw": null,
-      "jc_sp_lose": null
+      "jc_sp_lose": null,
+      "direction": "胜"
     },
     {
       "id": "周二046",
@@ -2612,7 +2613,8 @@
       "lambda_diff": 2.0254,
       "jc_sp_win": null,
       "jc_sp_draw": null,
-      "jc_sp_lose": null
+      "jc_sp_lose": null,
+      "direction": "胜"
     },
     {
       "id": "周二047",
@@ -2691,7 +2693,8 @@
         "hd": 17.0,
         "hh": 13.0
       },
-      "lambda_diff": -2.1388
+      "lambda_diff": -2.1388,
+      "direction": "负"
     },
     {
       "id": "周二048",
@@ -2770,7 +2773,8 @@
         "hd": 19.0,
         "hh": 1.9
       },
-      "lambda_diff": 1.9938
+      "lambda_diff": 1.9938,
+      "direction": "胜"
     },
     {
       "id": "周三049",

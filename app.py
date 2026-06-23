@@ -85,7 +85,7 @@ def index():
                 _rm["actual_score"] = _ascore
                 _rm["half_full"] = _info.get("half_full", "") or ""
                 # Calculate hit dynamically from direction + actual_score
-                _rm["hit"] = _check_hit(_rm.get("direction", ""), _ascore)
+                _rm["hit"] = _check_hit(_rm.get("direction", ""), _ascore, _info.get("jc_handicap", 0))
 
         # Build narratives
 
@@ -268,7 +268,7 @@ def get_latest():
         _ascore = _info.get("actual_score", "") or ""
         if _ascore:
             _m["actual_score"] = _ascore
-            _m["hit"] = _check_hit(_m.get("direction", ""), _ascore)
+            _m["hit"] = _check_hit(_m.get("direction", ""), _ascore, _info.get("jc_handicap", 0))
             _m["half_full"] = _info.get("half_full", "") or ""
         else:
             _m["actual_score"] = ""
@@ -322,8 +322,9 @@ def get_latest():
     })
 
 
-def _check_hit(direction, actual_score):
-    """Simple check if predicted direction matches actual result."""
+def _check_hit(direction, actual_score, jc_handicap=0):
+    """Check if predicted direction matches actual result.
+    Supports handicap directions (让胜/让平/让负) when jc_handicap is provided."""
     if not direction or not actual_score:
         return False
     try:
@@ -331,6 +332,18 @@ def _check_hit(direction, actual_score):
         h, a = int(parts[0]), int(parts[1])
     except (ValueError, IndexError):
         return False
+    # Handle handicap directions
+    if direction.startswith("让"):
+        base = direction[1:]  # 胜/平/负
+        adjusted_h = h + jc_handicap
+        if base == "胜":
+            return adjusted_h > a
+        elif base == "平":
+            return adjusted_h == a
+        elif base == "负":
+            return adjusted_h < a
+        return False
+    # Non-handicap directions
     if direction in ("胜", "主胜", "home"):
         return h > a
     if direction in ("负", "客胜", "away"):
