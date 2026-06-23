@@ -1,0 +1,322 @@
+﻿#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+gen_plan_html.py — 从 plan_data.json 渲染 plan.html（精心计划单页面）
+用法：python gen_plan_html.py [--data path/to/plan_data.json] [--out path/to/plan.html]
+"""
+
+import json, os, sys
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(BASE_DIR, "data")
+
+
+def load_json(path):
+    with open(path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def escape_js(s):
+    """转义 JS 字符串"""
+    return s.replace("\\", "\\\\").replace("'", "\\'").replace('"', '\\"').replace("\n", "\\n")
+
+
+CSS = r"""
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#f5f6f8;--surface:#ffffff;--s2:#f0f1f4;--sh:#e8eaf0;--t1:#1a1d26;--t2:#5a6072;--t3:#9ca3af;--green:#16a34a;--red:#dc2626;--gold:#d97706;--blue:#2563eb;--cyan:#0891b2;--purple:#7c3aed;--bd:rgba(0,0,0,.08);--mono:"SF Mono","Cascadia Code","JetBrains Mono",Consolas,monospace;--sans:"Inter","SF Pro","Microsoft YaHei","PingFang SC","Noto Sans SC",sans-serif}
+body{font-family:var(--sans);background:var(--bg);color:var(--t1);min-height:100vh}
+.wrap{padding:20px 24px 60px}
+.header{display:flex;align-items:center;justify-content:space-between;padding:0 0 16px;flex-wrap:wrap;gap:10px}
+.htitle{font-size:22px;font-weight:700;color:var(--t1);letter-spacing:1px}
+.htitle .hsub{font-size:12px;color:var(--t3);font-weight:400;margin-left:8px}
+.hdate{font-size:13px;color:var(--t2);font-family:var(--mono)}
+.stats{display:flex;gap:10px;flex-wrap:wrap;padding:0 0 20px}
+.stat-card{padding:8px 14px;background:var(--surface);border:1px solid var(--bd);border-radius:8px;font-size:12px;color:var(--t2);display:flex;align-items:center;gap:8px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.stat-card .sc-num{font-size:16px;font-weight:700;color:var(--t1);font-family:var(--mono)}
+.stat-card .sc-num.gr{color:var(--green)}.stat-card .sc-num.go{color:var(--gold)}.stat-card .sc-num.cy{color:var(--cyan)}.stat-card .sc-num.bl{color:var(--blue)}
+.cols{display:flex;gap:20px;align-items:flex-start}
+.col-left{width:400px;flex-shrink:0}
+.col-right{flex:1;min-width:0}
+@media(max-width:768px){.cols{flex-direction:column}.col-left{width:100%}}
+.top-pick{background:linear-gradient(135deg,rgba(22,163,74,.06),rgba(8,145,178,.04));border:1px solid rgba(22,163,74,.2);border-radius:12px;padding:18px 22px}
+.tp-badge{display:inline-block;font-size:11px;font-weight:700;color:var(--green);background:rgba(22,163,74,.1);padding:3px 12px;border-radius:20px;margin:0 0 10px;letter-spacing:.5px}
+.tp-title{font-size:16px;font-weight:700;color:var(--t1);margin:0 0 4px}
+.tp-sub{font-size:12px;color:var(--t2);margin:0 0 12px}
+.tp-legs{display:flex;flex-direction:column;gap:8px}
+.tp-leg{background:rgba(255,255,255,.5);border:1px solid var(--bd);border-radius:8px;padding:10px 12px}
+.tp-leg .tpl-match{font-size:13px;font-weight:600;color:var(--t1);margin:0 0 3px}
+.tp-leg .tpl-detail{font-size:11px;color:var(--t2);line-height:1.5}
+.tp-leg .tpl-detail .hl{color:var(--gold);font-weight:600}
+.tp-leg .tpl-detail .hl2{color:var(--cyan)}
+.tp-total{display:flex;align-items:center;gap:14px;margin:12px 0 0;padding:10px 0 0;border-top:1px solid rgba(22,163,74,.12)}
+.tp-total .tpt-odds{font-size:22px;font-weight:700;color:var(--green)}
+.tp-total .tpt-score{font-size:13px;color:var(--t2)}
+.tp-total .tpt-score b{color:var(--gold)}
+.tp-reason{font-size:11px;color:var(--t2);margin:8px 0 0;background:rgba(0,0,0,.02);padding:8px 12px;border-radius:6px;line-height:1.5}
+.sec-title{font-size:15px;font-weight:700;color:var(--t1);margin:0 0 12px}
+.tabs{display:flex;gap:0;margin:0 0 14px;background:var(--surface);border-radius:8px;overflow:hidden;border:1px solid var(--bd);width:fit-content}
+.tab{padding:7px 16px;font-size:12px;cursor:pointer;color:var(--t3);font-family:var(--sans);border:none;background:transparent;transition:all .15s}
+.tab:hover{color:var(--t2)}.tab.active{color:var(--t1);background:var(--sh);font-weight:600}.tab.active.t2{color:var(--cyan)}.tab.active.t3{color:var(--gold)}
+.tab-content{display:none}.tab-content.show{display:block}
+.ctable{width:100%;border-collapse:collapse;font-size:12px}
+.ctable thead th{padding:8px 10px;text-align:left;font-weight:600;color:var(--t3);background:rgba(0,0,0,.02);border-bottom:1px solid var(--bd);font-size:10px;white-space:nowrap}
+.ctable tbody td{padding:8px 10px;border-bottom:1px solid rgba(0,0,0,.02);color:var(--t2);vertical-align:top}
+.ctable tbody tr:hover{background:rgba(0,0,0,.015)}
+.ctable .td-rank{font-family:var(--mono);font-weight:700;color:var(--t3);width:28px;font-size:12px}
+.ctable .td-rank.top1{color:var(--gold)}
+.ctable .td-legs{line-height:1.7}
+.ctable .td-legs .lr{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+.ctable .td-legs .lr+.lr{margin-top:2px}
+.ctable .td-legs .leg-x{color:var(--t3);font-size:10px;width:14px;text-align:center}
+.tag{font-size:9px;padding:1px 5px;border-radius:3px;white-space:nowrap}
+.tag.dir{background:rgba(37,99,235,.08);color:var(--blue)}
+.tag.tg{background:rgba(22,163,74,.08);color:var(--green)}
+.tag.hf{background:rgba(217,119,6,.08);color:var(--gold)}
+.tag.cs{background:rgba(124,58,237,.08);color:var(--purple)}
+.tag.pk{background:rgba(8,145,178,.1);color:var(--cyan);border:1px solid rgba(8,145,178,.2)}
+.ctable .td-odds{font-family:var(--mono);font-weight:700;font-size:14px;white-space:nowrap}
+.ctable .td-odds.g2c{color:var(--cyan)}.ctable .td-odds.g3c{color:var(--gold)}
+.ctable .td-score{font-family:var(--mono);font-size:12px;white-space:nowrap}
+.ctable .td-score.high{color:var(--green);font-weight:600}
+.empty-state{padding:30px;text-align:center;color:var(--t3);font-size:13px}
+.match-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin:20px 0 0;padding:16px 0 0;border-top:1px solid var(--bd)}
+.match-card{padding:10px 14px;background:var(--surface);border:1px solid var(--bd);border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.match-card .mc-mid{font-size:10px;color:var(--t3);font-family:var(--mono);letter-spacing:.5px;margin-bottom:4px}
+.match-card .mc-label{font-size:13px;font-weight:600;color:var(--t1)}
+.match-card .mc-dir{font-size:11px;margin-top:4px;color:var(--t2)}
+.match-card .mc-dir .hl{color:var(--gold);font-weight:600}
+.legs-toggle{display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--surface);border:1px solid var(--bd);border-radius:8px;cursor:pointer;font-size:12px;color:var(--t2);margin:20px 0 8px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.legs-toggle:hover{background:var(--s2);color:var(--t1)}
+.legs-toggle .lt-arrow{transition:transform .2s;font-size:10px}
+.legs-toggle.open .lt-arrow{transform:rotate(90deg)}
+.legs-body{display:none;padding:0 0 16px}
+.legs-body.open{display:block}
+.legs-table{width:100%;border-collapse:collapse;font-size:12px;background:var(--surface);border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.legs-table thead th{padding:6px 8px;text-align:left;font-weight:600;color:var(--t3);background:var(--s2);border-bottom:1px solid var(--bd);font-size:10px;white-space:nowrap}
+.legs-table tbody td{padding:6px 8px;border-bottom:1px solid rgba(0,0,0,.04);color:var(--t2)}
+.legs-table tbody tr:hover{background:rgba(0,0,0,.02)}
+.legs-table .lt-rank{font-family:var(--mono);color:var(--t3);width:24px;font-size:10px}
+.legs-table .lt-match{font-size:12px;color:var(--t1);font-weight:500}
+.legs-table .lt-odds{font-family:var(--mono);font-weight:600}
+.legs-table .lt-score{font-family:var(--mono)}
+.legs-table .lt-score.high{color:var(--green)}.legs-table .lt-score.mid{color:var(--gold)}.legs-table .lt-score.low{color:var(--t3)}
+.legs-filter{display:flex;gap:6px;flex-wrap:wrap;padding:0 0 8px}
+.legs-filter .lf-btn{padding:3px 10px;font-size:10px;border-radius:12px;cursor:pointer;border:1px solid var(--bd);background:transparent;color:var(--t3);font-family:var(--sans)}
+.legs-filter .lf-btn:hover{background:var(--s2);color:var(--t2)}
+.legs-filter .lf-btn.active{background:rgba(8,145,178,.08);border-color:rgba(8,145,178,.2);color:var(--cyan)}
+.logic{background:var(--surface);border:1px solid var(--bd);border-radius:8px;padding:16px 20px;margin:20px 0;font-size:12px;color:var(--t2);line-height:1.7;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.logic h3{font-size:14px;font-weight:700;color:var(--t1);margin:0 0 8px}
+.logic .fml{background:rgba(0,0,0,.02);padding:8px 12px;border-radius:6px;margin:6px 0;font-family:var(--mono);font-size:11px;border-left:3px solid var(--cyan);line-height:1.5}
+.logic .disc{margin:10px 0 0;padding:8px 12px;background:rgba(220,38,38,.04);border-radius:6px;border:1px solid rgba(220,38,38,.1);font-size:11px}
+"""  # noqa
+
+
+def build_html(data):
+    ds = json.dumps(data, ensure_ascii=False)
+
+    html = f"""<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>精选计划单</title>
+<style>{CSS}</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+var DATA = {ds};
+
+function _tag(l){{
+  var m = {{"方向":"dir","总进球":"tg","半全场":"hf","比分":"cs"}};
+  var typ = l.type;
+  var baseType = typ.replace("打包","");
+  var cls = m[baseType]||"";
+  if(l.packed) return '<span class="tag pk">'+typ+'</span>';
+  return '<span class="tag '+cls+'">'+typ+'</span>';
+}}
+
+function _optStr(l){{
+  var s = l.option;
+  if(l.packed && l.sub_options){{
+    s += ' <span style="color:var(--t3);font-size:9px">(' + l.sub_options.join("/") + ')</span>';
+  }}
+  return s;
+}}
+
+function _fltBtn(typ, label, active){{
+  return '<button class="lf-btn'+(active?' active':'')+'" onclick="fl(\\''+typ+'\\')">'+label+'</button>';
+}}
+
+function render(){{
+  var d = DATA, h = "";
+
+  // Header
+  h += '<div class="header"><div class="htitle">精选计划单<span class="hsub">V3.3.3</span></div>';
+  h += '<div class="hdate">'+d.date+'</div></div>';
+
+  // Stats
+  h += '<div class="stats">';
+  h += '<div class="stat-card"><span class="sc-num gr">'+d.total_matches+'</span>场比赛</div>';
+  h += '<div class="stat-card"><span class="sc-num cy">'+d.total_legs+'</span>条腿</div>';
+  h += '<div class="stat-card"><span class="sc-num bl">'+d.plan_2_count+'</span>个2.0方案</div>';
+  h += '<div class="stat-card"><span class="sc-num go">'+d.plan_3_count+'</span>个3.0方案</div></div>';
+
+  // Two columns
+  h += '<div class="cols"><div class="col-left">';
+  if(d.top){{
+    var tp = d.top;
+    h += '<div class="top-pick">';
+    h += '<div class="tp-badge">&#11088; 本期最推荐</div>';
+    h += '<div class="tp-title">'+tp.l1.match+' &times; '+tp.l2.match+'</div>';
+    h += '<div class="tp-sub">综合评分最高的稳健串方案</div>';
+    h += '<div class="tp-legs">';
+    h += '<div class="tp-leg"><div class="tpl-match">'+tp.l1.match+'</div><div class="tpl-detail">'+_tag(tp.l1)+' <span class="hl">'+tp.l1.option+'</span> @<span class="hl2">'+tp.l1.odds+'</span><br>概率 '+(tp.l1.mp*100).toFixed(1)+'% &middot; 评分 '+tp.l1.score+'<br>贴合度 '+tp.l1.fit+' &middot; '+tp.l1.rating+'</div></div>';
+    h += '<div class="tp-leg"><div class="tpl-match">'+tp.l2.match+'</div><div class="tpl-detail">'+_tag(tp.l2)+' <span class="hl">'+tp.l2.option+'</span> @<span class="hl2">'+tp.l2.odds+'</span><br>概率 '+(tp.l2.mp*100).toFixed(1)+'% &middot; 评分 '+tp.l2.score+'<br>贴合度 '+tp.l2.fit+' &middot; '+tp.l2.rating+'</div></div>';
+    h += '</div>';
+    h += '<div class="tp-total"><span class="tpt-odds">乘积赔率 '+tp.odds+'</span><span class="tpt-score">综合评分 <b>'+tp.score+'</b></span></div>';
+    h += '<div class="tp-reason">'+_reason(tp)+'</div></div>';
+  }}
+  h += '</div>';
+
+  h += '<div class="col-right">';
+  h += '<div class="tabs">';
+  h += '<button class="tab t2 active" onclick="sw(\\'p2\\')">2.0计划 <span style="font-weight:400;color:var(--t3)">(2.0~3.0)</span></button>';
+  h += '<button class="tab t3" onclick="sw(\\'p3\\')">3.0计划 <span style="font-weight:400;color:var(--t3)">(3.0~4.0)</span></button>';
+  h += '</div>';
+  h += '<div class="tab-content show" id="p2">'+_combos(d.plan_2,"g2c")+'</div>';
+  h += '<div class="tab-content" id="p3">'+_combos(d.plan_3,"g3c")+'</div>';
+  h += '</div></div>';
+
+  // Match list
+  h += '<div class="match-list">';
+  var mids = Object.keys(d.matches);
+  for(var mi=0;mi<mids.length;mi++){{
+    var mid = mids[mi], mlbl = d.matches[mid];
+    h += '<div class="match-card"><div class="mc-mid">'+mid+'</div><div class="mc-label">'+mlbl+'</div>';
+    for(var li=0;li<d.legs.length;li++){{
+      if(d.legs[li].mid===mid && d.legs[li].type==="方向"){{
+        h += '<div class="mc-dir"><span class="hl">'+d.legs[li].option+'</span> @'+d.legs[li].odds+'</div>';
+        break;
+      }}
+    }}
+    h += '</div>';
+  }}
+  h += '</div>';
+
+  // Legs toggle
+  h += '<div class="legs-toggle" onclick="tl()" id="lt"><span class="lt-arrow">&#9654;</span> 腿池 &mdash; '+d.legs.length+' 条备选腿 <span style="color:var(--t3);font-weight:400;margin-left:4px">点击展开</span></div>';
+  h += '<div class="legs-body" id="lb">';
+  h += '<div class="legs-filter">';
+  var _flt = [{{k:"all",l:"全部"}},{{k:"方向",l:"方向"}},{{k:"总进球",l:"总进球"}},{{k:"半全场",l:"半全场"}},{{k:"比分",l:"比分"}},{{k:"打包",l:"打包腿"}}];
+  for(var fi=0;fi<_flt.length;fi++){{
+    h += _fltBtn(_flt[fi].k, _flt[fi].l, fi===0);
+  }}
+  h += '</div>';
+  h += '<table class="legs-table" id="ltbl"><thead><tr><th>#</th><th>比赛</th><th>类型</th><th>选项</th><th>赔率</th><th>概率</th><th>评分</th><th>贴合</th><th>评级</th></tr></thead><tbody>';
+  for(var i=0;i<d.legs.length;i++){{
+    var l = d.legs[i];
+    var _sc = l.score>0.1?"high":(l.score>0.03?"mid":"low");
+    h += '<tr class="lr2" data-typ="'+_dataTyp(l)+'"><td class="lt-rank">'+(i+1)+'</td>';
+    h += '<td class="lt-match">'+l.match+'</td>';
+    h += '<td>'+_tag(l)+'</td><td>'+_optStr(l)+'</td>';
+    h += '<td class="lt-odds">'+l.odds+'</td>';
+    h += '<td>'+(l.mp*100).toFixed(1)+'%</td>';
+    h += '<td class="lt-score '+_sc+'">'+l.score+'</td>';
+    h += '<td>'+l.fit+'</td><td>'+l.rating+'</td></tr>';
+  }}
+  h += '</tbody></table></div>';
+
+  // Logic
+  h += '<div class="logic"><h3>评分公式与策略说明</h3>';
+  h += '<div class="fml">score = model_prob x (fit_score / 10)</div>';
+  h += '<p>赔率来源：竞彩网 API</p>';
+  h += '<p>腿池构建：每场比赛方向、总进球、半全场、比分选项按公式计算score</p>';
+  h += '<p><b>打包腿</b>：将同一场比赛、同一玩法类型的 2-3 个选项打包成一条虚拟腿，赔率 = 1/(1/赔率1 + 1/赔率2)，概率 = 各选项概率之和，score = 各选项score均值</p>';
+  h += '<p>支持的打包类型：总进球 2/3球、总进球 3/4球、半全场 主不败(胜胜+平胜)、半全场 客不败(负负+平负)、比分 主小胜(1-0+2-0)、比分 客小胜(0-1+0-2)、方向让球盘 让胜/平、方向让球盘 让平/负</p>';
+  h += '<p>从腿池取两条腿，必须来自不同比赛，按乘积赔率分为2.0计划(2.0~3.0)和3.0计划(3.0~4.0)</p>';
+  h += '<div class="disc">&#9888;&#65039; 以上内容均由数据分析系统自动生成，仅供参考，不构成投注建议。</div></div>';
+
+  document.getElementById("app").innerHTML = h;
+}}
+
+function _dataTyp(l){{
+  if(l.packed) return "打包";
+  return l.type;
+}}
+
+function _reason(c){{
+  var p = [];
+  p.push(c.l1.match+" 模型概率"+(c.l1.mp*100).toFixed(0)+"%");
+  p.push(c.l2.match+" 模型概率"+(c.l2.mp*100).toFixed(0)+"%");
+  if(c.l1.fit>=6) p.push(c.l1.match+"贴合度"+c.l1.fit);
+  if(c.l2.fit>=6) p.push(c.l2.match+"贴合度"+c.l2.fit);
+  if(c.l1.rating==="A"||c.l2.rating==="A") p.push("含有A级评级");
+  p.push("两场来自不同比赛，风险分散");
+  p.push("乘积赔率"+c.odds+"，落在目标区间");
+  return "为什么是它？"+p.join("。")+"。";
+}}
+
+function _combos(list, cls){{
+  if(!list||list.length===0) return '<div class="empty-state">暂无符合条件方案</div>';
+  var h = '<table class="ctable"><thead><tr><th>#</th><th>组合方案</th><th>赔率</th><th>综合评分</th></tr></thead><tbody>';
+  for(var i=0;i<list.length;i++){{
+    var c = list[i];
+    h += '<tr><td class="td-rank'+(i===0?' top1':'')+'">'+(i+1)+'</td>';
+    h += '<td class="td-legs">';
+    h += '<div class="lr">'+_tag(c.l1)+' <span>'+c.l1.option+'</span> <span style="color:var(--t3)">@'+c.l1.odds+'</span> <span style="color:var(--t3);font-size:11px">'+c.l1.match+'</span> <span class="leg-x">x</span> '+_tag(c.l2)+' <span>'+c.l2.option+'</span> <span style="color:var(--t3)">@'+c.l2.odds+'</span> <span style="color:var(--t3);font-size:11px">'+c.l2.match+'</span></div>';
+    h += '</td>';
+    h += '<td class="td-odds '+cls+'">'+c.odds+'</td>';
+    h += '<td class="td-score'+(c.score>0.3?' high':'')+'">'+c.score+'</td></tr>';
+  }}
+  h += '</tbody></table>';
+  return h;
+}}
+
+function sw(id){{
+  document.querySelectorAll(".tab").forEach(function(t){{t.classList.remove("active");}});
+  document.querySelectorAll(".tab-content").forEach(function(t){{t.classList.remove("show");}});
+  if(id==="p2"){{document.querySelector(".tab.t2").classList.add("active");document.getElementById("p2").classList.add("show");}}
+  else{{document.querySelector(".tab.t3").classList.add("active");document.getElementById("p3").classList.add("show");}}
+}}
+
+function tl(){{var b=document.getElementById("lb");var t=document.getElementById("lt");b.classList.toggle("open");t.classList.toggle("open");}}
+
+function fl(typ){{
+  document.querySelectorAll(".lf-btn").forEach(function(b){{b.classList.remove("active");}});
+  var btns = document.querySelectorAll(".lf-btn");
+  for(var bi=0;bi<btns.length;bi++){{
+    if((typ==="all"&&bi===0)||btns[bi].textContent.trim()===typ){{btns[bi].classList.add("active");}}
+  }}
+  document.querySelectorAll("#ltbl .lr2").forEach(function(r){{
+    r.style.display=(typ==="all"||r.getAttribute("data-typ")===typ)?"":"none";
+  }});
+}}
+
+render();
+</script>
+</body>
+</html>"""
+    return html
+
+
+def main():
+    data_path = sys.argv[1] if len(sys.argv) > 1 and sys.argv[1] != "--out" else os.path.join(DATA_DIR, "plan_data.json")
+    out_path = sys.argv[sys.argv.index("--out") + 1] if "--out" in sys.argv else os.path.join(DATA_DIR, "plan.html")
+
+    if not os.path.exists(data_path):
+        print(f"[ERROR] 数据文件不存在: {data_path}")
+        return
+
+    data = load_json(data_path)
+    html = build_html(data)
+    with open(out_path, "w", encoding="utf-8") as f:
+        f.write(html)
+    print(f"已生成: {out_path}")
+    print(f"  {data['total_matches']} 场比赛")
+    print(f"  {data['total_legs']} 条腿 (含 {sum(1 for l in data['legs'] if l.get('packed'))} 条打包腿)")
+    print(f"  {data['plan_2_count']} 个2.0方案 + {data['plan_3_count']} 个3.0方案")
+
+
+if __name__ == "__main__":
+    main()

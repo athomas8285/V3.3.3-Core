@@ -3,11 +3,11 @@
 
 import numpy as np
 from collections import Counter
-from config import MONTE_CARLO_RUNS, HALF_TIME_RATIO
+from config import MONTE_CARLO_RUNS, HALF_TIME_RATIO, DISPERSION_ALPHA
 
 
 class MonteCarloEngine:
-    def __init__(self, lambda_h, lambda_a, jc_handicap, runs=None, random_seed=42):
+    def __init__(self, lambda_h, lambda_a, jc_handicap, runs=None, random_seed=42, dispersion_alpha=None):
         self.lh = lambda_h
         self.la = lambda_a
         self.handicap = jc_handicap
@@ -16,6 +16,7 @@ class MonteCarloEngine:
         np.random.seed(self.seed)
         self.max_runs = 10000  # 上限
         self.convergence_std = 0.01  # 收敛标准差阈值
+        self.dispersion_alpha = DISPERSION_ALPHA if dispersion_alpha is None else dispersion_alpha
 
     def run(self):
         """带收敛验证的蒙特卡洛模拟"""
@@ -23,8 +24,11 @@ class MonteCarloEngine:
         converged = False
 
         while runs <= self.max_runs and not converged:
-            home_goals = np.random.poisson(self.lh, runs)
-            away_goals = np.random.poisson(self.la, runs)
+            n_r = 1.0 / self.dispersion_alpha
+            p_h = n_r / (n_r + self.lh)
+            p_a = n_r / (n_r + self.la)
+            home_goals = np.random.negative_binomial(n_r, p_h, runs)
+            away_goals = np.random.negative_binomial(n_r, p_a, runs)
             diff = home_goals - away_goals
 
             home_win = np.sum(diff > 0) / runs
@@ -71,8 +75,11 @@ class MonteCarloEngine:
         top2_total = [f"{g}球" for g, _ in goal_counter.most_common(2)]
 
         # 半全场TOP2
-        half_h = np.random.poisson(self.lh * HALF_TIME_RATIO, runs)
-        half_a = np.random.poisson(self.la * HALF_TIME_RATIO, runs)
+        n_r_ht = 1.0 / self.dispersion_alpha
+        p_h_ht = n_r_ht / (n_r_ht + self.lh * HALF_TIME_RATIO)
+        p_a_ht = n_r_ht / (n_r_ht + self.la * HALF_TIME_RATIO)
+        half_h = np.random.negative_binomial(n_r_ht, p_h_ht, runs)
+        half_a = np.random.negative_binomial(n_r_ht, p_a_ht, runs)
         half_diff = half_h - half_a
         half_result = np.where(half_diff > 0, '胜', np.where(half_diff == 0, '平', '负'))
         full_result = np.where(diff > 0, '胜', np.where(diff == 0, '平', '负'))
@@ -109,6 +116,7 @@ class MonteCarloEngine:
                 "lambda_a": self.la,
                 "jc_handicap": self.handicap,
                 "runs": runs,
-                "converged": converged
+                "converged": converged,
+                "dispersion_alpha": self.dispersion_alpha
             }
         }

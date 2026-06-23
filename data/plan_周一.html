@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>精选计划单</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#f5f6f8;--surface:#ffffff;--s2:#f0f1f4;--sh:#e8eaf0;--t1:#1a1d26;--t2:#5a6072;--t3:#9ca3af;--green:#16a34a;--red:#dc2626;--gold:#d97706;--blue:#2563eb;--cyan:#0891b2;--purple:#7c3aed;--bd:rgba(0,0,0,.08);--mono:"SF Mono","Cascadia Code","JetBrains Mono",Consolas,monospace;--sans:"Inter","SF Pro","Microsoft YaHei","PingFang SC","Noto Sans SC",sans-serif}
+body{font-family:var(--sans);background:var(--bg);color:var(--t1);min-height:100vh}
+.wrap{padding:20px 24px 60px}
+.header{display:flex;align-items:center;justify-content:space-between;padding:0 0 16px;flex-wrap:wrap;gap:10px}
+.htitle{font-size:22px;font-weight:700;color:var(--t1);letter-spacing:1px}
+.htitle .hsub{font-size:12px;color:var(--t3);font-weight:400;margin-left:8px}
+.hdate{font-size:13px;color:var(--t2);font-family:var(--mono)}
+.stats{display:flex;gap:10px;flex-wrap:wrap;padding:0 0 20px}
+.stat-card{padding:8px 14px;background:var(--surface);border:1px solid var(--bd);border-radius:8px;font-size:12px;color:var(--t2);display:flex;align-items:center;gap:8px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.stat-card .sc-num{font-size:16px;font-weight:700;color:var(--t1);font-family:var(--mono)}
+.stat-card .sc-num.gr{color:var(--green)}.stat-card .sc-num.go{color:var(--gold)}.stat-card .sc-num.cy{color:var(--cyan)}.stat-card .sc-num.bl{color:var(--blue)}
+.cols{display:flex;gap:20px;align-items:flex-start}
+.col-left{width:400px;flex-shrink:0}
+.col-right{flex:1;min-width:0}
+@media(max-width:768px){.cols{flex-direction:column}.col-left{width:100%}}
+.top-pick{background:linear-gradient(135deg,rgba(22,163,74,.06),rgba(8,145,178,.04));border:1px solid rgba(22,163,74,.2);border-radius:12px;padding:18px 22px}
+.tp-badge{display:inline-block;font-size:11px;font-weight:700;color:var(--green);background:rgba(22,163,74,.1);padding:3px 12px;border-radius:20px;margin:0 0 10px;letter-spacing:.5px}
+.tp-title{font-size:16px;font-weight:700;color:var(--t1);margin:0 0 4px}
+.tp-sub{font-size:12px;color:var(--t2);margin:0 0 12px}
+.tp-legs{display:flex;flex-direction:column;gap:8px}
+.tp-leg{background:rgba(255,255,255,.5);border:1px solid var(--bd);border-radius:8px;padding:10px 12px}
+.tp-leg .tpl-match{font-size:13px;font-weight:600;color:var(--t1);margin:0 0 3px}
+.tp-leg .tpl-detail{font-size:11px;color:var(--t2);line-height:1.5}
+.tp-leg .tpl-detail .hl{color:var(--gold);font-weight:600}
+.tp-leg .tpl-detail .hl2{color:var(--cyan)}
+.tp-total{display:flex;align-items:center;gap:14px;margin:12px 0 0;padding:10px 0 0;border-top:1px solid rgba(22,163,74,.12)}
+.tp-total .tpt-odds{font-size:22px;font-weight:700;color:var(--green)}
+.tp-total .tpt-score{font-size:13px;color:var(--t2)}
+.tp-total .tpt-score b{color:var(--gold)}
+.tp-reason{font-size:11px;color:var(--t2);margin:8px 0 0;background:rgba(0,0,0,.02);padding:8px 12px;border-radius:6px;line-height:1.5}
+.sec-title{font-size:15px;font-weight:700;color:var(--t1);margin:0 0 12px}
+.tabs{display:flex;gap:0;margin:0 0 14px;background:var(--surface);border-radius:8px;overflow:hidden;border:1px solid var(--bd);width:fit-content}
+.tab{padding:7px 16px;font-size:12px;cursor:pointer;color:var(--t3);font-family:var(--sans);border:none;background:transparent;transition:all .15s}
+.tab:hover{color:var(--t2)}.tab.active{color:var(--t1);background:var(--sh);font-weight:600}.tab.active.t2{color:var(--cyan)}.tab.active.t3{color:var(--gold)}
+.tab-content{display:none}.tab-content.show{display:block}
+.ctable{width:100%;border-collapse:collapse;font-size:12px}
+.ctable thead th{padding:8px 10px;text-align:left;font-weight:600;color:var(--t3);background:rgba(0,0,0,.02);border-bottom:1px solid var(--bd);font-size:10px;white-space:nowrap}
+.ctable tbody td{padding:8px 10px;border-bottom:1px solid rgba(0,0,0,.02);color:var(--t2);vertical-align:top}
+.ctable tbody tr:hover{background:rgba(0,0,0,.015)}
+.ctable .td-rank{font-family:var(--mono);font-weight:700;color:var(--t3);width:28px;font-size:12px}
+.ctable .td-rank.top1{color:var(--gold)}
+.ctable .td-legs{line-height:1.7}
+.ctable .td-legs .lr{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+.ctable .td-legs .lr+.lr{margin-top:2px}
+.ctable .td-legs .leg-x{color:var(--t3);font-size:10px;width:14px;text-align:center}
+.tag{font-size:9px;padding:1px 5px;border-radius:3px;white-space:nowrap}
+.tag.dir{background:rgba(37,99,235,.08);color:var(--blue)}
+.tag.tg{background:rgba(22,163,74,.08);color:var(--green)}
+.tag.hf{background:rgba(217,119,6,.08);color:var(--gold)}
+.tag.cs{background:rgba(124,58,237,.08);color:var(--purple)}
+.tag.pk{background:rgba(8,145,178,.1);color:var(--cyan);border:1px solid rgba(8,145,178,.2)}
+.ctable .td-odds{font-family:var(--mono);font-weight:700;font-size:14px;white-space:nowrap}
+.ctable .td-odds.g2c{color:var(--cyan)}.ctable .td-odds.g3c{color:var(--gold)}
+.ctable .td-score{font-family:var(--mono);font-size:12px;white-space:nowrap}
+.ctable .td-score.high{color:var(--green);font-weight:600}
+.empty-state{padding:30px;text-align:center;color:var(--t3);font-size:13px}
+.match-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin:20px 0 0;padding:16px 0 0;border-top:1px solid var(--bd)}
+.match-card{padding:10px 14px;background:var(--surface);border:1px solid var(--bd);border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.match-card .mc-mid{font-size:10px;color:var(--t3);font-family:var(--mono);letter-spacing:.5px;margin-bottom:4px}
+.match-card .mc-label{font-size:13px;font-weight:600;color:var(--t1)}
+.match-card .mc-dir{font-size:11px;margin-top:4px;color:var(--t2)}
+.match-card .mc-dir .hl{color:var(--gold);font-weight:600}
+.legs-toggle{display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--surface);border:1px solid var(--bd);border-radius:8px;cursor:pointer;font-size:12px;color:var(--t2);margin:20px 0 8px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.legs-toggle:hover{background:var(--s2);color:var(--t1)}
+.legs-toggle .lt-arrow{transition:transform .2s;font-size:10px}
+.legs-toggle.open .lt-arrow{transform:rotate(90deg)}
+.legs-body{display:none;padding:0 0 16px}
+.legs-body.open{display:block}
+.legs-table{width:100%;border-collapse:collapse;font-size:12px;background:var(--surface);border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.legs-table thead th{padding:6px 8px;text-align:left;font-weight:600;color:var(--t3);background:var(--s2);border-bottom:1px solid var(--bd);font-size:10px;white-space:nowrap}
+.legs-table tbody td{padding:6px 8px;border-bottom:1px solid rgba(0,0,0,.04);color:var(--t2)}
+.legs-table tbody tr:hover{background:rgba(0,0,0,.02)}
+.legs-table .lt-rank{font-family:var(--mono);color:var(--t3);width:24px;font-size:10px}
+.legs-table .lt-match{font-size:12px;color:var(--t1);font-weight:500}
+.legs-table .lt-odds{font-family:var(--mono);font-weight:600}
+.legs-table .lt-score{font-family:var(--mono)}
+.legs-table .lt-score.high{color:var(--green)}.legs-table .lt-score.mid{color:var(--gold)}.legs-table .lt-score.low{color:var(--t3)}
+.legs-filter{display:flex;gap:6px;flex-wrap:wrap;padding:0 0 8px}
+.legs-filter .lf-btn{padding:3px 10px;font-size:10px;border-radius:12px;cursor:pointer;border:1px solid var(--bd);background:transparent;color:var(--t3);font-family:var(--sans)}
+.legs-filter .lf-btn:hover{background:var(--s2);color:var(--t2)}
+.legs-filter .lf-btn.active{background:rgba(8,145,178,.08);border-color:rgba(8,145,178,.2);color:var(--cyan)}
+.logic{background:var(--surface);border:1px solid var(--bd);border-radius:8px;padding:16px 20px;margin:20px 0;font-size:12px;color:var(--t2);line-height:1.7;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.logic h3{font-size:14px;font-weight:700;color:var(--t1);margin:0 0 8px}
+.logic .fml{background:rgba(0,0,0,.02);padding:8px 12px;border-radius:6px;margin:6px 0;font-family:var(--mono);font-size:11px;border-left:3px solid var(--cyan);line-height:1.5}
+.logic .disc{margin:10px 0 0;padding:8px 12px;background:rgba(220,38,38,.04);border-radius:6px;border:1px solid rgba(220,38,38,.1);font-size:11px}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+var DATA = {"date": "2026-06-22", "matches": {"周一015": "沙特阿拉伯 vs 乌拉圭", "周一041": "阿根廷 vs 奥地利", "周一042": "法国 vs 伊拉克", "周一043": "挪威 vs 塞内加尔", "周一044": "约旦 vs 阿尔及利亚"}, "total_matches": 5, "total_legs": 71, "plan_2_count": 127, "plan_3_count": 79, "top": {"l1": {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "方向", "option": "客胜", "odds": 1.45, "mp": 0.8065, "score": 0.5, "fit": 6.2, "rating": "A"}, "l2": {"mid": "周一041", "match": "阿根廷 vs 奥地利", "type": "方向打包", "option": "让平/负", "odds": 1.43, "mp": 0.6797, "score": 0.4581, "fit": 6.7, "rating": "A", "packed": true, "sub_options": ["让平", "让负"]}, "odds": 2.07, "score": 0.479}, "plan_2": [{"l1": {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "方向", "option": "客胜", "odds": 1.45, "mp": 0.8065, "score": 0.5, "fit": 6.2, "rating": "A"}, "l2": {"mid": "周一041", "match": "阿根廷 vs 奥地利", "type": "方向打包", "option": "让平/负", "odds": 1.43, "mp": 0.6797, "score": 0.4581, "fit": 6.7, "rating": "A", "packed": true, "sub_options": ["让平", "让负"]}, "odds": 2.07, "score": 0.479}, {"l1": {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "方向打包", "option": "让平/负", "odds": 1.41, "mp": 0.8065, "score": 0.5, "fit": 6.2, "rating": "A", "packed": true, "sub_options": ["让平", "让负"]}, "l2": {"mid": "周一041", "match": "阿根廷 vs 奥地利", "type": "方向打包", "option": "让平/负", "odds": 1.43, "mp": 0.6797, "score": 0.4581, "fit": 6.7, "rating": "A", "packed": true, "sub_options": ["让平", "让负"]}, "odds": 2.02, "score": 0.479}, {"l1": {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "方向", "option": "客胜", "odds": 1.45, "mp": 0.8065, "score": 0.5, "fit": 6.2, "rating": "A"}, "l2": {"mid": "周一041", "match": "阿根廷 vs 奥地利", "type": "方向", "option": "主胜", "odds": 1.49, "mp": 0.558, "score": 0.3761, "fit": 6.7, "rating": "A"}, "odds": 2.16, "score": 0.438}, {"l1": {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "方向", "option": "客胜", "odds": 1.45, "mp": 0.8065, "score": 0.5, "fit": 6.2, "rating": "A"}, "l2": {"mid": "周一041", "match": "阿根廷 vs 奥地利", "type": "方向打包", "option": "让胜/平", "odds": 1.4, "mp": 0.558, "score": 0.3761, "fit": 6.7, "rating": "A", "packed": true, "sub_options": ["让胜", "让平"]}, "odds": 2.03, "score": 0.438}, {"l1": {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "方向打包", "option": "让平/负", "odds": 1.41, "mp": 0.8065, "score": 0.5, "fit": 6.2, "rating": "A", "packed": true, "sub_options": ["让平", "让负"]}, "l2": {"mid": "周一041", "match": "阿根廷 vs 奥地利", "type": "方向", "option": "主胜", "odds": 1.49, "mp": 0.558, "score": 0.3761, "fit": 6.7, "rating": "A"}, "odds": 2.1, "score": 0.438}, {"l1": {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "方向", "option": "客胜", "odds": 1.45, "mp": 0.8065, "score": 0.5, "fit": 6.2, "rating": "A"}, "l2": {"mid": "周一043", "match": "挪威 vs 塞内加尔", "type": "方向", "option": "主胜", "odds": 2.03, "mp": 0.5291, "score": 0.3524, "fit": 6.7, "rating": "A"}, "odds": 2.94, "score": 0.4262}, {"l1": {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "方向", "option": "客胜", "odds": 1.45, "mp": 0.8065, "score": 0.5, "fit": 6.2, "rating": "A"}, "l2": {"mid": "周一043", "match": "挪威 vs 塞内加尔", "type": "方向打包", "option": "让胜/平", "odds": 1.95, "mp": 0.5292, "score": 0.3524, "fit": 6.7, "rating": "A", "packed": true, "sub_options": ["让胜", "让平"]}, "odds": 2.83, "score": 0.4262}, {"l1": {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "方向打包", "option": "让平/负", "odds": 1.41, "mp": 0.8065, "score": 0.5, "fit": 6.2, "rating": "A", "packed": true, "sub_options": ["让平", "让负"]}, "l2": {"mid": "周一043", "match": "挪威 vs 塞内加尔", "type": "方向", "option": "主胜", "odds": 2.03, "mp": 0.5291, "score": 0.3524, "fit": 6.7, "rating": "A"}, "odds": 2.86, "score": 0.4262}, {"l1": {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "方向打包", "option": "让平/负", "odds": 1.41, "mp": 0.8065, "score": 0.5, "fit": 6.2, "rating": "A", "packed": true, "sub_options": ["让平", "让负"]}, "l2": {"mid": "周一043", "match": "挪威 vs 塞内加尔", "type": "方向打包", "option": "让胜/平", "odds": 1.95, "mp": 0.5292, "score": 0.3524, "fit": 6.7, "rating": "A", "packed": true, "sub_options": ["让胜", "让平"]}, "odds": 2.75, "score": 0.4262}, {"l1": {"mid": "周一041", "match": "阿根廷 vs 奥地利", "type": "半全场打包", "option": "主不败", "odds": 1.37, "mp": 0.7308, "score": 0.4925, "fit": 6.7, "rating": "A", "packed": true, "sub_options": ["胜胜", "平胜"]}, "l2": {"mid": "周一043", "match": "挪威 vs 塞内加尔", "type": "方向", "option": "主胜", "odds": 2.03, "mp": 0.5291, "score": 0.3524, "fit": 6.7, "rating": "A"}, "odds": 2.78, "score": 0.4224}], "plan_3": [{"l1": {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "方向", "option": "客胜", "odds": 1.45, "mp": 0.8065, "score": 0.5, "fit": 6.2, "rating": "A"}, "l2": {"mid": "周一041", "match": "阿根廷 vs 奥地利", "type": "半全场", "option": "胜胜", "odds": 2.08, "mp": 0.4808, "score": 0.324, "fit": 6.7, "rating": "A"}, "odds": 3.02, "score": 0.412}, {"l1": {"mid": "周一041", "match": "阿根廷 vs 奥地利", "type": "方向打包", "option": "让平/负", "odds": 1.43, "mp": 0.6797, "score": 0.4581, "fit": 6.7, "rating": "A", "packed": true, "sub_options": ["让平", "让负"]}, "l2": {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "半全场", "option": "负负", "odds": 2.1, "mp": 0.4762, "score": 0.2952, "fit": 6.2, "rating": "A"}, "odds": 3.0, "score": 0.3767}, {"l1": {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "方向", "option": "客胜", "odds": 1.45, "mp": 0.8065, "score": 0.5, "fit": 6.2, "rating": "A"}, "l2": {"mid": "周一041", "match": "阿根廷 vs 奥地利", "type": "总进球打包", "option": "3/4球", "odds": 2.19, "mp": 0.3693, "score": 0.2489, "fit": 6.7, "rating": "A", "packed": true, "sub_options": ["3球", "4球"]}, "odds": 3.18, "score": 0.3745}, {"l1": {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "方向打包", "option": "让平/负", "odds": 1.41, "mp": 0.8065, "score": 0.5, "fit": 6.2, "rating": "A", "packed": true, "sub_options": ["让平", "让负"]}, "l2": {"mid": "周一041", "match": "阿根廷 vs 奥地利", "type": "总进球打包", "option": "3/4球", "odds": 2.19, "mp": 0.3693, "score": 0.2489, "fit": 6.7, "rating": "A", "packed": true, "sub_options": ["3球", "4球"]}, "odds": 3.09, "score": 0.3745}, {"l1": {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "方向", "option": "客胜", "odds": 1.45, "mp": 0.8065, "score": 0.5, "fit": 6.2, "rating": "A"}, "l2": {"mid": "周一043", "match": "挪威 vs 塞内加尔", "type": "总进球打包", "option": "3/4球", "odds": 2.13, "mp": 0.3693, "score": 0.2459, "fit": 6.7, "rating": "A", "packed": true, "sub_options": ["3球", "4球"]}, "odds": 3.09, "score": 0.373}, {"l1": {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "方向打包", "option": "让平/负", "odds": 1.41, "mp": 0.8065, "score": 0.5, "fit": 6.2, "rating": "A", "packed": true, "sub_options": ["让平", "让负"]}, "l2": {"mid": "周一043", "match": "挪威 vs 塞内加尔", "type": "总进球打包", "option": "3/4球", "odds": 2.13, "mp": 0.3693, "score": 0.2459, "fit": 6.7, "rating": "A", "packed": true, "sub_options": ["3球", "4球"]}, "odds": 3.0, "score": 0.373}, {"l1": {"mid": "周一041", "match": "阿根廷 vs 奥地利", "type": "方向", "option": "主胜", "odds": 1.49, "mp": 0.558, "score": 0.3761, "fit": 6.7, "rating": "A"}, "l2": {"mid": "周一043", "match": "挪威 vs 塞内加尔", "type": "方向", "option": "主胜", "odds": 2.03, "mp": 0.5291, "score": 0.3524, "fit": 6.7, "rating": "A"}, "odds": 3.02, "score": 0.3642}, {"l1": {"mid": "周一041", "match": "阿根廷 vs 奥地利", "type": "半全场打包", "option": "主不败", "odds": 1.37, "mp": 0.7308, "score": 0.4925, "fit": 6.7, "rating": "A", "packed": true, "sub_options": ["胜胜", "平胜"]}, "l2": {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "总进球打包", "option": "3/4球", "odds": 2.25, "mp": 0.3693, "score": 0.229, "fit": 6.2, "rating": "A", "packed": true, "sub_options": ["3球", "4球"]}, "odds": 3.08, "score": 0.3608}, {"l1": {"mid": "周一041", "match": "阿根廷 vs 奥地利", "type": "方向打包", "option": "让平/负", "odds": 1.43, "mp": 0.6797, "score": 0.4581, "fit": 6.7, "rating": "A", "packed": true, "sub_options": ["让平", "让负"]}, "l2": {"mid": "周一043", "match": "挪威 vs 塞内加尔", "type": "总进球打包", "option": "3/4球", "odds": 2.13, "mp": 0.3693, "score": 0.2459, "fit": 6.7, "rating": "A", "packed": true, "sub_options": ["3球", "4球"]}, "odds": 3.05, "score": 0.352}, {"l1": {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "半全场打包", "option": "客不败", "odds": 1.37, "mp": 0.7294, "score": 0.4522, "fit": 6.2, "rating": "A", "packed": true, "sub_options": ["平负", "负负"]}, "l2": {"mid": "周一041", "match": "阿根廷 vs 奥地利", "type": "总进球打包", "option": "3/4球", "odds": 2.19, "mp": 0.3693, "score": 0.2489, "fit": 6.7, "rating": "A", "packed": true, "sub_options": ["3球", "4球"]}, "odds": 3.0, "score": 0.3506}], "legs": [{"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "方向", "option": "客胜", "odds": 1.45, "mp": 0.8065, "score": 0.5, "fit": 6.2, "rating": "A"}, {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "方向打包", "option": "让平/负", "odds": 1.41, "mp": 0.8065, "score": 0.5, "fit": 6.2, "rating": "A", "packed": true, "sub_options": ["让平", "让负"]}, {"mid": "周一041", "match": "阿根廷 vs 奥地利", "type": "半全场打包", "option": "主不败", "odds": 1.37, "mp": 0.7308, "score": 0.4925, "fit": 6.7, "rating": "A", "packed": true, "sub_options": ["胜胜", "平胜"]}, {"mid": "周一043", "match": "挪威 vs 塞内加尔", "type": "方向打包", "option": "让平/负", "odds": 1.14, "mp": 0.7092, "score": 0.4723, "fit": 6.7, "rating": "A", "packed": true, "sub_options": ["让平", "让负"]}, {"mid": "周一041", "match": "阿根廷 vs 奥地利", "type": "方向打包", "option": "让平/负", "odds": 1.43, "mp": 0.6797, "score": 0.4581, "fit": 6.7, "rating": "A", "packed": true, "sub_options": ["让平", "让负"]}, {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "半全场打包", "option": "客不败", "odds": 1.37, "mp": 0.7294, "score": 0.4522, "fit": 6.2, "rating": "A", "packed": true, "sub_options": ["平负", "负负"]}, {"mid": "周一041", "match": "阿根廷 vs 奥地利", "type": "方向", "option": "主胜", "odds": 1.49, "mp": 0.558, "score": 0.3761, "fit": 6.7, "rating": "A"}, {"mid": "周一041", "match": "阿根廷 vs 奥地利", "type": "方向打包", "option": "让胜/平", "odds": 1.4, "mp": 0.558, "score": 0.3761, "fit": 6.7, "rating": "A", "packed": true, "sub_options": ["让胜", "让平"]}, {"mid": "周一015", "match": "沙特阿拉伯 vs 乌拉圭", "type": "方向", "option": "客胜", "odds": 1.28, "mp": 0.7245, "score": 0.3695, "fit": 5.1, "rating": "B"}, {"mid": "周一015", "match": "沙特阿拉伯 vs 乌拉圭", "type": "方向打包", "option": "让平/负", "odds": 1.26, "mp": 0.7245, "score": 0.3695, "fit": 5.1, "rating": "B", "packed": true, "sub_options": ["让平", "让负"]}, {"mid": "周一043", "match": "挪威 vs 塞内加尔", "type": "方向", "option": "主胜", "odds": 2.03, "mp": 0.5291, "score": 0.3524, "fit": 6.7, "rating": "A"}, {"mid": "周一043", "match": "挪威 vs 塞内加尔", "type": "方向打包", "option": "让胜/平", "odds": 1.95, "mp": 0.5292, "score": 0.3524, "fit": 6.7, "rating": "A", "packed": true, "sub_options": ["让胜", "让平"]}, {"mid": "周一042", "match": "法国 vs 伊拉克", "type": "方向打包", "option": "让平/负", "odds": 1.34, "mp": 0.771, "score": 0.34, "fit": 4.4, "rating": "B", "packed": true, "sub_options": ["让平", "让负"]}, {"mid": "周一041", "match": "阿根廷 vs 奥地利", "type": "半全场", "option": "胜胜", "odds": 2.08, "mp": 0.4808, "score": 0.324, "fit": 6.7, "rating": "A"}, {"mid": "周一041", "match": "阿根廷 vs 奥地利", "type": "总进球打包", "option": "2/3球", "odds": 1.71, "mp": 0.4654, "score": 0.3137, "fit": 6.7, "rating": "A", "packed": true, "sub_options": ["2球", "3球"]}, {"mid": "周一043", "match": "挪威 vs 塞内加尔", "type": "总进球打包", "option": "2/3球", "odds": 1.72, "mp": 0.4654, "score": 0.31, "fit": 6.7, "rating": "A", "packed": true, "sub_options": ["2球", "3球"]}, {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "半全场", "option": "负负", "odds": 2.1, "mp": 0.4762, "score": 0.2952, "fit": 6.2, "rating": "A"}, {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "总进球打包", "option": "2/3球", "odds": 1.71, "mp": 0.4654, "score": 0.2886, "fit": 6.2, "rating": "A", "packed": true, "sub_options": ["2球", "3球"]}, {"mid": "周一015", "match": "沙特阿拉伯 vs 乌拉圭", "type": "方向打包", "option": "让胜/平", "odds": 1.56, "mp": 0.5375, "score": 0.2741, "fit": 5.1, "rating": "B", "packed": true, "sub_options": ["让胜", "让平"]}, {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "方向打包", "option": "让胜/平", "odds": 1.4, "mp": 0.4345, "score": 0.2694, "fit": 6.2, "rating": "A", "packed": true, "sub_options": ["让胜", "让平"]}, {"mid": "周一041", "match": "阿根廷 vs 奥地利", "type": "总进球打包", "option": "3/4球", "odds": 2.19, "mp": 0.3693, "score": 0.2489, "fit": 6.7, "rating": "A", "packed": true, "sub_options": ["3球", "4球"]}, {"mid": "周一043", "match": "挪威 vs 塞内加尔", "type": "总进球打包", "option": "3/4球", "odds": 2.13, "mp": 0.3693, "score": 0.2459, "fit": 6.7, "rating": "A", "packed": true, "sub_options": ["3球", "4球"]}, {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "总进球打包", "option": "3/4球", "odds": 2.25, "mp": 0.3693, "score": 0.229, "fit": 6.2, "rating": "A", "packed": true, "sub_options": ["3球", "4球"]}, {"mid": "周一043", "match": "挪威 vs 塞内加尔", "type": "半全场", "option": "胜胜", "odds": 3.25, "mp": 0.3077, "score": 0.2049, "fit": 6.7, "rating": "A"}, {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "比分打包", "option": "客小胜", "odds": 2.94, "mp": 0.3284, "score": 0.2036, "fit": 6.2, "rating": "A", "packed": true, "sub_options": ["0-1", "0-2"]}, {"mid": "周一042", "match": "法国 vs 伊拉克", "type": "总进球打包", "option": "2/3球", "odds": 2.16, "mp": 0.4548, "score": 0.2006, "fit": 4.4, "rating": "B", "packed": true, "sub_options": ["2球", "3球"]}, {"mid": "周一042", "match": "法国 vs 伊拉克", "type": "方向打包", "option": "让胜/平", "odds": 1.65, "mp": 0.4295, "score": 0.1894, "fit": 4.4, "rating": "B", "packed": true, "sub_options": ["让胜", "让平"]}, {"mid": "周一042", "match": "法国 vs 伊拉克", "type": "总进球打包", "option": "3/4球", "odds": 2.0, "mp": 0.386, "score": 0.1702, "fit": 4.4, "rating": "B", "packed": true, "sub_options": ["3球", "4球"]}, {"mid": "周一041", "match": "阿根廷 vs 奥地利", "type": "半全场", "option": "平胜", "odds": 4.0, "mp": 0.25, "score": 0.1685, "fit": 6.7, "rating": "A"}, {"mid": "周一041", "match": "阿根廷 vs 奥地利", "type": "总进球", "option": "2球", "odds": 3.25, "mp": 0.245, "score": 0.1651, "fit": 6.7, "rating": "A"}, {"mid": "周一043", "match": "挪威 vs 塞内加尔", "type": "总进球", "option": "2球", "odds": 3.35, "mp": 0.245, "score": 0.1631, "fit": 6.7, "rating": "A"}, {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "半全场", "option": "平负", "odds": 3.95, "mp": 0.2532, "score": 0.157, "fit": 6.2, "rating": "A"}, {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "总进球", "option": "2球", "odds": 3.25, "mp": 0.245, "score": 0.1519, "fit": 6.2, "rating": "A"}, {"mid": "周一041", "match": "阿根廷 vs 奥地利", "type": "比分打包", "option": "主小胜", "odds": 3.12, "mp": 0.2241, "score": 0.151, "fit": 6.7, "rating": "A", "packed": true, "sub_options": ["1-0", "2-0"]}, {"mid": "周一041", "match": "阿根廷 vs 奥地利", "type": "总进球", "option": "3球", "odds": 3.6, "mp": 0.2205, "score": 0.1486, "fit": 6.7, "rating": "A"}, {"mid": "周一043", "match": "挪威 vs 塞内加尔", "type": "总进球", "option": "3球", "odds": 3.55, "mp": 0.2205, "score": 0.1468, "fit": 6.7, "rating": "A"}, {"mid": "周一042", "match": "法国 vs 伊拉克", "type": "比分打包", "option": "主小胜", "odds": 3.68, "mp": 0.3286, "score": 0.1449, "fit": 4.4, "rating": "B", "packed": true, "sub_options": ["1-0", "2-0"]}, {"mid": "周一043", "match": "挪威 vs 塞内加尔", "type": "比分打包", "option": "主小胜", "odds": 4.37, "mp": 0.2056, "score": 0.1369, "fit": 6.7, "rating": "A", "packed": true, "sub_options": ["1-0", "2-0"]}, {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "总进球", "option": "3球", "odds": 3.6, "mp": 0.2205, "score": 0.1367, "fit": 6.2, "rating": "A"}, {"mid": "周一041", "match": "阿根廷 vs 奥地利", "type": "总进球", "option": "1球", "odds": 4.5, "mp": 0.1815, "score": 0.1223, "fit": 6.7, "rating": "A"}, {"mid": "周一043", "match": "挪威 vs 塞内加尔", "type": "总进球", "option": "1球", "odds": 4.6, "mp": 0.1815, "score": 0.1208, "fit": 6.7, "rating": "A"}, {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "总进球", "option": "1球", "odds": 4.2, "mp": 0.1815, "score": 0.1125, "fit": 6.2, "rating": "A"}, {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "比分", "option": "0-2", "odds": 6.2, "mp": 0.175, "score": 0.1085, "fit": 6.2, "rating": "A"}, {"mid": "周一042", "match": "法国 vs 伊拉克", "type": "总进球", "option": "2球", "odds": 5.0, "mp": 0.2312, "score": 0.1019, "fit": 4.4, "rating": "B"}, {"mid": "周一042", "match": "法国 vs 伊拉克", "type": "方向", "option": "让胜(-3)", "odds": 2.61, "mp": 0.229, "score": 0.101, "fit": 4.4, "rating": "B"}, {"mid": "周一041", "match": "阿根廷 vs 奥地利", "type": "总进球", "option": "4球", "odds": 5.6, "mp": 0.1488, "score": 0.1003, "fit": 6.7, "rating": "A"}, {"mid": "周一043", "match": "挪威 vs 塞内加尔", "type": "总进球", "option": "4球", "odds": 5.3, "mp": 0.1488, "score": 0.0991, "fit": 6.7, "rating": "A"}, {"mid": "周一042", "match": "法国 vs 伊拉克", "type": "总进球", "option": "3球", "odds": 3.8, "mp": 0.2237, "score": 0.0986, "fit": 4.4, "rating": "B"}, {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "比分", "option": "0-1", "odds": 5.6, "mp": 0.1534, "score": 0.0951, "fit": 6.2, "rating": "A"}, {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "总进球", "option": "4球", "odds": 6.0, "mp": 0.1488, "score": 0.0923, "fit": 6.2, "rating": "A"}, {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "比分", "option": "0-3", "odds": 10.0, "mp": 0.1331, "score": 0.0825, "fit": 6.2, "rating": "A"}, {"mid": "周一042", "match": "法国 vs 伊拉克", "type": "比分", "option": "2-0", "odds": 6.0, "mp": 0.1858, "score": 0.082, "fit": 4.4, "rating": "B"}, {"mid": "周一041", "match": "阿根廷 vs 奥地利", "type": "比分", "option": "1-0", "odds": 6.0, "mp": 0.1189, "score": 0.0801, "fit": 6.7, "rating": "A"}, {"mid": "周一043", "match": "挪威 vs 塞内加尔", "type": "比分", "option": "1-1", "odds": 6.0, "mp": 0.1157, "score": 0.077, "fit": 6.7, "rating": "A"}, {"mid": "周一043", "match": "挪威 vs 塞内加尔", "type": "比分", "option": "1-0", "odds": 7.75, "mp": 0.1121, "score": 0.0747, "fit": 6.7, "rating": "A"}, {"mid": "周一041", "match": "阿根廷 vs 奥地利", "type": "比分", "option": "1-1", "odds": 6.5, "mp": 0.1107, "score": 0.0746, "fit": 6.7, "rating": "A"}, {"mid": "周一042", "match": "法国 vs 伊拉克", "type": "总进球", "option": "4球", "odds": 4.2, "mp": 0.1623, "score": 0.0716, "fit": 4.4, "rating": "B"}, {"mid": "周一042", "match": "法国 vs 伊拉克", "type": "比分", "option": "3-0", "odds": 5.25, "mp": 0.1613, "score": 0.0711, "fit": 4.4, "rating": "B"}, {"mid": "周一041", "match": "阿根廷 vs 奥地利", "type": "比分", "option": "2-0", "odds": 6.5, "mp": 0.1052, "score": 0.0709, "fit": 6.7, "rating": "A"}, {"mid": "周一042", "match": "法国 vs 伊拉克", "type": "总进球", "option": "1球", "odds": 8.5, "mp": 0.1593, "score": 0.0702, "fit": 4.4, "rating": "B"}, {"mid": "周一041", "match": "阿根廷 vs 奥地利", "type": "比分", "option": "2-1", "odds": 6.5, "mp": 0.0979, "score": 0.066, "fit": 6.7, "rating": "A"}, {"mid": "周一043", "match": "挪威 vs 塞内加尔", "type": "比分", "option": "2-1", "odds": 6.75, "mp": 0.0965, "score": 0.0643, "fit": 6.7, "rating": "A"}, {"mid": "周一042", "match": "法国 vs 伊拉克", "type": "比分", "option": "1-0", "odds": 9.5, "mp": 0.1428, "score": 0.063, "fit": 4.4, "rating": "B"}, {"mid": "周一043", "match": "挪威 vs 塞内加尔", "type": "比分", "option": "2-0", "odds": 10.0, "mp": 0.0935, "score": 0.0623, "fit": 6.7, "rating": "A"}, {"mid": "周一043", "match": "挪威 vs 塞内加尔", "type": "比分", "option": "0-1", "odds": 10.0, "mp": 0.0693, "score": 0.0462, "fit": 6.7, "rating": "A"}, {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "比分", "option": "1-2", "odds": 6.5, "mp": 0.0731, "score": 0.0453, "fit": 6.2, "rating": "A"}, {"mid": "周一042", "match": "法国 vs 伊拉克", "type": "总进球", "option": "5球", "odds": 5.7, "mp": 0.0943, "score": 0.0416, "fit": 4.4, "rating": "B"}, {"mid": "周一044", "match": "约旦 vs 阿尔及利亚", "type": "比分", "option": "1-1", "odds": 7.0, "mp": 0.0641, "score": 0.0397, "fit": 6.2, "rating": "A"}, {"mid": "周一042", "match": "法国 vs 伊拉克", "type": "比分", "option": "3-1", "odds": 10.0, "mp": 0.0484, "score": 0.0213, "fit": 4.4, "rating": "B"}, {"mid": "周一042", "match": "法国 vs 伊拉克", "type": "总进球", "option": "6球", "odds": 8.5, "mp": 0.0456, "score": 0.0201, "fit": 4.4, "rating": "B"}, {"mid": "周一042", "match": "法国 vs 伊拉克", "type": "总进球", "option": "7球", "odds": 9.0, "mp": 0.0189, "score": 0.0083, "fit": 4.4, "rating": "B"}]};
+
+function _tag(l){
+  var m = {"方向":"dir","总进球":"tg","半全场":"hf","比分":"cs"};
+  var typ = l.type;
+  var baseType = typ.replace("打包","");
+  var cls = m[baseType]||"";
+  if(l.packed) return '<span class="tag pk">'+typ+'</span>';
+  return '<span class="tag '+cls+'">'+typ+'</span>';
+}
+
+function _optStr(l){
+  var s = l.option;
+  if(l.packed && l.sub_options){
+    s += ' <span style="color:var(--t3);font-size:9px">(' + l.sub_options.join("/") + ')</span>';
+  }
+  return s;
+}
+
+function _fltBtn(typ, label, active){
+  return '<button class="lf-btn'+(active?' active':'')+'" onclick="fl(\''+typ+'\')">'+label+'</button>';
+}
+
+function render(){
+  var d = DATA, h = "";
+
+  // Header
+  h += '<div class="header"><div class="htitle">精选计划单<span class="hsub">V3.3.3</span></div>';
+  h += '<div class="hdate">'+d.date+'</div></div>';
+
+  // Stats
+  h += '<div class="stats">';
+  h += '<div class="stat-card"><span class="sc-num gr">'+d.total_matches+'</span>场比赛</div>';
+  h += '<div class="stat-card"><span class="sc-num cy">'+d.total_legs+'</span>条腿</div>';
+  h += '<div class="stat-card"><span class="sc-num bl">'+d.plan_2_count+'</span>个2.0方案</div>';
+  h += '<div class="stat-card"><span class="sc-num go">'+d.plan_3_count+'</span>个3.0方案</div></div>';
+
+  // Two columns
+  h += '<div class="cols"><div class="col-left">';
+  if(d.top){
+    var tp = d.top;
+    h += '<div class="top-pick">';
+    h += '<div class="tp-badge">&#11088; 本期最推荐</div>';
+    h += '<div class="tp-title">'+tp.l1.match+' &times; '+tp.l2.match+'</div>';
+    h += '<div class="tp-sub">综合评分最高的稳健串方案</div>';
+    h += '<div class="tp-legs">';
+    h += '<div class="tp-leg"><div class="tpl-match">'+tp.l1.match+'</div><div class="tpl-detail">'+_tag(tp.l1)+' <span class="hl">'+tp.l1.option+'</span> @<span class="hl2">'+tp.l1.odds+'</span><br>概率 '+(tp.l1.mp*100).toFixed(1)+'% &middot; 评分 '+tp.l1.score+'<br>贴合度 '+tp.l1.fit+' &middot; '+tp.l1.rating+'</div></div>';
+    h += '<div class="tp-leg"><div class="tpl-match">'+tp.l2.match+'</div><div class="tpl-detail">'+_tag(tp.l2)+' <span class="hl">'+tp.l2.option+'</span> @<span class="hl2">'+tp.l2.odds+'</span><br>概率 '+(tp.l2.mp*100).toFixed(1)+'% &middot; 评分 '+tp.l2.score+'<br>贴合度 '+tp.l2.fit+' &middot; '+tp.l2.rating+'</div></div>';
+    h += '</div>';
+    h += '<div class="tp-total"><span class="tpt-odds">乘积赔率 '+tp.odds+'</span><span class="tpt-score">综合评分 <b>'+tp.score+'</b></span></div>';
+    h += '<div class="tp-reason">'+_reason(tp)+'</div></div>';
+  }
+  h += '</div>';
+
+  h += '<div class="col-right">';
+  h += '<div class="tabs">';
+  h += '<button class="tab t2 active" onclick="sw(\'p2\')">2.0计划 <span style="font-weight:400;color:var(--t3)">(2.0~3.0)</span></button>';
+  h += '<button class="tab t3" onclick="sw(\'p3\')">3.0计划 <span style="font-weight:400;color:var(--t3)">(3.0~4.0)</span></button>';
+  h += '</div>';
+  h += '<div class="tab-content show" id="p2">'+_combos(d.plan_2,"g2c")+'</div>';
+  h += '<div class="tab-content" id="p3">'+_combos(d.plan_3,"g3c")+'</div>';
+  h += '</div></div>';
+
+  // Match list
+  h += '<div class="match-list">';
+  var mids = Object.keys(d.matches);
+  for(var mi=0;mi<mids.length;mi++){
+    var mid = mids[mi], mlbl = d.matches[mid];
+    h += '<div class="match-card"><div class="mc-mid">'+mid+'</div><div class="mc-label">'+mlbl+'</div>';
+    for(var li=0;li<d.legs.length;li++){
+      if(d.legs[li].mid===mid && d.legs[li].type==="方向"){
+        h += '<div class="mc-dir"><span class="hl">'+d.legs[li].option+'</span> @'+d.legs[li].odds+'</div>';
+        break;
+      }
+    }
+    h += '</div>';
+  }
+  h += '</div>';
+
+  // Legs toggle
+  h += '<div class="legs-toggle" onclick="tl()" id="lt"><span class="lt-arrow">&#9654;</span> 腿池 &mdash; '+d.legs.length+' 条备选腿 <span style="color:var(--t3);font-weight:400;margin-left:4px">点击展开</span></div>';
+  h += '<div class="legs-body" id="lb">';
+  h += '<div class="legs-filter">';
+  var _flt = [{k:"all",l:"全部"},{k:"方向",l:"方向"},{k:"总进球",l:"总进球"},{k:"半全场",l:"半全场"},{k:"比分",l:"比分"},{k:"打包",l:"打包腿"}];
+  for(var fi=0;fi<_flt.length;fi++){
+    h += _fltBtn(_flt[fi].k, _flt[fi].l, fi===0);
+  }
+  h += '</div>';
+  h += '<table class="legs-table" id="ltbl"><thead><tr><th>#</th><th>比赛</th><th>类型</th><th>选项</th><th>赔率</th><th>概率</th><th>评分</th><th>贴合</th><th>评级</th></tr></thead><tbody>';
+  for(var i=0;i<d.legs.length;i++){
+    var l = d.legs[i];
+    var _sc = l.score>0.1?"high":(l.score>0.03?"mid":"low");
+    h += '<tr class="lr2" data-typ="'+_dataTyp(l)+'"><td class="lt-rank">'+(i+1)+'</td>';
+    h += '<td class="lt-match">'+l.match+'</td>';
+    h += '<td>'+_tag(l)+'</td><td>'+_optStr(l)+'</td>';
+    h += '<td class="lt-odds">'+l.odds+'</td>';
+    h += '<td>'+(l.mp*100).toFixed(1)+'%</td>';
+    h += '<td class="lt-score '+_sc+'">'+l.score+'</td>';
+    h += '<td>'+l.fit+'</td><td>'+l.rating+'</td></tr>';
+  }
+  h += '</tbody></table></div>';
+
+  // Logic
+  h += '<div class="logic"><h3>评分公式与策略说明</h3>';
+  h += '<div class="fml">score = model_prob x (fit_score / 10)</div>';
+  h += '<p>赔率来源：竞彩网 API</p>';
+  h += '<p>腿池构建：每场比赛方向、总进球、半全场、比分选项按公式计算score</p>';
+  h += '<p><b>打包腿</b>：将同一场比赛、同一玩法类型的 2-3 个选项打包成一条虚拟腿，赔率 = 1/(1/赔率1 + 1/赔率2)，概率 = 各选项概率之和，score = 各选项score均值</p>';
+  h += '<p>支持的打包类型：总进球 2/3球、总进球 3/4球、半全场 主不败(胜胜+平胜)、半全场 客不败(负负+平负)、比分 主小胜(1-0+2-0)、比分 客小胜(0-1+0-2)、方向让球盘 让胜/平、方向让球盘 让平/负</p>';
+  h += '<p>从腿池取两条腿，必须来自不同比赛，按乘积赔率分为2.0计划(2.0~3.0)和3.0计划(3.0~4.0)</p>';
+  h += '<div class="disc">&#9888;&#65039; 以上内容均由数据分析系统自动生成，仅供参考，不构成投注建议。</div></div>';
+
+  document.getElementById("app").innerHTML = h;
+}
+
+function _dataTyp(l){
+  if(l.packed) return "打包";
+  return l.type;
+}
+
+function _reason(c){
+  var p = [];
+  p.push(c.l1.match+" 模型概率"+(c.l1.mp*100).toFixed(0)+"%");
+  p.push(c.l2.match+" 模型概率"+(c.l2.mp*100).toFixed(0)+"%");
+  if(c.l1.fit>=6) p.push(c.l1.match+"贴合度"+c.l1.fit);
+  if(c.l2.fit>=6) p.push(c.l2.match+"贴合度"+c.l2.fit);
+  if(c.l1.rating==="A"||c.l2.rating==="A") p.push("含有A级评级");
+  p.push("两场来自不同比赛，风险分散");
+  p.push("乘积赔率"+c.odds+"，落在目标区间");
+  return "为什么是它？"+p.join("。")+"。";
+}
+
+function _combos(list, cls){
+  if(!list||list.length===0) return '<div class="empty-state">暂无符合条件方案</div>';
+  var h = '<table class="ctable"><thead><tr><th>#</th><th>组合方案</th><th>赔率</th><th>综合评分</th></tr></thead><tbody>';
+  for(var i=0;i<list.length;i++){
+    var c = list[i];
+    h += '<tr><td class="td-rank'+(i===0?' top1':'')+'">'+(i+1)+'</td>';
+    h += '<td class="td-legs">';
+    h += '<div class="lr">'+_tag(c.l1)+' <span>'+c.l1.option+'</span> <span style="color:var(--t3)">@'+c.l1.odds+'</span> <span style="color:var(--t3);font-size:11px">'+c.l1.match+'</span> <span class="leg-x">x</span> '+_tag(c.l2)+' <span>'+c.l2.option+'</span> <span style="color:var(--t3)">@'+c.l2.odds+'</span> <span style="color:var(--t3);font-size:11px">'+c.l2.match+'</span></div>';
+    h += '</td>';
+    h += '<td class="td-odds '+cls+'">'+c.odds+'</td>';
+    h += '<td class="td-score'+(c.score>0.3?' high':'')+'">'+c.score+'</td></tr>';
+  }
+  h += '</tbody></table>';
+  return h;
+}
+
+function sw(id){
+  document.querySelectorAll(".tab").forEach(function(t){t.classList.remove("active");});
+  document.querySelectorAll(".tab-content").forEach(function(t){t.classList.remove("show");});
+  if(id==="p2"){document.querySelector(".tab.t2").classList.add("active");document.getElementById("p2").classList.add("show");}
+  else{document.querySelector(".tab.t3").classList.add("active");document.getElementById("p3").classList.add("show");}
+}
+
+function tl(){var b=document.getElementById("lb");var t=document.getElementById("lt");b.classList.toggle("open");t.classList.toggle("open");}
+
+function fl(typ){
+  document.querySelectorAll(".lf-btn").forEach(function(b){b.classList.remove("active");});
+  var btns = document.querySelectorAll(".lf-btn");
+  for(var bi=0;bi<btns.length;bi++){
+    if((typ==="all"&&bi===0)||btns[bi].textContent.trim()===typ){btns[bi].classList.add("active");}
+  }
+  document.querySelectorAll("#ltbl .lr2").forEach(function(r){
+    r.style.display=(typ==="all"||r.getAttribute("data-typ")===typ)?"":"none";
+  });
+}
+
+render();
+</script>
+</body>
+</html>

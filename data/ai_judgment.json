@@ -399,22 +399,178 @@
     {
       "id": "周二045",
       "home": "葡萄牙",
-      "away": "乌兹别克斯坦"
+      "away": "乌兹别克斯坦",
+      "s7_score": 0,
+      "s7_reason": "自动生成，无特殊扰动",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "",
+      "key_risk": ""
     },
     {
       "id": "周二046",
       "home": "英格兰",
-      "away": "加纳"
+      "away": "加纳",
+      "s7_score": 0,
+      "s7_reason": "自动生成，无特殊扰动",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "",
+      "key_risk": ""
     },
     {
       "id": "周二047",
       "home": "巴拿马",
-      "away": "克罗地亚"
+      "away": "克罗地亚",
+      "s7_score": 0,
+      "s7_reason": "自动生成，无特殊扰动",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "",
+      "key_risk": ""
     },
     {
       "id": "周二048",
       "home": "哥伦比亚",
-      "away": "刚果(金)"
+      "away": "刚果(金)",
+      "s7_score": 0,
+      "s7_reason": "自动生成，无特殊扰动",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "",
+      "key_risk": ""
+    },
+    {
+      "id": "周三049",
+      "home": "瑞士",
+      "away": "加拿大",
+      "s7_score": 0,
+      "s7_reason": "自动生成，无特殊扰动",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "",
+      "key_risk": ""
+    },
+    {
+      "id": "周三050",
+      "home": "波黑",
+      "away": "卡塔尔",
+      "s7_score": 0,
+      "s7_reason": "自动生成，无特殊扰动",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "",
+      "key_risk": ""
+    },
+    {
+      "id": "周三051",
+      "home": "苏格兰",
+      "away": "巴西",
+      "s7_score": 0,
+      "s7_reason": "自动生成，无特殊扰动",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "",
+      "key_risk": ""
+    },
+    {
+      "id": "周三052",
+      "home": "摩洛哥",
+      "away": "海地",
+      "s7_score": 0,
+      "s7_reason": "自动生成，无特殊扰动",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "",
+      "key_risk": ""
+    },
+    {
+      "id": "周三053",
+      "home": "南非",
+      "away": "韩国",
+      "s7_score": 0,
+      "s7_reason": "自动生成，无特殊扰动",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "",
+      "key_risk": ""
+    },
+    {
+      "id": "周三054",
+      "home": "捷克",
+      "away": "墨西哥",
+      "s7_score": 0,
+      "s7_reason": "自动生成，无特殊扰动",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "",
+      "key_risk": ""
+    },
+    {
+      "id": "周四055",
+      "home": "厄瓜多尔",
+      "away": "德国",
+      "s7_score": 0,
+      "s7_reason": "自动生成，无特殊扰动",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "",
+      "key_risk": ""
+    },
+    {
+      "id": "周四056",
+      "home": "库拉索",
+      "away": "科特迪瓦",
+      "s7_score": 0,
+      "s7_reason": "自动生成，无特殊扰动",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "",
+      "key_risk": ""
+    },
+    {
+      "id": "周四057",
+      "home": "突尼斯",
+      "away": "荷兰",
+      "s7_score": 0,
+      "s7_reason": "自动生成，无特殊扰动",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "",
+      "key_risk": ""
+    },
+    {
+      "id": "周四058",
+      "home": "日本",
+      "away": "瑞典",
+      "s7_score": 0,
+      "s7_reason": "自动生成，无特殊扰动",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "",
+      "key_risk": ""
+    },
+    {
+      "id": "周四059",
+      "home": "巴拉圭",
+      "away": "澳大利亚",
+      "s7_score": 0,
+      "s7_reason": "自动生成，无特殊扰动",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "",
+      "key_risk": ""
+    },
+    {
+      "id": "周四060",
+      "home": "土耳其",
+      "away": "美国",
+      "s7_score": 0,
+      "s7_reason": "自动生成，无特殊扰动",
+      "opponent_predictability": 1.0,
+      "opponent_reason": "",
+      "trap_analysis": "",
+      "key_risk": ""
     }
   ]
 }
