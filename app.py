@@ -216,6 +216,7 @@ def get_latest():
     ddi_idx    = _idx(ddi_list)
     mc_idx     = _idx(mc_list)
     ai_idx     = _idx(ai_list)
+    _info_idx  = _idx(info_list)
 
     matches = []
     reviews = []
@@ -265,21 +266,18 @@ def get_latest():
         # always treat today's matches as 'matches' (no actual_score yet)
         matches.append(base)
 
-    # inject actual_score and hit from DB (JSON files are unreliable for these)
-    try:
-        _conn = db.get_db()
-        _cur = _conn.cursor()
-        _cur.execute("WITH _latest AS (SELECT match_id, MAX(run_id) as _mr FROM matches WHERE actual_score IS NOT NULL AND actual_score != '' GROUP BY match_id) SELECT m.match_id, m.actual_score, m.hit, m.half_full FROM matches m JOIN _latest l ON m.match_id = l.match_id AND m.run_id = l._mr")
-        _rows = {r[0]: {"actual_score": r[1], "hit": bool(r[2]), "half_full": r[3] or ""} for r in _cur.fetchall()}
-        _conn.close()
-        for _m in matches:
-            _mid = _m.get("match_id", "")
-            if _mid in _rows:
-                _m["actual_score"] = _rows[_mid]["actual_score"]
-                _m["hit"] = _rows[_mid]["hit"]
-                _m["half_full"] = _rows[_mid]["half_full"]
-    except Exception as _e:
-        pass
+    # inject actual_score and hit from match_info.json (included in deployment, DB may not exist)
+    for _m in matches:
+        _mid = _m.get("match_id", "")
+        _info = _info_idx.get(_mid, {})
+        _ascore = _info.get("actual_score", "") or ""
+        if _ascore:
+            _m["actual_score"] = _ascore
+            _m["hit"] = _check_hit(_m.get("direction", ""), _ascore)
+            _m["half_full"] = _info.get("half_full", "") or ""
+        else:
+            _m["actual_score"] = ""
+            _m["hit"] = False
 
     # load reviews from history.csv
     import csv as _csv
