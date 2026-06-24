@@ -366,6 +366,15 @@ def action_fetch_jczq():
 @app.route("/api/dashboard/action/run_predict")
 def action_run_predict():
     return jsonify({"msg": "预测管道将在后续迭代中实现（run_all.py）"})
+@app.route("/api/dashboard/plan")
+def plan_data():
+    """Return plan_data.json for the dashboard plans panel."""
+    import os, json
+    plan_path = os.path.join(os.path.dirname(__file__), "data", "plan_data.json")
+    if os.path.exists(plan_path):
+        with open(plan_path, "r", encoding="utf-8") as f:
+            return jsonify(json.load(f))
+    return jsonify({})
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=5021, debug=True)
