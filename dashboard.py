@@ -376,5 +376,14 @@ def plan_data():
             return jsonify(json.load(f))
     return jsonify({})
 
+@app.route("/api/dashboard/fundamental")
+def fundamental_analysis():
+    import os, json
+    path = os.path.join(os.path.dirname(__file__), "data", "fundamental_analysis.json")
+    if os.path.exists(path):
+        with open(path, "r", encoding="utf-8") as f:
+            return jsonify(json.load(f))
+    return jsonify([])
+
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=5021, debug=True)

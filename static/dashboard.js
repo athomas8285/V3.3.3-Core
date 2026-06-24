@@ -282,6 +282,23 @@ async function loadPrediction() {
   lucide.createIcons();
 }
 
+// ==================== FUNDAMENTAL ====================
+async function loadFundamental() {
+  const data = await fetch("/api/dashboard/fundamental").then(r => r.json());
+  if (!data || !data.length) {
+    document.getElementById("fundamental-content").innerHTML = '<div class="empty">暂无基本面分析数据</div>';
+    return;
+  }
+  let h = "";
+  for (const a of data) {
+    h += '<div class="fund-card">';
+    h += '<div class="fund-narrative">' + a.narrative.replace(/\n/g, "<br>") + '</div>';
+    h += '</div>';
+  }
+  document.getElementById("fundamental-content").innerHTML = h || '<div class="empty">暂无数据</div>';
+  lucide.createIcons();
+}
+
 // ==================== 4. PLANS ====================
 async function loadPlans() {
   document.getElementById("plan-content").innerHTML = '<iframe src="/static/plan.html" style="width:100%;height:calc(100vh - 120px);border:none;border-radius:8px;background:#f5f6f8"></iframe>';

@@ -112,6 +112,12 @@ main{flex:1;padding:24px 28px;min-width:0;background:#f3f4f6}
 }
 
 
+
+.fund-card{background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:18px 22px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.fund-card:hover{border-color:#d1d5db}
+.fund-narrative{font-size:13px;line-height:1.8;color:#374151;white-space:pre-wrap}
+.fund-narrative b{color:#1f2937}
+
 </style>
 </head>
 <body>
@@ -125,6 +131,7 @@ main{flex:1;padding:24px 28px;min-width:0;background:#f3f4f6}
     <button class="nav-item" data-panel="console"><i data-lucide="terminal" width="20" height="20"></i><span>控制台</span></button>
     <button class="nav-item" data-panel="matches"><i data-lucide="list-filter" width="20" height="20"></i><span>比赛</span></button>
     <button class="nav-item" data-panel="prediction"><i data-lucide="brain" width="20" height="20"></i><span>预测</span></button>
+    <button class="nav-item" data-panel="fundamental"><i data-lucide="file-text" width="20" height="20"></i><span>基本面分析</span></button>
     <button class="nav-item" data-panel="plans"><i data-lucide="target" width="20" height="20"></i><span>计划单</span></button>
     <button class="nav-item" data-panel="review"><i data-lucide="bar-chart-3" width="20" height="20"></i><span>复盘</span></button>
     <button class="nav-item" data-panel="system"><i data-lucide="settings" width="20" height="20"></i><span>系统</span></button>
@@ -169,7 +176,11 @@ main{flex:1;padding:24px 28px;min-width:0;background:#f3f4f6}
     </div>
     <div id="match-groups"></div>
   </section>
-  <section class="panel" id="panel-prediction">
+  <section class="panel" id="panel-fundamental">
+    <div class="panel-title"><i data-lucide="file-text" width="24" height="24"></i>基本面分析</div>
+    <div id="fundamental-content"></div>
+  </section>
+<section class="panel" id="panel-prediction">
     <div class="panel-title"><i data-lucide="brain" width="24" height="24"></i>预测</div>
     <div class="pred-cards" id="pred-cards"></div>
   </section>
