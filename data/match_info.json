@@ -2534,7 +2534,9 @@
       "jc_sp_win": null,
       "jc_sp_draw": null,
       "jc_sp_lose": null,
-      "direction": "胜"
+      "direction": "胜",
+      "actual_score": "5-0",
+      "half_full": "胜胜"
     },
     {
       "id": "周二046",
@@ -2614,7 +2616,9 @@
       "jc_sp_win": null,
       "jc_sp_draw": null,
       "jc_sp_lose": null,
-      "direction": "胜"
+      "direction": "胜",
+      "actual_score": "0-0",
+      "half_full": "平平"
     },
     {
       "id": "周二047",
@@ -2694,7 +2698,9 @@
         "hh": 13.0
       },
       "lambda_diff": -2.1388,
-      "direction": "负"
+      "direction": "负",
+      "actual_score": "0-1",
+      "half_full": "平负"
     },
     {
       "id": "周二048",
@@ -2774,7 +2780,9 @@
         "hh": 1.9
       },
       "lambda_diff": 1.9938,
-      "direction": "胜"
+      "direction": "胜",
+      "actual_score": "1-0",
+      "half_full": "平胜"
     },
     {
       "id": "周三049",
@@ -2792,7 +2800,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0,
+      "lambda_diff": 0.7804,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -2892,7 +2900,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0,
+      "lambda_diff": 1.0704,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -2992,7 +3000,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0,
+      "lambda_diff": -1.3686,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -3092,7 +3100,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0,
+      "lambda_diff": 2.2326,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -3192,7 +3200,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0,
+      "lambda_diff": -2.1802,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -3292,7 +3300,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0,
+      "lambda_diff": -0.1238,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -3392,7 +3400,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0,
+      "lambda_diff": -0.9932,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -3492,7 +3500,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0,
+      "lambda_diff": -2.2565,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -3592,7 +3600,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0,
+      "lambda_diff": -1.9842,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -3692,7 +3700,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0,
+      "lambda_diff": -0.4892,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -3792,7 +3800,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0,
+      "lambda_diff": 0.4462,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,
@@ -3892,7 +3900,7 @@
       "handicap_change": 0,
       "match_type": "杯赛",
       "is_home_life_death": false,
-      "lambda_diff": 0,
+      "lambda_diff": -0.2662,
       "physical_direction": "home",
       "predicted_direction": "home",
       "h2h_missing": true,

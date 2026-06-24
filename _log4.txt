@@ -1,0 +1,23 @@
+
+
+### 2026-06-21(续4) — 按天分组生成历史计划单
+- 创建 run_plans_by_day.py：为 6/12~6/18 七个比赛日分别生成精选计划单
+- 40 场有预测的历史比赛可按天查看精选2串1方案
+- 创建 plan_index.html：按天导航首页
+- 评分公式改为只考虑 model_prob x fit/10，去掉 edge 因子
+
+### 按天使用方式
+`powershell
+cd D:\V3.3.3-Core
+python run_plans_by_day.py
+python gen_plan.py --prefix 周日
+python gen_plan.py --ids 周日037 周日038
+python gen_plan_html.py
+`
+
+### 输出文件
+| 文件 | 说明 |
+|------|------|
+| D:\V3.3.3-Coreun_plans_by_day.py | 按天批量生成脚本 |
+| data/plan_周四.html ~ plan_周三.html | 各比赛日计划单页面 |
+| data/plan_index.html | 按天导航首页 |

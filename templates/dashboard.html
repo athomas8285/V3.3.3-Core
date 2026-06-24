@@ -3,167 +3,196 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>管理后台 | V3.3.3-Core</title>
-<script>
-const BASE = "";
-let allMatches = [];
-
-function fmt(v, d) { return (v === null || v === undefined || v === "") ? (d || "-") : v; }
-
-function hitIcon(v) {
-  if (v === 1 || v === true || v === "True") return "&#9989;";
-  if (v === 0 || v === false || v === "False") return "&#10060;";
-  return "-";
-}
-
-async function loadStats() {
-  const r = await fetch(BASE + "/api/dashboard/stats").then(d => d.json());
-  document.getElementById("stat-total").textContent = r.total;
-  document.getElementById("stat-scored").textContent = r.scored;
-  document.getElementById("stat-predicted").textContent = r.predicted;
-  document.getElementById("stat-hit").textContent = r.hit;
-  document.getElementById("stat-miss").textContent = r.miss;
-  document.getElementById("stat-today").textContent = r.today_need_predict;
-  const pct = (r.hit + r.miss) > 0 ? ((r.hit / (r.hit + r.miss)) * 100).toFixed(1) : "-";
-  document.getElementById("stat-hitrate").textContent = (r.hit + r.miss) > 0 ? pct + "%" : "-";
-}
-
-async function loadMatches() {
-  allMatches = await fetch(BASE + "/api/dashboard/matches").then(d => d.json());
-  renderTable(allMatches);
-}
-
-function renderTable(matches) {
-  const tbody = document.querySelector("#match-table tbody");
-  tbody.innerHTML = "";
-  if (matches.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:40px;color:#888;">&#26242;&#26080;&#25968;&#25454;</td></tr>';
-    return;
-  }
-  for (const m of matches) {
-    const tr = document.createElement("tr");
-    const cls = m.actual_score ? "status-done" : (m.direction ? "status-pred" : "status-wait");
-    tr.className = cls;
-    tr.innerHTML = '<td>' + fmt(m.id) + '</td>' +
-      '<td>' + fmt(m.home) + '</td>' +
-      '<td>' + fmt(m.away) + '</td>' +
-      '<td>' + fmt(m.time) + '</td>' +
-      '<td>' + (m.actual_score ? '<strong>' + m.actual_score + '</strong>' : '<span class="no-score">-</span>') + '</td>' +
-      '<td>' + fmt(m.direction) + '</td>' +
-      '<td>' + fmt(m.rating) + '</td>' +
-      '<td>' + fmt(m.fit_score, "-") + '</td>' +
-      '<td>' + hitIcon(m.hit) + '</td>';
-    tbody.appendChild(tr);
-  }
-}
-
-function filterTable() {
-  const q = document.getElementById("search-input").value.toLowerCase();
-  if (!q) { renderTable(allMatches); return; }
-  const filtered = allMatches.filter(m =>
-    (m.id && m.id.toLowerCase().includes(q)) ||
-    (m.home && m.home.includes(q)) ||
-    (m.away && m.away.includes(q))
-  );
-  renderTable(filtered);
-}
-
-function filterByStatus(status) {
-  let filtered = allMatches;
-  if (status === "done") filtered = allMatches.filter(m => m.actual_score);
-  else if (status === "pred") filtered = allMatches.filter(m => m.direction && !m.actual_score);
-  else if (status === "wait") filtered = allMatches.filter(m => !m.direction);
-  renderTable(filtered);
-}
-
-async function loadAnalysis() {
-  const r = await fetch(BASE + "/api/dashboard/analysis").then(d => d.json());
-  if (r.error) { document.getElementById("analysis-info").textContent = r.error; return; }
-  document.getElementById("analysis-info").innerHTML = '' +
-    '总 ' + r.total_ratings + ' 条' +
-    ' · 已完成 ' + r.completed +
-    ' · 预测中 ' + r.predicted +
-    ' · 待预测 ' + r.waiting +
-    '<br>销售日期：' + (r.al_keys || []).join(" → ");
-}
-
-window.onload = async () => {
-  await Promise.all([loadStats(), loadMatches(), loadAnalysis()]);
-};
-</script>
+<title>???? | V3.3.3-Core</title>
+<script src="https://unpkg.com/lucide@latest"></script>
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background:#0d1117; color:#e6edf3; min-height:100vh; }
-.header { background:#161b22; border-bottom:1px solid #30363d; padding:16px 24px; display:flex; align-items:center; gap:16px; }
-.header h1 { font-size:20px; font-weight:600; }
-.header span { color:#8b949e; font-size:14px; }
-.stats { display:grid; grid-template-columns:repeat(auto-fit, minmax(130px,1fr)); gap:12px; padding:20px 24px; }
-.stat-card { background:#161b22; border:1px solid #30363d; border-radius:8px; padding:16px; text-align:center; }
-.stat-card .num { font-size:28px; font-weight:700; color:#58a6ff; }
-.stat-card .label { font-size:12px; color:#8b949e; margin-top:4px; }
-.controls { display:flex; gap:10px; padding:0 24px 16px; flex-wrap:wrap; align-items:center; }
-.controls input { background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:8px 12px; color:#e6edf3; font-size:14px; flex:1; min-width:200px; }
-.controls input:focus { outline:none; border-color:#58a6ff; }
-.controls button { background:#21262d; border:1px solid #30363d; border-radius:6px; padding:8px 16px; color:#e6edf3; cursor:pointer; font-size:13px; transition:.15s; }
-.controls button:hover { background:#30363d; border-color:#8b949e; }
-.section { padding:0 24px 24px; }
-.section-title { font-size:15px; font-weight:600; margin-bottom:12px; color:#8b949e; }
-.table-wrap { overflow-x:auto; border:1px solid #30363d; border-radius:8px; }
-table { width:100%; border-collapse:collapse; font-size:13px; }
-thead { background:#161b22; }
-th { padding:10px 12px; text-align:left; font-weight:600; color:#8b949e; border-bottom:1px solid #30363d; white-space:nowrap; }
-td { padding:8px 12px; border-bottom:1px solid #21262d; }
-tr:last-child td { border-bottom:none; }
-tr:hover { background:#161b22; }
-.status-done td:first-child { border-left:3px solid #3fb950; }
-.status-pred td:first-child { border-left:3px solid #d29922; }
-.status-wait td:first-child { border-left:3px solid #8b949e; }
-.no-score { color:#484f58; }
-.analysis-box { background:#161b22; border:1px solid #30363d; border-radius:8px; padding:16px; font-size:14px; line-height:1.6; }
-@media(max-width:640px) {
-  .stats { grid-template-columns:repeat(3,1fr); gap:8px; padding:12px; }
-  .stat-card { padding:12px; }
-  .stat-card .num { font-size:22px; }
-  .section { padding:0 12px 16px; }
-  .controls { padding:0 12px 12px; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#0f172a;color:#1f2937;display:flex;min-height:100vh}
+#sidebar{width:200px;min-width:200px;background:#fff;border-right:1px solid #e5e7eb;display:flex;flex-direction:column;transition:width .2s,min-width .2s;overflow:hidden;z-index:10;box-shadow:1px 0 3px rgba(0,0,0,.04)}
+#sidebar.collapsed{width:52px;min-width:52px}
+.sidebar-header{padding:16px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.sidebar-header h2{font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden}
+#collapse-btn{background:none;border:none;cursor:pointer;padding:4px;color:#9ca3af;flex-shrink:0}
+#collapse-btn:hover{color:#4b5563}
+#sidebar nav{flex:1;padding:8px;display:flex;flex-direction:column;gap:2px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:6px;color:#6b7280;cursor:pointer;font-size:14px;border:none;background:none;width:100%;text-align:left;transition:background .12s,color .12s;white-space:nowrap}
+.nav-item:hover{background:#f3f4f6;color:#1f2937}
+.nav-item.active{background:#eff6ff;color:#2563eb;border-left:3px solid #2563eb;padding-left:9px}
+.nav-item i{flex-shrink:0;width:20px;height:20px}
+#sidebar.collapsed .nav-item{gap:0;justify-content:center;padding:10px}
+#sidebar.collapsed .nav-item span{display:none}
+#sidebar.collapsed .nav-item.active{border-left:none;padding-left:10px}
+.sidebar-footer{padding:12px;border-top:1px solid #e5e7eb;font-size:11px;color:#9ca3af}
+#sidebar.collapsed .sidebar-footer{display:none}
+.sidebar-footer .time{font-size:11px}
+main{flex:1;padding:24px 28px;min-width:0;background:#f3f4f6}
+.panel{display:none}
+.panel.active{display:block}
+.panel-title{font-size:20px;font-weight:600;margin-bottom:20px;color:#1f2937;display:flex;align-items:center;gap:10px}
+.panel-title i{color:#2563eb}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat-card{background:#fff;border-radius:8px;padding:16px;text-align:center;border:1px solid #e5e7eb}
+.stat-card .num{font-size:28px;font-weight:700;color:#1f2937}
+.stat-card .num.green{color:#16a34a}
+.stat-card .num.yellow{color:#d97706}
+.stat-card .num.red{color:#dc2626}
+.stat-card .label{font-size:12px;color:#6b7280;margin-top:4px}
+.section-head{font-size:14px;font-weight:600;color:#6b7280;margin:24px 0 12px;text-transform:uppercase;letter-spacing:.5px}
+.console-wrap{background:#fff;border-radius:8px;padding:16px;border:1px solid #e5e7eb}
+.task-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.task-card{background:#f9fafb;border-radius:6px;padding:12px;text-align:center;cursor:pointer;transition:background .12s;border:1px solid #e5e7eb}
+.task-card:hover{background:#eff6ff}
+.task-num{font-size:22px;font-weight:700}
+.task-num.red{color:#dc2626}
+.task-num.yellow{color:#d97706}
+.task-num.green{color:#16a34a}
+.task-num.gray{color:#9ca3af}
+.task-label{font-size:12px;color:#6b7280;margin-top:2px}
+.console-actions{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.console-btn{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:6px;border:1px solid #d1d5db;background:#fff;color:#374151;font-size:13px;cursor:pointer;transition:background .12s}
+.console-btn:hover{background:#f3f4f6}
+.console-btn.primary{background:#2563eb;color:#fff;border-color:#2563eb}
+.console-btn.primary:hover{background:#1d4ed8}
+.console-log{background:#1e293b;border-radius:6px;padding:12px;font-family:monospace;font-size:12px;color:#e2e8f0;max-height:200px;overflow-y:auto;line-height:1.6}
+.health-bar{display:flex;gap:16px;flex-wrap:wrap;font-size:13px}
+.health-bar .ok{color:#16a34a}
+.health-bar .warn{color:#d97706}
+.pred-strip{display:flex;flex-direction:column;gap:6px}
+.pred-item{display:flex;align-items:center;gap:12px;background:#fff;padding:8px 12px;border-radius:6px;border:1px solid #e5e7eb;font-size:14px}
+.pred-item .teams{flex:1;font-weight:500}
+.dir-badge{font-size:12px;padding:2px 8px;border-radius:4px;font-weight:600}
+.dir-badge.A{background:#dcfce7;color:#16a34a}
+.dir-badge.B{background:#fef3c7;color:#d97706}
+.dir-badge.C{background:#fee2e2;color:#dc2626}
+.pred-item .fit{font-size:12px;color:#6b7280}
+.chart-wrap{background:#fff;border-radius:8px;padding:16px;border:1px solid #e5e7eb;margin-top:12px}
+.toolbar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.toolbar input{flex:1;min-width:200px;padding:8px 12px;border:1px solid #d1d5db;border-radius:6px;font-size:14px}
+.toolbar input:focus{outline:none;border-color:#2563eb}
+.pill{padding:6px 14px;border-radius:20px;border:1px solid #d1d5db;background:#fff;color:#6b7280;font-size:13px;cursor:pointer;transition:all .12s}
+.pill.on,.pill:hover{background:#2563eb;color:#fff;border-color:#2563eb}
+.match-group{margin-bottom:8px;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden}
+.group-header{padding:10px 14px;background:#f9fafb;font-weight:600;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:8px;user-select:none}
+.group-header .arrow{transition:transform .2s}
+.group-header.open .arrow{transform:rotate(90deg)}
+.group-header .count{font-weight:400;color:#9ca3af;font-size:12px;margin-left:auto}
+.group-body{display:none}
+.group-body.open{display:block}
+.group-body table{width:100%;border-collapse:collapse;font-size:13px}
+.group-body th{background:#f9fafb;padding:8px 12px;text-align:left;font-weight:600;color:#6b7280;border-bottom:1px solid #e5e7eb}
+.group-body td{padding:8px 12px;border-bottom:1px solid #f3f4f6}
+.group-body tr.row-done td:first-child{border-left:3px solid #16a34a}
+.group-body tr.row-pred td:first-child{border-left:3px solid #d97706}
+.group-body tr.row-wait td:first-child{border-left:3px solid #9ca3af}
+.pred-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.pred-card{background:#fff;border-radius:8px;padding:16px;border:1px solid #e5e7eb}
+.pred-card .pc-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.pred-card .pc-teams{font-size:15px;font-weight:600}
+.pred-card .pc-bars{margin-top:8px}
+.bar-row{display:flex;align-items:center;gap:8px;margin:4px 0;font-size:12px}
+.bar-row .bar-label{width:36px;color:#6b7280}
+.bar-row .bar-track{flex:1;height:6px;background:#f3f4f6;border-radius:3px;overflow:hidden}
+.bar-row .bar-fill{height:100%;border-radius:3px;transition:width .3s}
+.plan-content{display:flex;flex-direction:column;gap:16px}
+.rv-header{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:16px}
+.rv-stat{text-align:center}
+.rv-stat .rv-num{font-size:32px;font-weight:700}
+.rv-stat .rv-num.green{color:#16a34a}
+.rv-stat .rv-label{font-size:12px;color:#6b7280}
+.rv-list{display:flex;flex-direction:column;gap:8px}
+.rv-item{background:#fff;padding:10px 14px;border-radius:6px;border:1px solid #e5e7eb;display:flex;align-items:center;gap:12px;font-size:14px}
+.rv-item.hit{border-left:3px solid #16a34a}
+.rv-item.miss{border-left:3px solid #dc2626}
+.rv-item .rv-teams{flex:1}
+.sys-status{background:#fff;border-radius:8px;padding:16px;border:1px solid #e5e7eb;font-size:14px}
+.empty{text-align:center;padding:40px;color:#9ca3af}
+#loadingOverlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(15,23,42,.8);display:flex;align-items:center;justify-content:center;z-index:100;color:#fff;font-size:18px}
+@media(max-width:768px){
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .task-cards{grid-template-columns:repeat(2,1fr)}
+  main{padding:16px}
 }
 </style>
 </head>
 <body>
-<div class="header">
-  <h1>&#31649;&#29702;&#21518;&#21488;</h1>
-  <span>V3.3.3-Core &#183; &#21482;&#35835;&#38754;&#26495;</span>
-</div>
-<div class="stats">
-  <div class="stat-card"><div class="num" id="stat-total">-</div><div class="label">&#24635;&#27604;&#36187;</div></div>
-  <div class="stat-card"><div class="num" id="stat-scored">-</div><div class="label">&#24050;&#26377;&#36187;&#26524;</div></div>
-  <div class="stat-card"><div class="num" id="stat-predicted">-</div><div class="label">&#24050;&#39044;&#27979;</div></div>
-  <div class="stat-card"><div class="num" id="stat-hit">-</div><div class="label">&#21629;&#20013;</div></div>
-  <div class="stat-card"><div class="num" id="stat-miss">-</div><div class="label">&#26410;&#21629;&#20013;</div></div>
-  <div class="stat-card"><div class="num" id="stat-hitrate">-</div><div class="label">&#21629;&#20013;&#29575;</div></div>
-  <div class="stat-card"><div class="num" id="stat-today">-</div><div class="label">&#24453;&#39044;&#27979;</div></div>
-</div>
-<div class="controls">
-  <input id="search-input" placeholder="&#25628;&#32034;&#32534;&#21495;&#12289;&#29699;&#38431;..." oninput="filterTable()">
-  <button onclick="filterByStatus('all')">&#20840;&#37096;</button>
-  <button onclick="filterByStatus('done')">&#24050;&#23436;&#25104;</button>
-  <button onclick="filterByStatus('pred')">&#39044;&#27979;&#20013;</button>
-  <button onclick="filterByStatus('wait')">&#24453;&#39044;&#27979;</button>
-</div>
-<div class="section">
-  <div class="section-title">&#25152;&#26377;&#27604;&#36187;</div>
-  <div class="table-wrap">
-    <table id="match-table">
-      <thead><tr>
-        <th>&#32534;&#21495;</th><th>&#20027;&#38431;</th><th>&#23458;&#38431;</th><th>&#26102;&#38388;</th><th>&#27604;&#20998;</th><th>&#26041;&#21521;</th><th>&#35780;&#32423;</th><th>&#36148;&#21512;&#24230;</th><th>&#21629;&#20013;</th>
-      </tr></thead>
-      <tbody><tr><td colspan="10" style="text-align:center;padding:40px;color:#888;">&#21152;&#36733;&#20013;...</td></tr></tbody>
-    </table>
+<div id="sidebar">
+  <div class="sidebar-header">
+    <h2>V3.3.3</h2>
+    <button id="collapse-btn"><i data-lucide="panel-left-close" width="18" height="18"></i></button>
+  </div>
+  <nav>
+    <button class="nav-item active" data-panel="overview"><i data-lucide="layout-dashboard" width="20" height="20"></i><span>??</span></button>
+    <button class="nav-item" data-panel="console"><i data-lucide="terminal" width="20" height="20"></i><span>???</span></button>
+    <button class="nav-item" data-panel="matches"><i data-lucide="list-filter" width="20" height="20"></i><span>??</span></button>
+    <button class="nav-item" data-panel="prediction"><i data-lucide="brain" width="20" height="20"></i><span>??</span></button>
+    <button class="nav-item" data-panel="plans"><i data-lucide="target" width="20" height="20"></i><span>???</span></button>
+    <button class="nav-item" data-panel="review"><i data-lucide="bar-chart-3" width="20" height="20"></i><span>??</span></button>
+    <button class="nav-item" data-panel="system"><i data-lucide="settings" width="20" height="20"></i><span>??</span></button>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="time" id="sidebar-time"></div>
+    <div id="sidebar-update"></div>
   </div>
 </div>
-<div class="section">
-  <div class="section-title">APP &#25968;&#25454;&#29366;&#24577;</div>
-  <div class="analysis-box" id="analysis-info">&#21152;&#36733;&#20013;...</div>
-</div>
+<main>
+  <section class="panel active" id="panel-overview">
+    <div class="panel-title"><i data-lucide="layout-dashboard" width="24" height="24"></i>??</div>
+    <div class="stats-grid" id="ov-stats"></div>
+    <div class="section-head">????</div>
+    <div class="health-bar" id="ov-health"></div>
+    <div class="section-head">????</div>
+    <div class="pred-strip" id="ov-recent"></div>
+    <div class="section-head">?????</div>
+    <div class="chart-wrap"><canvas id="ov-chart"></canvas></div>
+  </section>
+  <section class="panel" id="panel-console">
+    <div class="panel-title"><i data-lucide="terminal" width="24" height="24"></i>???</div>
+    <div class="console-wrap">
+      <div class="task-cards" id="console-tasks"></div>
+      <div class="console-actions">
+        <button class="console-btn primary" id="btn-fetch-results"><i data-lucide="search" width="16" height="16"></i> ??????</button>
+        <button class="console-btn" id="btn-manual-entry"><i data-lucide="edit-3" width="16" height="16"></i> ????</button>
+        <button class="console-btn" id="btn-fetch-jczq"><i data-lucide="download" width="16" height="16"></i> ???????</button>
+        <button class="console-btn" id="btn-select-predict"><i data-lucide="play" width="16" height="16"></i> ????</button>
+      </div>
+      <div class="console-log" id="console-log" style="display:none"></div>
+    </div>
+  </section>
+  <section class="panel" id="panel-matches">
+    <div class="panel-title"><i data-lucide="list-filter" width="24" height="24"></i>??</div>
+    <div class="toolbar" id="match-toolbar">
+      <input type="text" id="match-search" placeholder="???????..." oninput="filterMatches()">
+      <button class="pill on" data-filter="all" onclick="currentMatchFilter='all';filterMatches()">??</button>
+      <button class="pill" data-filter="done" onclick="currentMatchFilter='done';filterMatches()">???</button>
+      <button class="pill" data-filter="pred" onclick="currentMatchFilter='pred';filterMatches()">???</button>
+      <button class="pill" data-filter="wait" onclick="currentMatchFilter='wait';filterMatches()">???</button>
+    </div>
+    <div id="match-groups"></div>
+  </section>
+  <section class="panel" id="panel-prediction">
+    <div class="panel-title"><i data-lucide="brain" width="24" height="24"></i>??</div>
+    <div class="pred-cards" id="pred-cards"></div>
+  </section>
+  <section class="panel" id="panel-plans">
+    <div class="panel-title"><i data-lucide="target" width="24" height="24"></i>???</div>
+    <div class="plan-content" id="plan-content"></div>
+  </section>
+  <section class="panel" id="panel-review">
+    <div class="panel-title"><i data-lucide="bar-chart-3" width="24" height="24"></i>??</div>
+    <div class="rv-header">
+      <div class="rv-stat"><div class="rv-num" id="rv-total">-</div><div class="rv-label">??</div></div>
+      <div class="rv-stat"><div class="rv-num green" id="rv-hits">-</div><div class="rv-label">??</div></div>
+      <div class="rv-stat"><div class="rv-num" id="rv-hitrate">-%</div><div class="rv-label">???</div></div>
+      <div class="rv-stat" id="rv-ratings"></div>
+    </div>
+    <div class="rv-list" id="rv-list"></div>
+  </section>
+  <section class="panel" id="panel-system">
+    <div class="panel-title"><i data-lucide="settings" width="24" height="24"></i>??</div>
+    <div class="sys-status" id="sys-status"></div>
+  </section>
+</main>
+<div id="loadingOverlay">???...</div>
+<script src="/static/dashboard.js"></script>
 </body>
 </html>

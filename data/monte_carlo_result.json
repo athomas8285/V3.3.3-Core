@@ -59,13 +59,13 @@
         "1球"
       ],
       "top2_half_full": [
-        "胜胜",
-        "平胜"
+        "平负",
+        "负负"
       ],
       "top3_scores": [
-        "1-0",
-        "2-0",
-        "2-1"
+        "0-1",
+        "0-0",
+        "1-0"
       ]
     },
     {
@@ -127,13 +127,13 @@
         "1球"
       ],
       "top2_half_full": [
-        "胜胜",
-        "平胜"
+        "平胜",
+        "胜胜"
       ],
       "top3_scores": [
-        "2-0",
-        "3-0",
-        "2-1"
+        "1-0",
+        "0-0",
+        "1-1"
       ]
     },
     {
@@ -161,13 +161,13 @@
         "1球"
       ],
       "top2_half_full": [
-        "胜胜",
-        "平胜"
+        "负负",
+        "平负"
       ],
       "top3_scores": [
-        "1-0",
-        "2-0",
-        "2-1"
+        "0-1",
+        "0-2",
+        "0-0"
       ]
     },
     {
@@ -263,13 +263,13 @@
         "2球"
       ],
       "top2_half_full": [
-        "胜胜",
-        "平胜"
+        "平负",
+        "负负"
       ],
       "top3_scores": [
-        "1-0",
-        "2-0",
-        "2-1"
+        "0-1",
+        "0-0",
+        "1-0"
       ]
     },
     {
@@ -331,13 +331,13 @@
         "1球"
       ],
       "top2_half_full": [
-        "负负",
-        "平负"
+        "平胜",
+        "胜胜"
       ],
       "top3_scores": [
-        "0-1",
-        "1-1",
-        "0-2"
+        "1-0",
+        "0-0",
+        "2-0"
       ]
     },
     {
@@ -365,13 +365,13 @@
         "1球"
       ],
       "top2_half_full": [
-        "胜胜",
-        "平胜"
+        "平负",
+        "负负"
       ],
       "top3_scores": [
-        "1-0",
-        "2-0",
-        "2-1"
+        "0-1",
+        "0-0",
+        "0-2"
       ]
     },
     {
@@ -943,13 +943,13 @@
         "2球"
       ],
       "top2_half_full": [
-        "胜胜",
-        "平胜"
+        "平胜",
+        "胜胜"
       ],
       "top3_scores": [
         "1-0",
-        "2-0",
-        "2-1"
+        "0-0",
+        "1-1"
       ]
     },
     {
@@ -1453,13 +1453,13 @@
         "2球"
       ],
       "top2_half_full": [
-        "胜胜",
-        "平胜"
+        "平胜",
+        "胜胜"
       ],
       "top3_scores": [
-        "2-1",
-        "3-2",
-        "2-0"
+        "0-0",
+        "1-0",
+        "0-1"
       ]
     },
     {
@@ -1630,6 +1630,414 @@
         "1-0",
         "2-0",
         "0-0"
+      ]
+    },
+    {
+      "id": "周三049",
+      "home": "瑞士",
+      "away": "加拿大",
+      "lambda_raw_h": 1.7402,
+      "lambda_raw_a": 0.9598,
+      "lambda_h_final": 1.7402,
+      "lambda_a_final": 0.9598,
+      "lambda_diff": 0.7804,
+      "jc_handicap": -1,
+      "physical": {
+        "home_win": 0.5004,
+        "draw": 0.252,
+        "away_win": 0.2476
+      },
+      "jc_handicap_prob": {
+        "rang_sheng": 0.2928,
+        "rang_ping": 0.2076,
+        "rang_fu": 0.4996
+      },
+      "top2_total_goals": [
+        "2球",
+        "1球"
+      ],
+      "top2_half_full": [
+        "胜胜",
+        "平胜"
+      ],
+      "top3_scores": [
+        "1-0",
+        "0-0",
+        "1-1"
+      ]
+    },
+    {
+      "id": "周三050",
+      "home": "波黑",
+      "away": "卡塔尔",
+      "lambda_raw_h": 1.8852,
+      "lambda_raw_a": 0.8148,
+      "lambda_h_final": 1.8852,
+      "lambda_a_final": 0.8148,
+      "lambda_diff": 1.0704,
+      "jc_handicap": -1,
+      "physical": {
+        "home_win": 0.5757,
+        "draw": 0.2357,
+        "away_win": 0.1887
+      },
+      "jc_handicap_prob": {
+        "rang_sheng": 0.3627,
+        "rang_ping": 0.213,
+        "rang_fu": 0.4243
+      },
+      "top2_total_goals": [
+        "2球",
+        "1球"
+      ],
+      "top2_half_full": [
+        "平胜",
+        "胜胜"
+      ],
+      "top3_scores": [
+        "1-0",
+        "0-0",
+        "2-0"
+      ]
+    },
+    {
+      "id": "周三051",
+      "home": "苏格兰",
+      "away": "巴西",
+      "lambda_raw_h": 0.6657,
+      "lambda_raw_a": 2.0343,
+      "lambda_h_final": 0.6657,
+      "lambda_a_final": 2.0343,
+      "lambda_diff": -1.3686,
+      "jc_handicap": 1,
+      "physical": {
+        "home_win": 0.134,
+        "draw": 0.2195,
+        "away_win": 0.6465
+      },
+      "jc_handicap_prob": {
+        "rang_sheng": 0.3535,
+        "rang_ping": 0.224,
+        "rang_fu": 0.4225
+      },
+      "top2_total_goals": [
+        "2球",
+        "1球"
+      ],
+      "top2_half_full": [
+        "平负",
+        "负负"
+      ],
+      "top3_scores": [
+        "0-1",
+        "0-2",
+        "0-0"
+      ]
+    },
+    {
+      "id": "周三052",
+      "home": "摩洛哥",
+      "away": "海地",
+      "lambda_raw_h": 2.5326,
+      "lambda_raw_a": 0.3,
+      "lambda_h_final": 2.5326,
+      "lambda_a_final": 0.3,
+      "lambda_diff": 2.2326,
+      "jc_handicap": -2,
+      "physical": {
+        "home_win": 0.7468,
+        "draw": 0.1928,
+        "away_win": 0.0604
+      },
+      "jc_handicap_prob": {
+        "rang_sheng": 0.3764,
+        "rang_ping": 0.1644,
+        "rang_fu": 0.4592
+      },
+      "top2_total_goals": [
+        "1球",
+        "2球"
+      ],
+      "top2_half_full": [
+        "胜胜",
+        "平胜"
+      ],
+      "top3_scores": [
+        "1-0",
+        "0-0",
+        "2-0"
+      ]
+    },
+    {
+      "id": "周三053",
+      "home": "南非",
+      "away": "韩国",
+      "lambda_raw_h": 0.3,
+      "lambda_raw_a": 2.4802,
+      "lambda_h_final": 0.3,
+      "lambda_a_final": 2.4802,
+      "lambda_diff": -2.1802,
+      "jc_handicap": 1,
+      "physical": {
+        "home_win": 0.044,
+        "draw": 0.172,
+        "away_win": 0.784
+      },
+      "jc_handicap_prob": {
+        "rang_sheng": 0.216,
+        "rang_ping": 0.23,
+        "rang_fu": 0.554
+      },
+      "top2_total_goals": [
+        "1球",
+        "2球"
+      ],
+      "top2_half_full": [
+        "负负",
+        "平负"
+      ],
+      "top3_scores": [
+        "0-1",
+        "0-2",
+        "0-0"
+      ]
+    },
+    {
+      "id": "周三054",
+      "home": "捷克",
+      "away": "墨西哥",
+      "lambda_raw_h": 1.2881,
+      "lambda_raw_a": 1.4119,
+      "lambda_h_final": 1.2881,
+      "lambda_a_final": 1.4119,
+      "lambda_diff": -0.1238,
+      "jc_handicap": 1,
+      "physical": {
+        "home_win": 0.326,
+        "draw": 0.2568,
+        "away_win": 0.4172
+      },
+      "jc_handicap_prob": {
+        "rang_sheng": 0.5828,
+        "rang_ping": 0.192,
+        "rang_fu": 0.2252
+      },
+      "top2_total_goals": [
+        "2球",
+        "1球"
+      ],
+      "top2_half_full": [
+        "平负",
+        "平胜"
+      ],
+      "top3_scores": [
+        "0-0",
+        "0-1",
+        "1-0"
+      ]
+    },
+    {
+      "id": "周四055",
+      "home": "厄瓜多尔",
+      "away": "德国",
+      "lambda_raw_h": 0.8534,
+      "lambda_raw_a": 1.8466,
+      "lambda_h_final": 0.8534,
+      "lambda_a_final": 1.8466,
+      "lambda_diff": -0.9932,
+      "jc_handicap": 1,
+      "physical": {
+        "home_win": 0.1845,
+        "draw": 0.2395,
+        "away_win": 0.576
+      },
+      "jc_handicap_prob": {
+        "rang_sheng": 0.424,
+        "rang_ping": 0.214,
+        "rang_fu": 0.362
+      },
+      "top2_total_goals": [
+        "2球",
+        "1球"
+      ],
+      "top2_half_full": [
+        "平负",
+        "负负"
+      ],
+      "top3_scores": [
+        "0-1",
+        "0-0",
+        "0-2"
+      ]
+    },
+    {
+      "id": "周四056",
+      "home": "库拉索",
+      "away": "科特迪瓦",
+      "lambda_raw_h": 0.3,
+      "lambda_raw_a": 2.5565,
+      "lambda_h_final": 0.3,
+      "lambda_a_final": 2.5565,
+      "lambda_diff": -2.2565,
+      "jc_handicap": 2,
+      "physical": {
+        "home_win": 0.042,
+        "draw": 0.162,
+        "away_win": 0.796
+      },
+      "jc_handicap_prob": {
+        "rang_sheng": 0.4145,
+        "rang_ping": 0.1895,
+        "rang_fu": 0.396
+      },
+      "top2_total_goals": [
+        "2球",
+        "1球"
+      ],
+      "top2_half_full": [
+        "负负",
+        "平负"
+      ],
+      "top3_scores": [
+        "0-1",
+        "0-2",
+        "0-3"
+      ]
+    },
+    {
+      "id": "周四057",
+      "home": "突尼斯",
+      "away": "荷兰",
+      "lambda_raw_h": 0.3579,
+      "lambda_raw_a": 2.3421,
+      "lambda_h_final": 0.3579,
+      "lambda_a_final": 2.3421,
+      "lambda_diff": -1.9842,
+      "jc_handicap": 2,
+      "physical": {
+        "home_win": 0.052,
+        "draw": 0.1955,
+        "away_win": 0.7525
+      },
+      "jc_handicap_prob": {
+        "rang_sheng": 0.4745,
+        "rang_ping": 0.182,
+        "rang_fu": 0.3435
+      },
+      "top2_total_goals": [
+        "2球",
+        "1球"
+      ],
+      "top2_half_full": [
+        "负负",
+        "平负"
+      ],
+      "top3_scores": [
+        "0-1",
+        "0-2",
+        "0-0"
+      ]
+    },
+    {
+      "id": "周四058",
+      "home": "日本",
+      "away": "瑞典",
+      "lambda_raw_h": 1.1054,
+      "lambda_raw_a": 1.5946,
+      "lambda_h_final": 1.1054,
+      "lambda_a_final": 1.5946,
+      "lambda_diff": -0.4892,
+      "jc_handicap": -1,
+      "physical": {
+        "home_win": 0.274,
+        "draw": 0.229,
+        "away_win": 0.497
+      },
+      "jc_handicap_prob": {
+        "rang_sheng": 0.1265,
+        "rang_ping": 0.1475,
+        "rang_fu": 0.726
+      },
+      "top2_total_goals": [
+        "2球",
+        "1球"
+      ],
+      "top2_half_full": [
+        "平负",
+        "负负"
+      ],
+      "top3_scores": [
+        "0-1",
+        "0-0",
+        "0-2"
+      ]
+    },
+    {
+      "id": "周四059",
+      "home": "巴拉圭",
+      "away": "澳大利亚",
+      "lambda_raw_h": 1.5731,
+      "lambda_raw_a": 1.1269,
+      "lambda_h_final": 1.5731,
+      "lambda_a_final": 1.1269,
+      "lambda_diff": 0.4462,
+      "jc_handicap": -1,
+      "physical": {
+        "home_win": 0.4643,
+        "draw": 0.2327,
+        "away_win": 0.303
+      },
+      "jc_handicap_prob": {
+        "rang_sheng": 0.2647,
+        "rang_ping": 0.1997,
+        "rang_fu": 0.5357
+      },
+      "top2_total_goals": [
+        "1球",
+        "2球"
+      ],
+      "top2_half_full": [
+        "平胜",
+        "胜胜"
+      ],
+      "top3_scores": [
+        "1-0",
+        "0-0",
+        "0-1"
+      ]
+    },
+    {
+      "id": "周四060",
+      "home": "土耳其",
+      "away": "美国",
+      "lambda_raw_h": 1.2169,
+      "lambda_raw_a": 1.4831,
+      "lambda_h_final": 1.2169,
+      "lambda_a_final": 1.4831,
+      "lambda_diff": -0.2662,
+      "jc_handicap": 1,
+      "physical": {
+        "home_win": 0.2995,
+        "draw": 0.261,
+        "away_win": 0.4395
+      },
+      "jc_handicap_prob": {
+        "rang_sheng": 0.5605,
+        "rang_ping": 0.184,
+        "rang_fu": 0.2555
+      },
+      "top2_total_goals": [
+        "2球",
+        "3球"
+      ],
+      "top2_half_full": [
+        "平负",
+        "负负"
+      ],
+      "top3_scores": [
+        "0-0",
+        "1-1",
+        "0-1"
       ]
     }
   ]

@@ -1199,6 +1199,306 @@
       },
       "protection_triggered": false,
       "sp_missing": false
+    },
+    {
+      "id": "周三049",
+      "p_physical": {
+        "home_win": 0.5004,
+        "draw": 0.252,
+        "away_win": 0.2476
+      },
+      "p_market": {
+        "home_win": 0.3851,
+        "draw": 0.3381,
+        "away_win": 0.2768
+      },
+      "ddi": {
+        "home_win": 0.1153,
+        "draw": -0.0861,
+        "away_win": -0.0292
+      },
+      "calibrated": {
+        "home_win": 0.535,
+        "draw": 0.2262,
+        "away_win": 0.2476
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "周三050",
+      "p_physical": {
+        "home_win": 0.5757,
+        "draw": 0.2357,
+        "away_win": 0.1887
+      },
+      "p_market": {
+        "home_win": 0.6415,
+        "draw": 0.1989,
+        "away_win": 0.1595
+      },
+      "ddi": {
+        "home_win": -0.0658,
+        "draw": 0.0368,
+        "away_win": 0.0292
+      },
+      "calibrated": {
+        "home_win": 0.5757,
+        "draw": 0.2357,
+        "away_win": 0.1887
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "周三051",
+      "p_physical": {
+        "home_win": 0.134,
+        "draw": 0.2195,
+        "away_win": 0.6465
+      },
+      "p_market": {
+        "home_win": 0.1128,
+        "draw": 0.1845,
+        "away_win": 0.7027
+      },
+      "ddi": {
+        "home_win": 0.0212,
+        "draw": 0.035,
+        "away_win": -0.0562
+      },
+      "calibrated": {
+        "home_win": 0.134,
+        "draw": 0.2195,
+        "away_win": 0.6465
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "周三052",
+      "p_physical": {
+        "home_win": 0.7468,
+        "draw": 0.1928,
+        "away_win": 0.0604
+      },
+      "p_market": {
+        "home_win": 0,
+        "draw": 0,
+        "away_win": 0
+      },
+      "ddi": {
+        "home_win": 0,
+        "draw": 0,
+        "away_win": 0
+      },
+      "calibrated": {
+        "home_win": 0.7468,
+        "draw": 0.1928,
+        "away_win": 0.0604
+      },
+      "protection_triggered": true,
+      "sp_missing": true
+    },
+    {
+      "id": "周三053",
+      "p_physical": {
+        "home_win": 0.044,
+        "draw": 0.172,
+        "away_win": 0.784
+      },
+      "p_market": {
+        "home_win": 0.1825,
+        "draw": 0.2642,
+        "away_win": 0.5532
+      },
+      "ddi": {
+        "home_win": -0.1385,
+        "draw": -0.0922,
+        "away_win": 0.2308
+      },
+      "calibrated": {
+        "home_win": 0.0024,
+        "draw": 0.1443,
+        "away_win": 0.834
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "周三054",
+      "p_physical": {
+        "home_win": 0.326,
+        "draw": 0.2568,
+        "away_win": 0.4172
+      },
+      "p_market": {
+        "home_win": 0.2642,
+        "draw": 0.2724,
+        "away_win": 0.4634
+      },
+      "ddi": {
+        "home_win": 0.0618,
+        "draw": -0.0156,
+        "away_win": -0.0462
+      },
+      "calibrated": {
+        "home_win": 0.326,
+        "draw": 0.2568,
+        "away_win": 0.4172
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "周四055",
+      "p_physical": {
+        "home_win": 0.1845,
+        "draw": 0.2395,
+        "away_win": 0.576
+      },
+      "p_market": {
+        "home_win": 0.2447,
+        "draw": 0.2461,
+        "away_win": 0.5092
+      },
+      "ddi": {
+        "home_win": -0.0602,
+        "draw": -0.0066,
+        "away_win": 0.0668
+      },
+      "calibrated": {
+        "home_win": 0.1845,
+        "draw": 0.2395,
+        "away_win": 0.576
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "周四056",
+      "p_physical": {
+        "home_win": 0.042,
+        "draw": 0.162,
+        "away_win": 0.796
+      },
+      "p_market": {
+        "home_win": 0,
+        "draw": 0,
+        "away_win": 0
+      },
+      "ddi": {
+        "home_win": 0,
+        "draw": 0,
+        "away_win": 0
+      },
+      "calibrated": {
+        "home_win": 0.042,
+        "draw": 0.162,
+        "away_win": 0.796
+      },
+      "protection_triggered": true,
+      "sp_missing": true
+    },
+    {
+      "id": "周四057",
+      "p_physical": {
+        "home_win": 0.052,
+        "draw": 0.1955,
+        "away_win": 0.7525
+      },
+      "p_market": {
+        "home_win": 0,
+        "draw": 0,
+        "away_win": 0
+      },
+      "ddi": {
+        "home_win": 0,
+        "draw": 0,
+        "away_win": 0
+      },
+      "calibrated": {
+        "home_win": 0.052,
+        "draw": 0.1955,
+        "away_win": 0.7525
+      },
+      "protection_triggered": true,
+      "sp_missing": true
+    },
+    {
+      "id": "周四058",
+      "p_physical": {
+        "home_win": 0.274,
+        "draw": 0.229,
+        "away_win": 0.497
+      },
+      "p_market": {
+        "home_win": 0.4634,
+        "draw": 0.2724,
+        "away_win": 0.2642
+      },
+      "ddi": {
+        "home_win": -0.1894,
+        "draw": -0.0434,
+        "away_win": 0.2328
+      },
+      "calibrated": {
+        "home_win": 0.224,
+        "draw": 0.229,
+        "away_win": 0.547
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "周四059",
+      "p_physical": {
+        "home_win": 0.4643,
+        "draw": 0.2327,
+        "away_win": 0.303
+      },
+      "p_market": {
+        "home_win": 0.3489,
+        "draw": 0.4323,
+        "away_win": 0.2188
+      },
+      "ddi": {
+        "home_win": 0.1154,
+        "draw": -0.1996,
+        "away_win": 0.0842
+      },
+      "calibrated": {
+        "home_win": 0.4989,
+        "draw": 0.1827,
+        "away_win": 0.3283
+      },
+      "protection_triggered": false,
+      "sp_missing": false
+    },
+    {
+      "id": "周四060",
+      "p_physical": {
+        "home_win": 0.2995,
+        "draw": 0.261,
+        "away_win": 0.4395
+      },
+      "p_market": {
+        "home_win": 0.2856,
+        "draw": 0.2604,
+        "away_win": 0.454
+      },
+      "ddi": {
+        "home_win": 0.0139,
+        "draw": 0.0006,
+        "away_win": -0.0145
+      },
+      "calibrated": {
+        "home_win": 0.2995,
+        "draw": 0.261,
+        "away_win": 0.4395
+      },
+      "protection_triggered": false,
+      "sp_missing": false
     }
   ]
 }
