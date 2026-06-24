@@ -162,6 +162,36 @@ main{flex:1;padding:24px 28px;min-width:0;background:#f3f4f6}
 .plan-legend{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0 0;font-size:11px}
 .plan-legend span{display:flex;align-items:center;gap:4px}
 
+
+/* Two-column plan layout */
+.plan-cols{display:flex;gap:20px;align-items:flex-start}
+.plan-col-left{width:400px;flex-shrink:0}
+.plan-col-right{flex:1;min-width:0}
+@media(max-width:900px){.plan-cols{flex-direction:column}.plan-col-left{width:100%}}
+
+
+.legs-toggle{display:flex;align-items:center;gap:8px;padding:10px 14px;background:#fff;border:1px solid #e5e7eb;border-radius:8px;cursor:pointer;font-size:12px;color:#6b7280;margin:20px 0 8px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.legs-toggle:hover{background:#f0f1f4;color:#1f2937}
+.legs-toggle .lt-arrow{transition:transform .2s;font-size:10px}
+.legs-toggle.open .lt-arrow{transform:rotate(90deg)}
+.legs-body{display:none;padding:0 0 16px}
+.legs-body.open{display:block}
+.legs-table{width:100%;border-collapse:collapse;font-size:12px;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.legs-table thead th{padding:6px 8px;text-align:left;font-weight:600;color:#9ca3af;background:#f0f1f4;border-bottom:1px solid #e5e7eb;font-size:10px;white-space:nowrap}
+.legs-table tbody td{padding:6px 8px;border-bottom:1px solid #f3f4f6;color:#6b7280}
+.legs-table tbody tr:hover{background:#fafbfc}
+.legs-table .lt-rank{color:#9ca3af;width:24px;font-size:10px}
+.legs-table .lt-match{font-size:12px;color:#1f2937;font-weight:500}
+.legs-table .lt-odds{font-weight:600}
+.legs-table .lt-score{font-size:12px}
+.legs-table .lt-score.high{color:#16a34a}
+.legs-table .lt-score.mid{color:#d97706}
+.legs-table .lt-score.low{color:#9ca3af}
+.legs-filter{display:flex;gap:6px;flex-wrap:wrap;padding:0 0 8px}
+.legs-filter .lf-btn{padding:3px 10px;font-size:10px;border-radius:12px;cursor:pointer;border:1px solid #e5e7eb;background:transparent;color:#9ca3af}
+.legs-filter .lf-btn:hover{background:#f0f1f4;color:#6b7280}
+.legs-filter .lf-btn.active{background:rgba(8,145,178,.08);border-color:rgba(8,145,178,.2);color:#0891b2}
+
 </style>
 </head>
 <body>

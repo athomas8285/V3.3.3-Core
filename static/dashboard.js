@@ -333,7 +333,7 @@ async function loadPlans() {
   var h = "";
 
   // Stats
-  h += '<div class="plan-stats">';
+  h += '<div class="plan-cols"><div class="plan-col-left"><div class="plan-stats">';
   h += '<div class="plan-stat-card"><span class="sc-num gr">'+d.total_matches+'</span>\u573a\u6bd4\u8d5b</div>';
   h += '<div class="plan-stat-card"><span class="sc-num cy">'+d.total_legs+'</span>\u6761\u817f</div>';
   h += '<div class="plan-stat-card"><span class="sc-num">'+(d.plan_2_count||0)+'</span>\u4e2a2.0\u65b9\u6848</div>';
@@ -356,13 +356,14 @@ async function loadPlans() {
   }
 
   // Tabs for 2.0 / 3.0
-  h += '<div class="plan-tabs">';
+  h += '</div><div class="plan-col-right"><div class="plan-tabs">';
   h += '<button class="plan-tab active" onclick="planSwitchTab(\'p2\')">2.0\u8ba1\u5212 <span style="font-weight:400;color:#9ca3af">(2.0~3.0)</span></button>';
   h += '<button class="plan-tab" onclick="planSwitchTab(\'p3\')">3.0\u8ba1\u5212 <span style="font-weight:400;color:#9ca3af">(3.0~4.0)</span></button>';
   h += '</div>';
   h += '<div class="plan-tab-content show" id="plan-p2">'+_renderPlanCombos(d.plan_2||[],"")+'</div>';
   h += '<div class="plan-tab-content" id="plan-p3">'+_renderPlanCombos(d.plan_3||[],"")+'</div>';
 
+  h += '</div></div>'; // close cols
   // Legs toggle
   if(d.legs && d.legs.length > 0){
     h += '<div class="legs-toggle" onclick="planToggleLegs()" id="plan-lt"><span class="lt-arrow">\u25b6</span> \u817f\u6c60 \u2014 '+d.legs.length+' \u6761\u5907\u9009\u817f <span style="color:#9ca3af;font-weight:400;margin-left:4px">\u70b9\u51fb\u5c55\u5f00</span></div>';
